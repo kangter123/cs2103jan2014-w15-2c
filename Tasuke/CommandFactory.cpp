@@ -34,14 +34,41 @@ std::shared_ptr<ICommand> CommandFactory::interpret(const std::string& command) 
 			throw ExceptionBadCommand();
 		}
 		return std::shared_ptr<ICommand>(new RemoveCommand(pos-1));
+	} else if (commandType == "edit") {
+		if (tokens.size() < 2) {
+			throw ExceptionBadCommand();
+		}
+		int pos = tokens[1].toInt();
+		int maxPos = Tasuke::instance().getStorage().totalTasks();
+
+		if (pos < 1 || pos > maxPos) {
+			throw ExceptionBadCommand();
+		}
+
+		Task task = Tasuke::instance().getStorage().getTask(pos-1);;
+
+		QString description;
+		for (int i=2; i<tokens.size(); i++) {
+			description.append(tokens[i]);
+			description.append(" ");
+		}
+		description.chop(1);
+		task.setDescription(description);
+		return std::shared_ptr<ICommand>(new EditCommand(pos-1, task));
 	} else if (commandString == "show") {
 		Tasuke::instance().showTaskWindow();
+		return nullptr;
+	} else if (commandString == "about") {
+		Tasuke::instance().showAboutWindow();
 		return nullptr;
 	} else if (commandString == "hide") {
 		Tasuke::instance().hideTaskWindow();
 		return nullptr;
 	} else if (commandString == "undo") {
 		Tasuke::instance().undoCommand();
+		return nullptr;
+	} else if (commandString == "redo") {
+		Tasuke::instance().redoCommand();
 		return nullptr;
 	} else if (commandString == "exit") {
 		QApplication::quit();

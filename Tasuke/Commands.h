@@ -36,4 +36,17 @@ public:
 	void undo();
 };
 
+class EditCommand : public ICommand {
+private:
+	int id;
+	Task old;
+	Task task;
+public:
+	EditCommand(int _id, Task& _task);
+	~EditCommand();
+	
+	void run();
+	void undo();
+};
+
 #endif

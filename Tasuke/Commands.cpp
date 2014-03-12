@@ -36,3 +36,23 @@ void RemoveCommand::undo() {
 	Tasuke::instance().getStorage().addTask(task, id);
 	Tasuke::instance().showMessage(QString("Undone remove \"%1\"").arg(task.getDescription()));
 }
+
+EditCommand::EditCommand(int _id, Task& _task) {
+	id = _id;
+	task = _task;
+}
+EditCommand::~EditCommand() {
+
+}
+
+void EditCommand::run() {
+	old = Tasuke::instance().getStorage().getTask(id);;
+	Tasuke::instance().getStorage().removeTask(id);
+	Tasuke::instance().getStorage().addTask(task, id);
+	Tasuke::instance().showMessage(QString("Edited \"%1\"").arg(task.getDescription()));
+}
+void EditCommand::undo() {
+	Tasuke::instance().getStorage().removeTask(id);
+	Tasuke::instance().getStorage().addTask(old, id);
+	Tasuke::instance().showMessage(QString("Undone edit \"%1\"").arg(task.getDescription()));
+}
