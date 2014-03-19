@@ -9,6 +9,8 @@
 #include <QPoint>
 #include "Task.h"
 #include "ui_TaskWindow.h"
+#include "HotKeyThread.h"
+#include <qscrollbar.h>
 
 class TaskWindow : public QMainWindow {
 	Q_OBJECT
@@ -29,12 +31,15 @@ protected:
 	void closeEvent(QCloseEvent *event);
 	void mousePressEvent(QMouseEvent *event);
 	void mouseMoveEvent(QMouseEvent *event);
+	void keyDownEvent(QKeyEvent *event);
 
 private slots:
+	void handleHotKeyPress(int key);
 	void iconActivated(QSystemTrayIcon::ActivationReason reason);
 
 private:
-	Ui::TaskWindowClass ui;
+	Ui::TaskWindowClass ui;	
+	HotKeyThread *hotKeyThread;
 	QSystemTrayIcon *trayIcon;
 	QMenu *trayIconMenu;
 	QPoint mpos;

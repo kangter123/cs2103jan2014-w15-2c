@@ -16,6 +16,7 @@ TaskEntry::TaskEntry(int id, QString description, QList<QString> tags, QDateTime
 	setAttribute(Qt::WA_TranslucentBackground);
     setStyleSheet("background:transparent;");
 	setWindowFlags(windowFlags() | Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint | Qt::Tool);
+
 }
 
 TaskEntry::~TaskEntry() {
@@ -23,28 +24,6 @@ TaskEntry::~TaskEntry() {
 }
 
 
-//this function will return the string once it fits the width of the column.
-QString TaskEntry::fitDescription(QString des, int currWidth){
-	des.append(QString("..."));
-	int width = fm.width(des);
-
-	if(width < TaskEntry::MAX_WIDTH_FOR_DESCRIPTION){
-		return des;
-	} else { //take out one char
-		return fitDescription(des.left(currWidth-1), currWidth-1);
-	}
-}
-
-QString TaskEntry::fitTags(QString tag, int currWidth){
-	tag.append(QString("..."));
-	int width = fm.width(tag);
-
-	if(width < TaskEntry::MAX_WIDTH_FOR_TAGS){
-		return tag;
-	} else { //take out one char
-		return fitTags(tag.left(currWidth-1), currWidth-1);
-	}
-}
 
 void TaskEntry::setDescription(QString des){
 
@@ -55,7 +34,7 @@ void TaskEntry::setDescription(QString des){
 		ui.description->setText(des);
 	} else { //the description is too long.
 		ui.description->setToolTip(des);
-		ui.description->setText(fitDescription(des, des.length()));
+		ui.description->setText(fm.elidedText(des, Qt::ElideRight, MAX_WIDTH_FOR_DESCRIPTION));
 	}
 }
 
@@ -76,23 +55,29 @@ void TaskEntry::setDateTimes(QDateTime start, QDateTime end){
 	}
 }
 
-void TaskEntry::setTags(QList<QString> tags){
-	if(!tags.isEmpty()){
-		QString strTags = tags[0];
-		strTags.prepend("#");
-		if(tags.size() > 1){
-			for (int i = 1; i < tags.size(); i++){ //iterate through the list to create a string of tags
-				strTags.append(QString(", #"));
-				strTags.append(tags[i]);
-			}
+QString TaskEntry::createTagString(QList<QString> tags){
+	QString strTags = tags[0];
+	strTags.prepend("#");
+
+	if(tags.size() > 1){
+		for (int i = 1; i < tags.size(); i++){ //iterate through the list to create a string of tags
+			strTags.append(QString(", #"));
+			strTags.append(tags[i]);
 		}
+	}
+
+	return strTags;
+}
+
+void TaskEntry::setTags(QList<QString> tags){
+		QString strTags = createTagString(tags);
+
 		if (fm.width(strTags) < TaskEntry::MAX_WIDTH_FOR_TAGS){ //the tag string fits into the column nicely.
 			ui.tag->setText(strTags);
 		} else { //the tag string is too long.
 			ui.tag->setToolTip(strTags);
-			ui.tag->setText(fitTags(strTags, strTags.length()));
+			ui.tag->setText(fm.elidedText(strTags, Qt::ElideRight, MAX_WIDTH_FOR_TAGS));
 		}
-	}
 }
 
 //this function sets the respective fields in the TaskEntry widget
@@ -111,7 +96,9 @@ void TaskEntry::makeWidget(){
 	setDateTimes(this->start, this->end);
 
 	//TAGS
-	setTags(this->tags);
+	if(!tags.isEmpty()){
+		setTags(this->tags);
+	}
 }
 
 
