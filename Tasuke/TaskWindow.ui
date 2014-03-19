@@ -10,6 +10,9 @@
     <height>440</height>
    </rect>
   </property>
+  <property name="focusPolicy">
+   <enum>Qt::StrongFocus</enum>
+  </property>
   <property name="windowTitle">
    <string>Tasuke </string>
   </property>
@@ -322,6 +325,9 @@ QScrollBar::handle:vertical {
       <height>322</height>
      </rect>
     </property>
+    <property name="focusPolicy">
+     <enum>Qt::WheelFocus</enum>
+    </property>
     <property name="frameShape">
      <enum>QFrame::NoFrame</enum>
     </property>
@@ -342,6 +348,9 @@ QScrollBar::handle:vertical {
        <width>803</width>
        <height>322</height>
       </rect>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::WheelFocus</enum>
      </property>
      <property name="styleSheet">
       <string notr="true">background: transparent;</string>

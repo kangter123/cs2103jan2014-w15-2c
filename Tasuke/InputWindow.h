@@ -4,9 +4,9 @@
 #include <QWidget>
 #include "HotKeyThread.h"
 #include "ui_InputWindow.h"
+#include "InputHighlighter.h"
 
-class InputWindow : public QWidget
-{
+class InputWindow : public QWidget {
 	Q_OBJECT
 
 public:
@@ -16,6 +16,7 @@ public:
 public slots:
 	void showAndCenter();
 
+	bool eventFilter(QObject *object, QEvent *event);
 private slots:
 	void handleReturnPressed();
 	void handleEditingFinished();
@@ -24,6 +25,7 @@ private slots:
 
 private:
 	Ui::InputWindow ui;
+    InputHighlighter *highlighter;
 };
 
 #endif // INPUTWINDOW_H

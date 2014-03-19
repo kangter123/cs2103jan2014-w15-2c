@@ -15,35 +15,17 @@ TaskWindow::TaskWindow(QWidget* parent) : QMainWindow(parent) {
 
 	setWindowFlags(windowFlags() | Qt::FramelessWindowHint);
 	setAttribute(Qt::WA_TranslucentBackground);
+
+	//hotkey
+	hotKeyThread = new HotKeyThread(this);
+	connect(hotKeyThread, SIGNAL(hotKeyPress(int)), this, SLOT(handleHotKeyPress(int)), Qt::QueuedConnection);
+	hotKeyThread->start();
 }
 
 TaskWindow::~TaskWindow() {
 	LOG(INFO) << "TaskWindow instance destroyed";
 }
 
-void TaskWindow::mousePressEvent(QMouseEvent *event){
-    mpos = event->pos();
-}
-
-void TaskWindow::mouseMoveEvent(QMouseEvent *event){
-    if (event->buttons() && Qt::LeftButton) {
-        QPoint diff = event->pos() - mpos;
-        QPoint newpos = this->pos() + diff;
-
-        this->move(newpos);
-    }
-}
-
-void TaskWindow::showAndMoveToSide() {
-	QPoint center = QApplication::desktop()->screen()->rect().center() - rect().center();
-	center.setY(QApplication::desktop()->screen()->rect().height() / 9);
-
-	move(center);
-
-	showNormal();
-	raise();
-	activateWindow();
-}
 
 void TaskWindow::showTasks(QList<Task> tasks) {
 	ui.taskList->clear();
@@ -62,7 +44,79 @@ void TaskWindow::showTasks(QList<Task> tasks) {
 
 }
 
-void TaskWindow::closeEvent(QCloseEvent *event) {
 	hide();
 	event->ignore();
+}
+
+void TaskWindow::showAndMoveToSide() {
+	QPoint center = QApplication::desktop()->screen()->rect().center() - rect().center();
+	center.setY(QApplication::desktop()->screen()->rect().height() / 9);
+
+	move(center);
+
+	showNormal();
+	raise();
+	activateWindow();
+}
+
+
+void TaskWindow::closeEvent(QCloseEvent *event) {
+	if (trayIcon->isVisible()) {
+		hide();
+		event->ignore();
+	}
+}
+
+void TaskWindow::mousePressEvent(QMouseEvent *event){
+    mpos = event->pos();
+}
+
+void TaskWindow::mouseMoveEvent(QMouseEvent *event){
+    if (event->buttons() && Qt::LeftButton) {
+        QPoint diff = event->pos() - mpos;
+        QPoint newpos = this->pos() + diff;
+
+        this->move(newpos);
+    }
+}
+
+void TaskWindow::keyDownEvent(QKeyEvent *event){
+
+	event->accept();
+
+	if ((event->modifiers() == Qt::CTRL) && (event->key() == Qt::UpArrow)) {
+		ui.scrollbox->scroll(0, -300);
+	}
+		
+	if ((event->modifiers() == Qt::CTRL) && (event->key() == Qt::DownArrow)) {
+		ui.scrollbox->scroll(0, 300);
+	}
+
+	if (event->key() == Qt::UpArrow) {
+		ui.scrollbox->scroll(0,-60);
+	}
+		
+	if (event->key() == Qt::DownArrow) {
+		ui.scrollbox->scroll(0, 60);
+	}
+	
+	ui.scrollbox->repaint();
+}	
+
+
+
+void TaskWindow::handleHotKeyPress(int key) {
+	if (isVisible() == true) {
+		hide();
+	} else {
+		showAndMoveToSide();
+	}
+}
+
+void TaskWindow::iconActivated(QSystemTrayIcon::ActivationReason reason) {
+	//Following shawn's advice to show both.
+	if (reason == QSystemTrayIcon::Trigger || reason == QSystemTrayIcon::DoubleClick) {
+		Tasuke::instance().showTaskWindow();
+		Tasuke::instance().showInputWindow();	
+	}
 }
