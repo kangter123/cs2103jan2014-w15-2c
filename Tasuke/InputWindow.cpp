@@ -1,9 +1,6 @@
 #include <glog/logging.h>
 #include <QApplication>
 #include <QDesktopWidget>
-#include <QKeyEvent>
-#include <QFocusEvent>
-#include <QtGui\qbitmap.h>
 #include "Tasuke.h"
 #include "InputWindow.h"
 

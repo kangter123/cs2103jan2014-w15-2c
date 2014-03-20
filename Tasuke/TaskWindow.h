@@ -5,12 +5,15 @@
 #include <QMenu>
 #include <QCloseEvent>
 #include <QtWidgets/QMainWindow>
-#include <QMouseEvent> 
+#include <QMouseEvent>
+#include <QListView>
+#include <QBitmap>
+#include <QKeySequence>
 #include <QPoint>
 #include "Task.h"
 #include "ui_TaskWindow.h"
 #include "HotKeyThread.h"
-#include <qscrollbar.h>
+
 
 class TaskWindow : public QMainWindow {
 	Q_OBJECT
@@ -39,11 +42,15 @@ protected:
 	void handleHotKeyPress(int key);
 
 private:
+	static const int TASKS_PER_PAGE = 5;
+	static const int TASK_ENTRY_WIDTH = 780;
+	static const int TASK_ENTRY_HEIGHT = 65;
+
 	Ui::TaskWindowClass ui;	
 	HotKeyThread *hotKeyThread;
 	QPoint mpos;
 	QList<Task> currentTasks;
-	int currentlySelected;
+	int currentlySelected; //represents of the # of the selected entry in the UI. min is 1. max is size of the task list
 	int previouslySelected;
 
 };

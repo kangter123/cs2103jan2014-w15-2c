@@ -2,6 +2,9 @@
 #define INPUTWINDOW_H
 
 #include <QWidget>
+#include <QKeyEvent>
+#include <QFocusEvent>
+#include <QBitmap>
 #include "HotKeyThread.h"
 #include "ui_InputWindow.h"
 #include "InputHighlighter.h"

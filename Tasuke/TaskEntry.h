@@ -4,7 +4,7 @@
 #include <QWidget>
 #include <qdatetime.h>
 #include "ui_TaskEntry.h"
-#include <qfontmetrics.h>
+#include <QFontMetrics>
 
 class TaskEntry : public QWidget
 {

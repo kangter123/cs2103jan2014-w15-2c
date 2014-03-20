@@ -4,9 +4,7 @@
 #include "Tasuke.h"
 #include "TaskWindow.h"
 #include "TaskEntry.h"
-#include <qlistview.h>
-#include <qbitmap.h>
-#include <QKeySequence>
+
 
 TaskWindow::TaskWindow(QWidget* parent) : QMainWindow(parent) {
 	LOG(INFO) << "TaskWindow instance created";
@@ -39,14 +37,14 @@ void TaskWindow::highlightCurrentlySelected(){
 	QPixmap pxr2(QString::fromUtf8("roundedEntryMask.png")); //normal bg image
 
 	//highlight currently selected
-	if((currentlySelected>0) && (currentlySelected<currentTasks.size())) {
+	if((currentlySelected>=0) && (currentlySelected<currentTasks.size())) {
 		
 		Task t = currentTasks[currentlySelected];
 		TaskEntry * entry = new TaskEntry(currentlySelected+1, t.getDescription(), t.getTags(), t.getBegin(), t.getEnd(), this);
 		entry->ui.bg->setPixmap(pxr); 
 
 		QListWidgetItem *listItem = new QListWidgetItem();
-		listItem->setSizeHint(QSize(780,65));
+		listItem->setSizeHint(QSize(TASK_ENTRY_WIDTH, TASK_ENTRY_HEIGHT));
 		ui.taskList->insertItem(currentlySelected, listItem);
 		ui.taskList->setItemWidget(listItem, entry);
 
@@ -60,7 +58,7 @@ void TaskWindow::highlightCurrentlySelected(){
 		entry2->ui.bg->setPixmap(pxr2);
 
 		QListWidgetItem *listItem2 = new QListWidgetItem();
-		listItem2->setSizeHint(QSize(780,65));
+		listItem2->setSizeHint(QSize(TASK_ENTRY_WIDTH, TASK_ENTRY_HEIGHT));
 		ui.taskList->insertItem(previouslySelected, listItem2);
 		ui.taskList->setItemWidget(listItem2, entry2);
 
@@ -79,7 +77,7 @@ void TaskWindow::showTasks(QList<Task> tasks) {
 		TaskEntry * entry = new TaskEntry(i+1, t.getDescription(), t.getTags(), t.getBegin(), t.getEnd(), this);
 
 		QListWidgetItem *listItem = new QListWidgetItem();
-		listItem->setSizeHint(QSize(780,65));
+		listItem->setSizeHint(QSize(TASK_ENTRY_WIDTH, TASK_ENTRY_HEIGHT));
 		ui.taskList->addItem(listItem);
 		ui.taskList->setItemWidget(listItem, entry);	
 	}
@@ -116,9 +114,9 @@ void TaskWindow::pageUp(){
 		return;
 	}
 
-	if (currentlySelected > 4) {
+	if (currentlySelected > TASKS_PER_PAGE-1) {
 		previouslySelected = currentlySelected;
-		currentlySelected -= 5;
+		currentlySelected -= TASKS_PER_PAGE;
 	} else {
 		previouslySelected = currentlySelected;
 		currentlySelected = 0;
@@ -134,9 +132,9 @@ void TaskWindow::pageDown(){
 		return;
 	}
 
-	if (currentlySelected < ui.taskList->count()-6){
+	if (currentlySelected < ui.taskList->count() - TASKS_PER_PAGE - 1){
 		previouslySelected = currentlySelected;
-		currentlySelected += 5;
+		currentlySelected += TASKS_PER_PAGE;
 	} else {
 		previouslySelected = currentlySelected;
 		currentlySelected = ui.taskList->count()-1;
