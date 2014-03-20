@@ -22,7 +22,8 @@ public:
 	TaskWindow(QWidget *parent = 0);
 	virtual ~TaskWindow();
 
-	void highlightCurrentlySelected();
+	void highlightCurrentlySelected(int prevsize);
+	void focusOnNewTask();
 	void showTasks(QList<Task> tasks);
 	void scrollUp();
 	void scrollDown();
@@ -41,7 +42,6 @@ protected:
 
 	void handleHotKeyPress(int key);
 
-	void clearTasks();
 
 private:
 	static const int TASKS_PER_PAGE = 5;
@@ -54,6 +54,7 @@ private:
 	QList<Task> currentTasks;
 	int currentlySelected; //represents of the # of the selected entry in the UI. min is 1. max is size of the task list
 	int previouslySelected;
+	int previousSize;
 
 };
 
