@@ -16,14 +16,13 @@ QHash<QString, QString> Interpreter::decompose(QString text) {
 
 	for (int i=0; i<tokens.size(); i++) {
 		if (tokens[i].size() > 0 && (tokens[i][0] == '@' || tokens[i][0] == '#' || tokens[i] == "-@" || tokens[i].startsWith("-#"))) {
-			expectNewDelimiter = false;
 			current = tokens[i];
 
 			if (tokens[i][0] == '@') {
 				current = tokens[i][0];
 				tokens[i].remove(0,1);
 
-				if (retVal.contains(current) == false) {
+				if (retVal.contains(current) == true) {
 					throw ExceptionBadCommand();
 				}
 			} else if (tokens[i][0] == '#') {
@@ -41,6 +40,8 @@ QHash<QString, QString> Interpreter::decompose(QString text) {
 				throw ExceptionBadCommand();
 			}
 		}
+
+		expectNewDelimiter = false;
 
 		QString newVal =  tokens[i];
 		QString temp = retVal[current];
@@ -252,7 +253,7 @@ int Interpreter::parseId(QString idString) {
 }
 
 Interpreter::TIME_PERIOD Interpreter::parseTimePeriod(QString timePeriod) {
-	QStringList timePeriodParts = timePeriod.split('-');
+	QStringList timePeriodParts = timePeriod.split("-");
 	TIME_PERIOD retVal;
 
 	if (timePeriodParts.size() > 2) {
@@ -263,7 +264,7 @@ Interpreter::TIME_PERIOD Interpreter::parseTimePeriod(QString timePeriod) {
 		retVal.end = parseDate(timePeriod);
 	} else if (timePeriodParts.size() == 2) {
 		retVal.begin = parseDate(timePeriodParts[0]);
-		retVal.begin = parseDate(timePeriodParts[1]);
+		retVal.end = parseDate(timePeriodParts[1]);
 	}
 
 	return retVal;
