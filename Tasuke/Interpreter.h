@@ -11,8 +11,16 @@
 // this factory must be cleaned up using delete.
 class Interpreter {
 private:
+	typedef struct {
+		QDateTime begin;
+		QDateTime end;
+	} TIME_PERIOD;
+	
+	static QHash<QString, QString> decompose(QString text);
 	static QString removeBefore(QString text, QString before);
 	static QString getType(QString commandString);
+	static int parseId(QString idString);
+	static TIME_PERIOD parseTimePeriod(QString timePeriod);
 	static QDateTime parseDate(QString dateString);
 
 	static AddCommand* createAddCommand(QString commandString);

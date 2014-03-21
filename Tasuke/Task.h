@@ -17,17 +17,17 @@ public:
 	Task();
 	~Task();
 
-	void setDescription(QString& _description);
+	void setDescription(QString _description);
 	QString getDescription() const;
 
-	void addTag(QString& tag);
-	void removeTag(QString& tag);
+	void addTag(QString tag);
+	void removeTag(QString tag);
 	QList<QString> getTags();
 
-	void setBegin(QDateTime& _begin);
+	void setBegin(QDateTime _begin);
 	QDateTime getBegin() const;
 
-	void setEnd(QDateTime& _end);
+	void setEnd(QDateTime _end);
 	QDateTime getEnd() const;
 
 	void setDone(bool _done);

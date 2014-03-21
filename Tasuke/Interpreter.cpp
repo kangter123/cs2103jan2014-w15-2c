@@ -8,12 +8,57 @@
 #include "Exceptions.h"
 #include "Interpreter.h"
 
+QHash<QString, QString> Interpreter::decompose(QString text) {
+	QStringList tokens = text.split(" ");
+	QString current = "";
+	bool expectNewDelimiter = false;
+	QHash<QString, QString> retVal;
+
+	for (int i=0; i<tokens.size(); i++) {
+		if (tokens[i].size() > 0 && (tokens[i][0] == '@' || tokens[i][0] == '#' || tokens[i] == "-@" || tokens[i].startsWith("-#"))) {
+			expectNewDelimiter = false;
+			current = tokens[i];
+
+			if (tokens[i][0] == '@') {
+				current = tokens[i][0];
+				tokens[i].remove(0,1);
+
+				if (retVal.contains(current) == false) {
+					throw ExceptionBadCommand();
+				}
+			} else if (tokens[i][0] == '#') {
+				tokens[i].remove(0,1);
+				expectNewDelimiter = true;
+			} else if (tokens[i] == "-@") {
+				tokens[i].remove(0,2);
+				expectNewDelimiter = true;
+			} else if (tokens[i].startsWith("-#")) {
+				tokens[i].remove(0,2);
+				expectNewDelimiter = true;
+			}
+		} else {
+			if (expectNewDelimiter) {
+				throw ExceptionBadCommand();
+			}
+		}
+
+		QString newVal =  tokens[i];
+		QString temp = retVal[current];
+		if (temp.isEmpty() == false) {
+			newVal = temp + " " + newVal;
+		}
+		retVal[current] = newVal;
+	}
+
+	return retVal;
+}
+
 QString Interpreter::removeBefore(QString text, QString before) {
 	QString retVal = text;
 	int pos = retVal.indexOf(before);
 
-	if (pos > 0) {
-		retVal.remove(0, pos);
+	if (pos != -1) {
+		retVal.remove(0, pos + before.size());
 	}
 
 	return retVal;
@@ -85,126 +130,86 @@ ICommand* Interpreter::interpret(QString commandString) {
 	}
 
 	return nullptr;
-
-	/*if (commandType == "add") {
-		Task task;
-		QString description;
-		for (int i=1; i<tokens.size(); i++) {
-			if (tokens[i][0] == '@' || tokens[i] == "-" || tokens[i][0] == '#') {
-				break;
-			}
-
-			description.append(tokens[i]);
-			description.append(" ");
-		}
-		description.chop(1);
-
-		int atPos = commandString.indexOf("@");
-		if (atPos > 0) {
-			QString atString = commandString.remove(0,atPos+1);
-			if (atString.contains("@")) {
-				throw ExceptionBadCommand();
-			}
-			
-			int tagPos = atString.indexOf("#");
-			if (tagPos > 0) {
-				atString.truncate(tagPos);
-			}
-
-			if (atString.trimmed().isEmpty()) {
-				throw ExceptionBadCommand();
-			}
-
-			QStringList dateTimePeriod = atString.split("-");
-
-			if (dateTimePeriod.size() == 1) {
-				QDateTime end = parseDate(dateTimePeriod[0]);
-				task.setEnd(end);
-
-				if (!end.isValid()) {
-					throw ExceptionBadCommand();
-				}
-			} else if (dateTimePeriod.size() == 2) {
-				QDateTime begin = parseDate(dateTimePeriod[0]);
-				QDateTime end = parseDate(dateTimePeriod[1]);
-				task.setBegin(begin);
-				task.setEnd(end);
-
-				if (!end.isValid() || !begin.isValid()) {
-					throw ExceptionBadCommand();
-				}
-			} else {
-				throw ExceptionBadCommand();
-			}
-		}
-
-		task.setDescription(description);
-		return new AddCommand(task);
-	} else if (commandType == "remove") {
-		if (tokens.size() != 2) {
-			throw ExceptionBadCommand();
-		}
-		int pos = tokens[1].toInt();
-		int maxPos = Tasuke::instance().getStorage().totalTasks();
-
-		if (pos < 1 || pos > maxPos) {
-			throw ExceptionBadCommand();
-		}
-		return new RemoveCommand(pos-1);
-	} else if (commandType == "edit") {
-		if (tokens.size() < 2) {
-			throw ExceptionBadCommand();
-		}
-		int pos = tokens[1].toInt();
-		int maxPos = Tasuke::instance().getStorage().totalTasks();
-
-		if (pos < 1 || pos > maxPos) {
-			throw ExceptionBadCommand();
-		}
-
-		Task task = Tasuke::instance().getStorage().getTask(pos-1);;
-
-		QString description;
-		for (int i=2; i<tokens.size(); i++) {
-			description.append(tokens[i]);
-			description.append(" ");
-		}
-		description.chop(1);
-		task.setDescription(description);
-		return new EditCommand(pos-1, task);
-	} else if (commandString == "show") {
-		Tasuke::instance().showTaskWindow();
-		return nullptr;
-	} else if (commandString == "about") {
-		Tasuke::instance().showAboutWindow();
-		return nullptr;
-	} else if (commandString == "hide") {
-		Tasuke::instance().hideTaskWindow();
-		return nullptr;
-	} else if (commandString == "undo") {
-		Tasuke::instance().undoCommand();
-		return nullptr;
-	} else if (commandString == "redo") {
-		Tasuke::instance().redoCommand();
-		return nullptr;
-	} else if (commandString == "exit") {
-		QApplication::quit();
-		return nullptr;
-	} else {
-		throw ExceptionBadCommand();
-	}*/
 }
 
 AddCommand* Interpreter::createAddCommand(QString commandString) {
 	commandString = removeBefore(commandString, "add");
+	commandString = commandString.trimmed();
+
+	if (commandString.isEmpty()) {
+		throw ExceptionBadCommand();
+	}
+
+	QHash<QString, QString> parts = decompose(commandString);
+	Task task;
+
+	task.setDescription(parts[""]);
+
+	foreach(const QString &key, parts.keys()) {
+		QString value = parts[key].trimmed();
+
+		if (key.startsWith('#')) {
+			task.addTag(value);
+		} else if (key == "@") {
+			TIME_PERIOD period = parseTimePeriod(value);
+			task.setBegin(period.begin);
+			task.setEnd(period.end);
+		}
+	}
+
+	return new AddCommand(task);
 }
 
 RemoveCommand* Interpreter::createRemoveCommand(QString commandString) {
 	commandString = removeBefore(commandString, "remove");
+	commandString = commandString.trimmed();
+
+	if (commandString.isEmpty()) {
+		throw ExceptionBadCommand();
+	}
+
+	QString idString = commandString.split(' ')[0];
+	int id = parseId(idString);
+
+	return new RemoveCommand(id-1);
 }
 
 EditCommand* Interpreter::createEditCommand(QString commandString) {
 	commandString = removeBefore(commandString, "edit");
+	commandString = commandString.trimmed();
+
+	if (commandString.isEmpty()) {
+		throw ExceptionBadCommand();
+	}
+
+	QString idString = commandString.split(' ')[0];
+	int id = parseId(idString);
+
+	commandString = commandString.section(' ', 1);
+
+	QHash<QString, QString> parts = decompose(commandString);
+	Task task = Tasuke::instance().getStorage().getTask(id-1);
+
+	foreach(const QString &key, parts.keys()) {
+		QString value = parts[key].trimmed();
+
+		if (key == "") {
+			task.setDescription(value);
+		} else if (key.startsWith('#')) {
+			task.addTag(value);
+		} else if (key == "@") {
+			TIME_PERIOD period = parseTimePeriod(value);
+			task.setBegin(period.begin);
+			task.setEnd(period.end);
+		} else if (key.startsWith("-#")) {
+			task.removeTag(value);
+		} else if (key.startsWith("-@")) {
+			task.setBegin(QDateTime());
+			task.setEnd(QDateTime());
+		}
+	}
+
+	return new EditCommand(id-1, task);
 }
 
 void Interpreter::doShow() {
@@ -227,6 +232,41 @@ void Interpreter::doRedo() {
 }
 void Interpreter::doExit() {
 	QApplication::quit();
+}
+
+int Interpreter::parseId(QString idString) {
+	bool ok = false;
+	int id = idString.toInt(&ok);
+
+	if (ok == false) {
+		throw ExceptionBadCommand();
+	}
+
+	int numTasks = Tasuke::instance().getStorage().totalTasks();
+
+	if (id < 1 || id > numTasks) {
+		throw ExceptionBadCommand();
+	}
+
+	return id;
+}
+
+Interpreter::TIME_PERIOD Interpreter::parseTimePeriod(QString timePeriod) {
+	QStringList timePeriodParts = timePeriod.split('-');
+	TIME_PERIOD retVal;
+
+	if (timePeriodParts.size() > 2) {
+		throw ExceptionBadCommand();
+	}
+
+	if (timePeriodParts.size() == 1) {
+		retVal.end = parseDate(timePeriod);
+	} else if (timePeriodParts.size() == 2) {
+		retVal.begin = parseDate(timePeriodParts[0]);
+		retVal.begin = parseDate(timePeriodParts[1]);
+	}
+
+	return retVal;
 }
 
 QDateTime Interpreter::parseDate(QString dateString) {
