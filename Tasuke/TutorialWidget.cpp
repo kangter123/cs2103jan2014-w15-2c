@@ -20,6 +20,35 @@ TutorialWidget::~TutorialWidget() {
 	LOG(INFO) << "TutorialWidget instance destroyed";
 }
 
+//goes back to the task list
 void TutorialWidget::backToTasuke() {
 	Tasuke::instance().getTaskWindow().showListWidget();
+}
+
+//switches tabs to the next tab
+void TutorialWidget::changeTabs(){
+
+	int nextTab;
+	int currTab = ui.tabWidget->currentIndex();
+
+	if (currTab == ui.tabWidget->count()-1) {
+		nextTab = 0;
+	} else { 
+		nextTab = currTab + 1;
+	}
+
+	ui.tabWidget->setCurrentIndex(nextTab);
+}
+
+bool TutorialWidget::eventFilter(QObject* object, QEvent* event) {
+	if (event->type() == QEvent::KeyPress) {
+		QKeyEvent* eventKey = static_cast<QKeyEvent*>(event);
+
+		if (eventKey->key() == Qt::Key_Tab){
+			changeTabs();
+			return true;
+		}
+	}
+	return QObject::eventFilter(object, event);
+
 }

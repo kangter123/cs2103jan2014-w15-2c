@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>797</width>
+    <width>820</width>
     <height>411</height>
    </rect>
   </property>
@@ -19,11 +19,130 @@
   <widget class="QTabWidget" name="tabWidget">
    <property name="geometry">
     <rect>
-     <x>10</x>
-     <y>50</y>
-     <width>771</width>
-     <height>351</height>
+     <x>5</x>
+     <y>43</y>
+     <width>808</width>
+     <height>361</height>
     </rect>
+   </property>
+   <property name="palette">
+    <palette>
+     <active>
+      <colorrole role="Button">
+       <brush brushstyle="SolidPattern">
+        <color alpha="0">
+         <red>0</red>
+         <green>0</green>
+         <blue>0</blue>
+        </color>
+       </brush>
+      </colorrole>
+      <colorrole role="Base">
+       <brush brushstyle="SolidPattern">
+        <color alpha="0">
+         <red>0</red>
+         <green>0</green>
+         <blue>0</blue>
+        </color>
+       </brush>
+      </colorrole>
+      <colorrole role="Window">
+       <brush brushstyle="SolidPattern">
+        <color alpha="0">
+         <red>0</red>
+         <green>0</green>
+         <blue>0</blue>
+        </color>
+       </brush>
+      </colorrole>
+     </active>
+     <inactive>
+      <colorrole role="Button">
+       <brush brushstyle="SolidPattern">
+        <color alpha="0">
+         <red>0</red>
+         <green>0</green>
+         <blue>0</blue>
+        </color>
+       </brush>
+      </colorrole>
+      <colorrole role="Base">
+       <brush brushstyle="SolidPattern">
+        <color alpha="0">
+         <red>0</red>
+         <green>0</green>
+         <blue>0</blue>
+        </color>
+       </brush>
+      </colorrole>
+      <colorrole role="Window">
+       <brush brushstyle="SolidPattern">
+        <color alpha="0">
+         <red>0</red>
+         <green>0</green>
+         <blue>0</blue>
+        </color>
+       </brush>
+      </colorrole>
+     </inactive>
+     <disabled>
+      <colorrole role="Button">
+       <brush brushstyle="SolidPattern">
+        <color alpha="0">
+         <red>0</red>
+         <green>0</green>
+         <blue>0</blue>
+        </color>
+       </brush>
+      </colorrole>
+      <colorrole role="Base">
+       <brush brushstyle="SolidPattern">
+        <color alpha="0">
+         <red>0</red>
+         <green>0</green>
+         <blue>0</blue>
+        </color>
+       </brush>
+      </colorrole>
+      <colorrole role="Window">
+       <brush brushstyle="SolidPattern">
+        <color alpha="0">
+         <red>0</red>
+         <green>0</green>
+         <blue>0</blue>
+        </color>
+       </brush>
+      </colorrole>
+     </disabled>
+    </palette>
+   </property>
+   <property name="font">
+    <font>
+     <family>Quicksand Book</family>
+     <pointsize>10</pointsize>
+     <kerning>true</kerning>
+    </font>
+   </property>
+   <property name="focusPolicy">
+    <enum>Qt::NoFocus</enum>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QTabBar::tab{
+	background-color: rgb(129, 129, 129);
+	color: rgb(255, 255, 255);
+	padding-top:20px;
+	padding-bottom: 20px;
+	padding-left: 5px;
+	padding-right: 7px;
+	margin: 1px;
+	border-radius: 2px;
+}
+
+
+QTabBar::tab:selected{
+	background-color: rgb(88, 88, 88);
+}
+</string>
    </property>
    <property name="tabPosition">
     <enum>QTabWidget::West</enum>
@@ -32,7 +151,7 @@
     <enum>QTabWidget::Triangular</enum>
    </property>
    <property name="currentIndex">
-    <number>0</number>
+    <number>1</number>
    </property>
    <property name="usesScrollButtons">
     <bool>true</bool>
@@ -104,7 +223,7 @@
     <widget class="QLabel" name="label_4">
      <property name="geometry">
       <rect>
-       <x>190</x>
+       <x>170</x>
        <y>220</y>
        <width>431</width>
        <height>41</height>
@@ -117,7 +236,7 @@
       </font>
      </property>
      <property name="text">
-      <string>Or press &lt;tab&gt; to navigate.</string>
+      <string>Or press &lt;tab&gt; to switch tabs.</string>
      </property>
     </widget>
    </widget>
@@ -174,7 +293,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>14</y>
+     <y>5</y>
      <width>171</width>
      <height>23</height>
     </rect>
@@ -185,6 +304,9 @@
      <pointsize>14</pointsize>
     </font>
    </property>
+   <property name="focusPolicy">
+    <enum>Qt::ClickFocus</enum>
+   </property>
    <property name="text">
     <string>&lt; Back to Tasuke!</string>
    </property>
@@ -193,7 +315,7 @@
    <property name="geometry">
     <rect>
      <x>340</x>
-     <y>7</y>
+     <y>0</y>
      <width>131</width>
      <height>41</height>
     </rect>

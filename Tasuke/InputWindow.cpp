@@ -43,10 +43,10 @@ bool InputWindow::eventFilter(QObject* object, QEvent* event) {
 			return true;
 		}
 
-		if(Tasuke::instance().getTaskWindow().getScreen() == 0){
+		if (Tasuke::instance().getTaskWindow().getScreen() == 0){
 			//scroll keys for tasks
-			if(eventKey->modifiers() & Qt::CTRL) {
-				if(eventKey->key() == Qt::Key_Down) {
+			if (eventKey->modifiers() & Qt::CTRL) {
+				if (eventKey->key() == Qt::Key_Down) {
 					Tasuke::instance().getTaskWindow().pageDown();
 					return true;
 				}
@@ -57,7 +57,7 @@ bool InputWindow::eventFilter(QObject* object, QEvent* event) {
 				}
 			}
 
-			if(eventKey->key() == Qt::Key_Down) {
+			if (eventKey->key() == Qt::Key_Down) {
 				Tasuke::instance().getTaskWindow().scrollDown();
 				return true;
 			}
@@ -81,6 +81,13 @@ bool InputWindow::eventFilter(QObject* object, QEvent* event) {
 				if(ui.lineEdit->toPlainText().trimmed().isEmpty()) {
 					ui.lineEdit->insertPlainText(QString("add "));
 				}
+			}
+		}
+
+		if (Tasuke::instance().getTaskWindow().getScreen() == 1) { //on tutorial window
+			if (eventKey->key() == Qt::Key_Tab){
+				Tasuke::instance().getTaskWindow().changeTutorialWidgetTabs();
+				return true;
 			}
 		}
     }

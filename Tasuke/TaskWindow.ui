@@ -360,9 +360,9 @@ QScrollBar::handle:vertical {
    <widget class="QStackedWidget" name="stackedWidget">
     <property name="geometry">
      <rect>
-      <x>21</x>
+      <x>10</x>
       <y>15</y>
-      <width>797</width>
+      <width>820</width>
       <height>411</height>
      </rect>
     </property>
@@ -376,7 +376,7 @@ QScrollBar::handle:vertical {
      <widget class="QListWidget" name="taskList">
       <property name="geometry">
        <rect>
-        <x>0</x>
+        <x>11</x>
         <y>77</y>
         <width>797</width>
         <height>330</height>
@@ -404,7 +404,7 @@ QScrollBar::handle:vertical {
      <widget class="QLabel" name="columnLabel">
       <property name="geometry">
        <rect>
-        <x>10</x>
+        <x>21</x>
         <y>43</y>
         <width>780</width>
         <height>31</height>

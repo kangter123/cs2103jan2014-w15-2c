@@ -14,8 +14,10 @@ public:
 
 public slots:
 	void backToTasuke();
+	void changeTabs();
 
 protected:
+	bool eventFilter(QObject* object, QEvent* event);
 
 private slots:
 

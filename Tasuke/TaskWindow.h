@@ -24,7 +24,8 @@ public:
 	virtual ~TaskWindow();
 
 	void highlightCurrentlySelected(int prevsize);
-	void focusOnNewTask();
+	void highlightAndAnimateCurrentlySelected(int prevsize);
+	void focusOnNewTask(bool haveAnimation);
 	void showTasks(QList<Task> tasks);
 	void initTut();
 	void scrollUp();
@@ -32,6 +33,7 @@ public:
 	void pageUp();
 	void pageDown();
 	int getScreen();
+	void changeTutorialWidgetTabs();
 
 	
 public slots:
