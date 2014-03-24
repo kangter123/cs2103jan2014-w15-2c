@@ -30,6 +30,11 @@ void TaskWindow::highlightCurrentlySelected(int prevSize){
 	if ((previouslySelected>=0) && (previouslySelected<currentTasks.size()) && (prevSize!=0)) { //dehighlight if previous state is not empty
 		Task t2 = currentTasks[previouslySelected];
 		TaskEntry * entry2 = new TaskEntry(previouslySelected+1, t2.getDescription(), t2.getTags(), t2.getBegin(), t2.getEnd(), this);
+		
+		if (t2.isDone()) {
+			entry2->strikeOut();
+		}
+		
 		entry2->ui.bg->setPixmap(pxr2);
 
 		QListWidgetItem *listItem2 = new QListWidgetItem();
@@ -44,6 +49,11 @@ void TaskWindow::highlightCurrentlySelected(int prevSize){
 	if((currentlySelected>=0) && (currentlySelected<currentTasks.size())) {
 		Task t = currentTasks[currentlySelected];
 		TaskEntry * entry = new TaskEntry(currentlySelected+1, t.getDescription(), t.getTags(), t.getBegin(), t.getEnd(), this);
+		
+		if (t.isDone()) {
+			entry->strikeOut();
+		}
+		
 		entry->ui.bg->setPixmap(pxr); 
 
 		QListWidgetItem *listItem = new QListWidgetItem();
@@ -64,6 +74,11 @@ void TaskWindow::highlightAndAnimateCurrentlySelected(int prevSize){
 	if ((previouslySelected>=0) && (previouslySelected<currentTasks.size()) && (prevSize!=0)) { //dehighlight if previous state is not empty
 		Task t2 = currentTasks[previouslySelected];
 		TaskEntry * entry2 = new TaskEntry(previouslySelected+1, t2.getDescription(), t2.getTags(), t2.getBegin(), t2.getEnd(), this);
+		
+		if (t2.isDone()) {
+			entry2->strikeOut();
+		}
+		
 		entry2->ui.bg->setPixmap(pxr2);
 
 		QListWidgetItem *listItem2 = new QListWidgetItem();
@@ -78,6 +93,11 @@ void TaskWindow::highlightAndAnimateCurrentlySelected(int prevSize){
 	if((currentlySelected>=0) && (currentlySelected<currentTasks.size())) {
 		Task t = currentTasks[currentlySelected];
 		TaskEntry * entry = new TaskEntry(currentlySelected+1, t.getDescription(), t.getTags(), t.getBegin(), t.getEnd(), this);
+		
+		if (t.isDone()) {
+			entry->strikeOut();
+		}
+
 		entry->ui.bg->setPixmap(pxr); 
 
 		QListWidgetItem *listItem = new QListWidgetItem();

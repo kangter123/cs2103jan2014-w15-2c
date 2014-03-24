@@ -14,6 +14,7 @@ public:
 	TaskEntry(int id, QString description, QList<QString> tags, QDateTime start, QDateTime end, QWidget *parent = 0);
 	~TaskEntry();
 	void strikeOut();
+	void highlightOverdue();
 	Ui::TaskEntry ui;
 
 public slots:
