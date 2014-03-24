@@ -18,6 +18,7 @@ private slots:
 	void handleShowInputWindow();
 	void handleShowAboutWindow();
 	void handleIconActivated(QSystemTrayIcon::ActivationReason reason);
+	void handleAboutToQuit();
 
 private:
 	QSystemTrayIcon* trayIcon;

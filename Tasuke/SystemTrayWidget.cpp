@@ -37,6 +37,9 @@ SystemTrayWidget::SystemTrayWidget(QWidget *parent ) : QWidget(parent) {
 
 	//when tray icon is clicked..
 	connect(trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this, SLOT(handleIconActivated(QSystemTrayIcon::ActivationReason)));
+
+	//when quiting
+	connect(qApp, SIGNAL(aboutToQuit()), this, SLOT(handleAboutToQuit()));
 }
 
 SystemTrayWidget::~SystemTrayWidget() {
@@ -68,4 +71,8 @@ void SystemTrayWidget::handleIconActivated(QSystemTrayIcon::ActivationReason rea
 		Tasuke::instance().showTaskWindow();
 		Tasuke::instance().showInputWindow();	
 	}
+}
+
+void SystemTrayWidget::handleAboutToQuit() {
+	trayIcon->hide();
 }
