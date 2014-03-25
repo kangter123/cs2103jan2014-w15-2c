@@ -62,11 +62,20 @@ bool Task::isDone() const {
 	return done;
 }
 
+// 
 bool Task::isOverdue() {
 	if (end.isNull() || !end.isValid()) {
 		return false;
 	}
 	if (end < QDateTime::currentDateTime()) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
+bool Task::isOngoing() {
+	if (begin < QDateTime::currentDateTime()) {
 		return true;
 	} else {
 		return false;
