@@ -23,6 +23,7 @@ Tasuke::Tasuke() {
 	taskWindow = nullptr;
 	inputWindow = nullptr;
 	aboutWindow = nullptr;
+	settingsWindow = nullptr;
 	systemTrayWidget = nullptr;
 	hotKeyManager = nullptr;
 
@@ -45,6 +46,10 @@ Tasuke::~Tasuke() {
 
 	if (aboutWindow != nullptr) {
 		delete aboutWindow;
+	}
+	
+	if (settingsWindow != nullptr) {
+		delete settingsWindow;
 	}
 
 	if (inputWindow != nullptr) {
@@ -99,6 +104,7 @@ void Tasuke::initialize(){
 	taskWindow = new TaskWindow();
 	inputWindow = new InputWindow();
 	aboutWindow = new AboutWindow();
+	settingsWindow = new SettingsWindow();
 	systemTrayWidget = new SystemTrayWidget();
 	hotKeyManager = new HotKeyManager();
 	
@@ -134,6 +140,10 @@ InputWindow& Tasuke::getInputWindow(){
 
 AboutWindow& Tasuke::getAboutWindow(){
 	return *aboutWindow;
+}
+
+SettingsWindow& Tasuke::getSettingsWindow(){
+	return *settingsWindow;
 }
 
 TaskWindow& Tasuke::getTaskWindow(){
@@ -215,6 +225,14 @@ void Tasuke::showTutorial() {
 	}
 
 	taskWindow->showTutorialWidget();
+}
+
+void Tasuke::showSettingsWindow() {
+	if (!guiMode) {
+		return;
+	}
+
+	settingsWindow->showAndCenter();
 }
 
 void Tasuke::showMessage(QString message) {

@@ -33,7 +33,7 @@ public:
 	void updateCurrentlySelectedTo(int row);
 	void highlightTask(int row);
 	void highlightCurrentlySelectedTask(int prevsize);
-	void showTasks(QList<Task> tasks);
+	void showTasks(QList<Task> tasks, QString title = "");
 
 	// Handles scrolling
 	void scrollUp();

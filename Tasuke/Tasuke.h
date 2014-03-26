@@ -8,6 +8,7 @@
 #include "InputWindow.h"
 #include "TaskWindow.h"
 #include "AboutWindow.h"
+#include "SettingsWindow.h"
 #include "SystemTrayWidget.h"
 #include "HotKeyManager.h"
 
@@ -22,6 +23,7 @@ public:
 	IStorage& getStorage();
 	InputWindow& getInputWindow();
 	AboutWindow& getAboutWindow();
+	SettingsWindow& getSettingsWindow();
 	TaskWindow& getTaskWindow();
     HotKeyManager& getHotKeyManager();
 
@@ -32,6 +34,7 @@ public:
 	void hideTaskWindow();
 	void toggleInputWindow();
 	void toggleTaskWindow();
+	void showSettingsWindow();
 	void showTutorial();
 	void showMessage(QString message);
 	void updateTaskWindow(QList<Task> tasks);
@@ -56,6 +59,7 @@ private:
 	TaskWindow* taskWindow;
 	InputWindow* inputWindow;
 	AboutWindow* aboutWindow;
+	SettingsWindow* settingsWindow;
 	SystemTrayWidget* systemTrayWidget;
 	HotKeyManager* hotKeyManager;
 	Hunspell* spellObj;

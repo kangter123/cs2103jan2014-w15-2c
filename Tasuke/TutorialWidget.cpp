@@ -22,7 +22,7 @@ void TutorialWidget::backToTasuke() {
 }
 
 // Switches tabs to the next tab
-void TutorialWidget::changeTabs(){
+void TutorialWidget::changeTabs() {
 
 	int nextTab;
 	int currTab = ui.tabWidget->currentIndex();

@@ -86,6 +86,7 @@ QString Interpreter::getType(QString commandString) {
 	typeKeywords << "clear";
 	typeKeywords << "help";
 	typeKeywords << "about";
+	typeKeywords << "settings";
 	typeKeywords << "exit";
 	
 	QString temp = commandString.trimmed();
@@ -140,6 +141,8 @@ ICommand* Interpreter::interpret(QString commandString) {
 		return createClearCommand(commandString);
 	} else if (commandType == "help") {
 		doHelp();
+	} else if (commandType == "settings") {
+		doSettings();
 	} else if (commandType == "about") {
 		doAbout();
 	} else if (commandType == "exit") {
@@ -274,6 +277,9 @@ void Interpreter::doUndo() {
 }
 void Interpreter::doRedo() {
 	Tasuke::instance().redoCommand();
+}
+void Interpreter::doSettings() {
+	Tasuke::instance().showSettingsWindow();
 }
 void Interpreter::doHelp() {
 	Tasuke::instance().showTutorial();

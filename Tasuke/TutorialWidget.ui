@@ -151,7 +151,7 @@ QTabBar::tab:selected{
     <enum>QTabWidget::Triangular</enum>
    </property>
    <property name="currentIndex">
-    <number>0</number>
+    <number>1</number>
    </property>
    <property name="usesScrollButtons">
     <bool>true</bool>
@@ -223,11 +223,11 @@ QTabBar::tab:selected{
      <property name="font">
       <font>
        <family>Quicksand Book</family>
-       <pointsize>22</pointsize>
+       <pointsize>11</pointsize>
       </font>
      </property>
      <property name="text">
-      <string>We can possibly boast our features here, such as spellcheck, auto prepend add, etc.</string>
+      <string>We can possibly boast our features here, such as spellcheck, auto prepend add, support for long ass tasks, multiple tags etc.</string>
      </property>
      <property name="wordWrap">
       <bool>true</bool>

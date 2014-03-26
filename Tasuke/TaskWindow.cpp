@@ -34,16 +34,15 @@ TaskEntry* TaskWindow::createEntry(Task t, int index) {
 
 	if (t.isDone()) {
 		entry->strikeOut();
-	}
+	} else {
+		if (t.isOverdue()) {
+			entry->highlightOverdue();
+		}
 
-	if (t.isOverdue()) {
-		entry->highlightOverdue();
+		if (t.isOngoing()) {
+			entry->highlightOngoing();
+		}
 	}
-
-	if (t.isOngoing()) {
-		entry->highlightOngoing();
-	}
-
 	return entry;
 }
 
@@ -118,10 +117,15 @@ void TaskWindow::highlightCurrentlySelectedTask(int prevSize) {
 }
 
 // This function is responsible for showing all the tasks entries.
-void TaskWindow::showTasks(QList<Task> tasks) {
+void TaskWindow::showTasks(QList<Task> tasks, QString title) {
 	previousSize = currentTasks.size(); // Size of previous list
 	currentTasks = tasks; // Update current tasks
 	ui.taskList->clear();
+
+	// Will change title on top
+	if (!title.isEmpty()) {
+		ui.taskScope->setText("Viewing " + title);
+	}
 
 	for (int i = 0; i < tasks.size(); i++){
 		Task t = tasks[i];

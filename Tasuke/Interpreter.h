@@ -36,6 +36,7 @@ private:
 	static void doUndo();
 	static void doRedo();
 	static void doHelp();
+	static void doSettings();
 	static void doExit();
 
 public:
