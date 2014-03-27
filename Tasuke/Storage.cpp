@@ -199,3 +199,46 @@ void Storage::clearAllDone() {
 void Storage::clearAllTasks() {
 	tasks.clear();
 }
+
+
+// Searches all descriptions of all tasks in memory for specified keyword(s).
+// Returns a list of all tasks that contain the keyword in its description.
+// Searches by whole keyword only. Case sensitivity optional.
+QList<Task&> Storage::searchByDesc(QString keyword, Qt::CaseSensitivity caseSensitivity) {
+	QList<Task&> results;
+
+	int taskCount = tasks.size();
+
+	for (int i=0; i<taskCount; i++) {
+		Task& task = tasks[i];
+		QStringRef description(&task.getDescription());
+		if (description.contains(keyword, caseSensitivity)) {
+			results.push_back(task);
+		}
+	}
+
+	return results;
+}
+
+// Searches all tags in all tasks in memory for specified tag.
+// Returns a list of all tasks that contain that tag.
+// Searches by whole tag only. Case sensitive.
+QList<Task&> Storage::searchByTag(QString tag) {
+	QList<Task&> results;
+
+	int taskCount = tasks.size();
+
+	for (int i=0; i<taskCount; i++) {
+		Task& task = tasks[i];
+		QList<QString> tags = task.getTags();
+		int tagCount = tags.size();
+
+		for (int j=0; j<tagCount; j++) {
+			if (tags[j] == tag) {
+				results.push_back(task);
+			}
+		}
+	}
+
+	return results;
+}

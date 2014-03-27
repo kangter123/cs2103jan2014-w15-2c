@@ -44,6 +44,9 @@ public:
 
 	void clearAllDone();
 	void clearAllTasks();
+
+	QList<Task&> searchByDesc(QString keyword, Qt::CaseSensitivity caseSensitivity);
+	QList<Task&> searchByTag(QString tag);
 };
 
 #endif
