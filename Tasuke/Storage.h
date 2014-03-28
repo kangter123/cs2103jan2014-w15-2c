@@ -26,6 +26,14 @@ public:
 	QList<Task> searchByDescription(QString keyword, Qt::CaseSensitivity caseSensitivity = Qt::CaseInsensitive);
 	QList<Task> searchByTag(QString tag);
 
+	void sortByEndDate();
+	void sortByBeginDate();
+	void sortByDescription();
+	void sortByDone();
+
+	void clearAllDone();
+	void clearAllTasks();
+
 	virtual void loadFile() = 0;
 	virtual void saveFile() = 0;
 };
@@ -35,18 +43,11 @@ public:
 // Tasuke singleton.
 class Storage : public IStorage {
 private:
-	void sortByEndDate();
-	void sortByBeginDate();
-	void sortByDescription();
-	void sortByDone();
 
 public:
 	Storage();
 	void loadFile();
 	void saveFile();
-
-	void clearAllDone();
-	void clearAllTasks();
 };
 
 #endif

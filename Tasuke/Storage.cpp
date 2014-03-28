@@ -113,6 +113,48 @@ QList<Task> IStorage::searchByTag(QString tag) {
 	return results;
 }
 
+void IStorage::sortByEndDate() {
+	LOG(INFO) << "Sorting by end date.";
+	qStableSort(tasks.begin(), tasks.end(), [](const Task& t1, const Task& t2) {
+		return t1.getEnd() < t2.getEnd();
+	});
+}
+
+void IStorage::sortByBeginDate() {
+	LOG(INFO) << "Sorting by begin date.";
+	qStableSort(tasks.begin(), tasks.end(), [](const Task& t1, const Task& t2) {
+		return t1.getBegin() < t2.getBegin();
+	});
+}
+
+void IStorage::sortByDescription() {
+	LOG(INFO) << "Sorting by description.";
+	qStableSort(tasks.begin(), tasks.end(), [](const Task& t1, const Task& t2) {
+		return t1.getDescription().toLower() < t2.getDescription().toLower();
+	});
+}
+
+void IStorage::sortByDone() {
+	LOG(INFO) << "Sorting by done status.";
+	qStableSort(tasks.begin(), tasks.end(), [](const Task& t1, const Task& t2) {
+		return t1.isDone() < t2.isDone();
+	});
+}
+
+void IStorage::clearAllDone() {
+	LOG(INFO) << "Clearing all tasks marked as done.";
+	foreach (const Task& task, tasks) {
+		if (task.isDone()) {
+			tasks.removeOne(task);
+		}
+	}
+}
+
+void IStorage::clearAllTasks() {
+	LOG(INFO) << "Clearing all tasks with great justice.";
+	tasks.clear();
+}
+
 // Constructor for Storage.
 Storage::Storage() {
 	LOG(INFO) << "Storage instance created...";
@@ -206,46 +248,4 @@ void Storage::saveFile() {
 	settings.endArray();
 
 	LOG(INFO) << "File saved.";
-}
-
-void Storage::sortByEndDate() {
-	LOG(INFO) << "Sorting by end date.";
-	qStableSort(tasks.begin(), tasks.end(), [](const Task& t1, const Task& t2) {
-		return t1.getEnd() < t2.getEnd();
-	});
-}
-
-void Storage::sortByBeginDate() {
-	LOG(INFO) << "Sorting by begin date.";
-	qStableSort(tasks.begin(), tasks.end(), [](const Task& t1, const Task& t2) {
-		return t1.getBegin() < t2.getBegin();
-	});
-}
-
-void Storage::sortByDescription() {
-	LOG(INFO) << "Sorting by description.";
-	qStableSort(tasks.begin(), tasks.end(), [](const Task& t1, const Task& t2) {
-		return t1.getDescription().toLower() < t2.getDescription().toLower();
-	});
-}
-
-void Storage::sortByDone() {
-	LOG(INFO) << "Sorting by done status.";
-	qStableSort(tasks.begin(), tasks.end(), [](const Task& t1, const Task& t2) {
-		return t1.isDone() < t2.isDone();
-	});
-}
-
-void Storage::clearAllDone() {
-	LOG(INFO) << "Clearing all tasks marked as done.";
-	foreach (const Task& task, tasks) {
-		if (task.isDone()) {
-			tasks.removeOne(task);
-		}
-	}
-}
-
-void Storage::clearAllTasks() {
-	LOG(INFO) << "Clearing all tasks with great justice.";
-	tasks.clear();
 }
