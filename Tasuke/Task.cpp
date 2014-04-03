@@ -43,6 +43,18 @@ QList<QString> Task::getTags() {
 
 void Task::setBegin(QDateTime _begin) {
 	begin = _begin;
+	beginDate = _begin.date();
+	beginTime = _begin.time();
+}
+
+void Task::setBeginDate(QDate _beginDate) {
+	beginDate = _beginDate;
+	begin.setDate(_beginDate);
+}
+
+void Task::setBeginTime(QTime _beginTime) {
+	beginTime = _beginTime;
+	begin.setTime(_beginTime);
 }
 
 QDateTime Task::getBegin() const {
@@ -51,6 +63,18 @@ QDateTime Task::getBegin() const {
 
 void Task::setEnd(QDateTime _end) {
 	end = _end;
+	endDate = _end.date();
+	endTime = _end.time();
+}
+
+void Task::setEndDate(QDate _endDate) {
+	endDate = _endDate;
+	end.setDate(_endDate);
+}
+
+void Task::setEndTime(QTime _endTime) {
+	endTime = _endTime;
+	end.setTime(_endTime);
 }
 
 QDateTime Task::getEnd() const {

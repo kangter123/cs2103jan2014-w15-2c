@@ -1,3 +1,5 @@
+#define NOMINMAX
+
 #include <glog/logging.h>
 #include <QSettings>
 #include <QVariant>
@@ -346,6 +348,7 @@ void Storage::saveFile() {
 		for (int j=0; j<tags.size(); j++) {
 			settings.setArrayIndex(j);
 			settings.setValue("Tag", tags[j]);
+
 		}
 		settings.endArray();
 		settings.sync();

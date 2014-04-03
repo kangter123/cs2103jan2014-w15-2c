@@ -9,8 +9,15 @@ class Task {
 private:
 	QString description;
 	QList<QString> tags;
+
 	QDateTime begin;
+	QDate beginDate;
+	QTime beginTime;
+
 	QDateTime end;
+	QDate endDate;
+	QTime endTime;
+
 	bool done;
 	int id;
 
@@ -27,9 +34,13 @@ public:
 	QList<QString> getTags();
 
 	void setBegin(QDateTime _begin);
+	void setBeginDate(QDate _beginDate);
+	void setBeginTime(QTime _beginTime);
 	QDateTime getBegin() const;
 
 	void setEnd(QDateTime _end);
+	void setEndDate(QDate _endDate);
+	void setEndTime(QTime _endTime);
 	QDateTime getEnd() const;
 
 	void setDone(bool _done);
