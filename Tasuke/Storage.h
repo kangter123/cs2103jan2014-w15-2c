@@ -9,18 +9,19 @@
 // Interface class for Storage.
 class IStorage {
 protected:
-	QList<Task> tasks;
+	//QList<Task> tasks;
+	QList<QSharedPointer<Task>> tasks;
 	QMutex mutex;
+
 public:
 	IStorage();
 	virtual ~IStorage();
 
-	void addTask(Task& task);
-	void addTask(Task& task, int pos);
+	Task addTask(Task& task);
 	Task& getTask(int pos);
 	void removeTask(int pos);
 	void popTask();
-	QList<Task> getTasks();
+	QList<Task> getTasks() const;
 	int totalTasks();
 
 	QList<Task> searchByDescription(QString keyword, Qt::CaseSensitivity caseSensitivity = Qt::CaseInsensitive);
@@ -35,7 +36,6 @@ public:
 	void sortByOngoing();
 	void sortByDone();
 	void sortByOverdue();
-	void sortByHasBeginDate();
 
 	void renumber();
 

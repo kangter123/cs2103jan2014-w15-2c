@@ -43,6 +43,8 @@ public:
 	void setEndTime(QTime _endTime);
 	QDateTime getEnd() const;
 
+	QString getTimeLeftString() const;
+
 	void setDone(bool _done);
 	void markDone();
 	void markUndone();

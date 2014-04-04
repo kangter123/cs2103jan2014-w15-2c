@@ -19,37 +19,26 @@ IStorage::~IStorage() {
 
 }
 
-void IStorage::addTask(Task& task) {
+Task IStorage::addTask(Task& task) {
 	QMutexLocker lock(&mutex);
+
+	QSharedPointer<Task> taskPtr = QSharedPointer<Task>(new Task(task));
+
 	LOG(INFO) << "Adding task " << task.getDescription().toStdString();
 
-	tasks.push_back(task);
+	tasks.push_back(taskPtr);
 	saveFile();
 	QString description = task.getDescription();
-	int id = 0;
-	foreach(Task task, tasks) {
-		if (task.getDescription() == description) {
-			id = task.getId();
-			break;
-		}
-	}
-	Tasuke::instance().updateTaskWindow(tasks);
-	Tasuke::instance().highightTask(id);
-}
 
-void IStorage::addTask(Task& task, int pos) {
-	QMutexLocker lock(&mutex);
-	LOG(INFO) << "Adding task " << task.getDescription().toStdString()
-		<< " at position " << pos;
+	Tasuke::instance().updateTaskWindow(getTasks());
+	//Tasuke::instance().highightTask(id);
 
-	tasks.insert(pos, task);
-	saveFile();
-	Tasuke::instance().updateTaskWindow(tasks);
+	return *taskPtr;
 }
 
 Task& IStorage::getTask(int pos) {
 	QMutexLocker lock(&mutex);
-	return tasks[pos];
+	return *tasks[pos];
 }
 
 void IStorage::removeTask(int pos) {
@@ -58,7 +47,7 @@ void IStorage::removeTask(int pos) {
 
 	tasks.removeAt(pos);
 	saveFile();
-	Tasuke::instance().updateTaskWindow(tasks);
+	Tasuke::instance().updateTaskWindow(getTasks());
 }
 
 void IStorage::popTask() {
@@ -67,12 +56,17 @@ void IStorage::popTask() {
 
 	tasks.pop_back();
 	saveFile();
-	Tasuke::instance().updateTaskWindow(tasks);
+	Tasuke::instance().updateTaskWindow(getTasks());
 }
 
-QList<Task> IStorage::getTasks() {
-	QMutexLocker lock(&mutex);
-	return tasks;
+// Read-only
+QList<Task> IStorage::getTasks() const {
+	QList<Task> result;
+
+	foreach (QSharedPointer<Task> task, tasks) {
+		result.push_back(*task);
+	}
+	return result;
 }
 
 int IStorage::totalTasks() {
@@ -89,9 +83,9 @@ QList<Task> IStorage::searchByDescription(QString keyword, Qt::CaseSensitivity c
 	QList<Task> results;
 
 	for (int i=0; i<tasks.size(); i++) {
-		QStringRef description(&tasks[i].getDescription());
+		QStringRef description(&tasks[i]->getDescription());
 		if (description.contains(keyword, caseSensitivity)) {
-			results.push_back(tasks[i]);
+			results.push_back(*tasks[i]);
 		}
 	}
 
@@ -108,12 +102,12 @@ QList<Task> IStorage::searchByTag(QString keyword, Qt::CaseSensitivity caseSensi
 	QList<Task> results;
 
 	for (int i=0; i<tasks.size(); i++) {
-		QList<QString> tags = tasks[i].getTags();
+		QList<QString> tags = tasks[i]->getTags();
 		int tagCount = tags.size();
 
 		for (int j=0; j<tagCount; j++) {
 			if (tags[j].contains(keyword, caseSensitivity)) {
-				results.push_back(tasks[i]);
+				results.push_back(*tasks[i]);
 			}
 		}
 	}
@@ -129,8 +123,8 @@ QList<Task> IStorage::searchByEndDate(QDateTime byThisDate) {
 	QList<Task> results;
 
 	for (int i=0; i<tasks.size(); i++) {
-		if (tasks[i].getEnd() <= byThisDate) {
-			results.push_back(tasks[i]);
+		if (tasks[i]->getEnd() <= byThisDate) {
+			results.push_back(*tasks[i]);
 		}
 	}
 
@@ -145,8 +139,8 @@ QList<Task> IStorage::searchByBeginDate(QDateTime fromThisDate) {
 	QList<Task> results;
 
 	for (int i=0; i<tasks.size(); i++) {
-		if (tasks[i].getBegin() >= fromThisDate) {
-			results.push_back(tasks[i]);
+		if (tasks[i]->getBegin() >= fromThisDate) {
+			results.push_back(*tasks[i]);
 		}
 	}
 
@@ -162,11 +156,11 @@ QList<Task> IStorage::searchByDateTimeInterval(QDateTime fromThisDate, QDateTime
 	QList<Task> results;
 
 	for (int i=0; i<tasks.size(); i++) {
-		bool fromStart = tasks[i].getBegin() >= fromThisDate;
-		bool byEnd = tasks[i].getEnd() <= byThisDate;
+		bool fromStart = tasks[i]->getBegin() >= fromThisDate;
+		bool byEnd = tasks[i]->getEnd() <= byThisDate;
 
 		if (fromStart && byEnd) {
-			results.push_back(tasks[i]);
+			results.push_back(*tasks[i]);
 		}
 	}
 
@@ -175,53 +169,46 @@ QList<Task> IStorage::searchByDateTimeInterval(QDateTime fromThisDate, QDateTime
 
 void IStorage::sortByEndDate() {
 	LOG(INFO) << "Sorting by end date.";
-	qStableSort(tasks.begin(), tasks.end(), [](const Task& t1, const Task& t2) {
-		if (!t1.getEnd().isValid()) {
+	qStableSort(tasks.begin(), tasks.end(), [](const QSharedPointer<Task>& t1, const QSharedPointer<Task>& t2) {
+		if (!t1->getEnd().isValid()) {
 			return true;
 		}
-		return t1.getEnd() < t2.getEnd();
+		return t1->getEnd() < t2->getEnd();
 	});
 }
 
 void IStorage::sortByBeginDate() {
 	LOG(INFO) << "Sorting by begin date.";
-	qStableSort(tasks.begin(), tasks.end(), [](const Task& t1, const Task& t2) {
-		return t1.getBegin() < t2.getBegin();
+	qStableSort(tasks.begin(), tasks.end(), [](const QSharedPointer<Task>& t1, const QSharedPointer<Task>& t2) {
+		return t1->getBegin() < t2->getBegin();
 	});
 }
 
 void IStorage::sortByDescription() {
 	LOG(INFO) << "Sorting by description.";
-	qStableSort(tasks.begin(), tasks.end(), [](const Task& t1, const Task& t2) {
-		return t1.getDescription().toLower() < t2.getDescription().toLower();
+	qStableSort(tasks.begin(), tasks.end(), [](const QSharedPointer<Task>& t1, const QSharedPointer<Task>& t2) {
+		return t1->getDescription().toLower() < t2->getDescription().toLower();
 	});
 }
 
 void IStorage::sortByOngoing() {
 	LOG(INFO) << "Sorting by done status.";
-	qStableSort(tasks.begin(), tasks.end(), [](const Task& t1, const Task& t2) {
-		return t1.isOngoing() > t2.isOngoing();
+	qStableSort(tasks.begin(), tasks.end(), [](const QSharedPointer<Task>& t1, const QSharedPointer<Task>& t2) {
+		return t1->isOngoing() > t2->isOngoing();
 	});
 }
 
 void IStorage::sortByOverdue() {
 	LOG(INFO) << "Sorting by done status.";
-	qStableSort(tasks.begin(), tasks.end(), [](const Task& t1, const Task& t2) {
-		return t1.isOverdue() > t2.isOverdue();
+	qStableSort(tasks.begin(), tasks.end(), [](const QSharedPointer<Task>& t1, const QSharedPointer<Task>& t2) {
+		return t1->isOverdue() > t2->isOverdue();
 	});
 }
 
 void IStorage::sortByDone() {
 	LOG(INFO) << "Sorting by done status.";
-	qStableSort(tasks.begin(), tasks.end(), [](const Task& t1, const Task& t2) {
-		return t1.isDone() < t2.isDone();
-	});
-}
-
-void IStorage::sortByHasBeginDate() {
-	LOG(INFO) << "Sorting by done status.";
-	qStableSort(tasks.begin(), tasks.end(), [](const Task& t1, const Task& t2) {
-		return t1.getBegin().isValid() > t2.getBegin().isValid();
+	qStableSort(tasks.begin(), tasks.end(), [](const QSharedPointer<Task>& t1, const QSharedPointer<Task>& t2) {
+		return t1->isDone() < t2->isDone();
 	});
 }
 
@@ -229,21 +216,20 @@ void IStorage::sortByHasBeginDate() {
 void IStorage::renumber() {
 
 	sortByDescription();
-	sortByEndDate();
-	sortByHasBeginDate();
 	sortByDone();
 	sortByOngoing();
+	sortByEndDate();
 	sortByOverdue();
 	
 	for (int i=0; i<tasks.size(); i++) {
-		tasks[i].setId(i);
+		tasks[i]->setId(i);
 	}
 }
 
 void IStorage::clearAllDone() {
 	LOG(INFO) << "Clearing all tasks marked as done.";
-	foreach (const Task& task, tasks) {
-		if (task.isDone()) {
+	foreach (const QSharedPointer<Task>& task, tasks) {
+		if (task->isDone()) {
 			tasks.removeOne(task);
 		}
 	}
@@ -257,6 +243,8 @@ void IStorage::clearAllTasks() {
 // Constructor for Storage.
 Storage::Storage() {
 	LOG(INFO) << "Storage instance created...";
+	
+	//QSettings settings(QSettings::IniFormat, QSettings::UserScope, "Tasuke", "Tasuke");
 
 	qRegisterMetaType<Task>("Task");
 	qRegisterMetaTypeStreamOperators<Task>("Task");	
@@ -266,6 +254,7 @@ Storage::Storage(QString path) {
 	LOG(INFO) << "Storage instance with custom save directory created...";
 
 	this->path = path;
+	//QSettings settings(path, QSettings::IniFormat);
 
 	qRegisterMetaType<Task>("Task");
 	qRegisterMetaTypeStreamOperators<Task>("Task");	
