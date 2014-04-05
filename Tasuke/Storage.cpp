@@ -344,6 +344,8 @@ void Storage::loadFile() {
 	}
 	settings.endArray();
 
+	renumber();
+
 	LOG(INFO) << "File loaded.";
 }
 
