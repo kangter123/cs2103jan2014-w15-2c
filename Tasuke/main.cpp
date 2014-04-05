@@ -7,6 +7,9 @@ int main(int argc, char *argv[]) {
 	LOG(INFO) << "Tasuke starting up!";
 
 	QApplication app(argc, argv);
+
+	QCoreApplication::setOrganizationName("Tasuke");
+	QCoreApplication::setApplicationName("Tasuke");
 	
 	Tasuke::instance();
 

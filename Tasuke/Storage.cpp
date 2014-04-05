@@ -5,6 +5,7 @@
 #include <QVariant>
 #include <QJsonArray>
 #include <QStandardPaths>
+#include <QDir>
 #include <iostream>
 #include "Constants.h"
 #include "Exceptions.h"
@@ -287,21 +288,21 @@ void IStorage::clearAllTasks() {
 	renumber();
 }
 
-// Constructor for Storage.
 Storage::Storage() {
 	LOG(INFO) << "Storage instance created...";
+
+	QDir dir = QDir(QStandardPaths::writableLocation(QStandardPaths::DataLocation));
 	
-	//QSettings settings(QSettings::IniFormat, QSettings::UserScope, "Tasuke", "Tasuke");
+	path = dir.absoluteFilePath("tasks.ini");
 
 	qRegisterMetaType<Task>("Task");
 	qRegisterMetaTypeStreamOperators<Task>("Task");	
 }
 
-Storage::Storage(QString path) {
-	LOG(INFO) << "Storage instance with custom save directory created...";
+Storage::Storage(QString _path) {
+	LOG(INFO) << "Storage instance with custom path created...";
 
-	this->path = path;
-	//QSettings settings(path, QSettings::IniFormat);
+	path = _path;
 
 	qRegisterMetaType<Task>("Task");
 	qRegisterMetaTypeStreamOperators<Task>("Task");	
@@ -312,7 +313,7 @@ Storage::Storage(QString path) {
 void Storage::loadFile() {
 	LOG(INFO) << "Loading file...";
 
-	QSettings settings(QSettings::IniFormat, QSettings::UserScope, "Tasuke", "Tasuke");
+	QSettings settings(path, QSettings::IniFormat);
 
 	int size = settings.beginReadArray("Tasks");
 	for (int i=0; i<size; i++) {
@@ -351,7 +352,7 @@ void Storage::loadFile() {
 void Storage::saveFile() {
 	LOG(INFO) << "Saving file...";
 
-	QSettings settings(QSettings::IniFormat, QSettings::UserScope, "Tasuke", "Tasuke");
+	QSettings settings(path, QSettings::IniFormat);
 
 	settings.clear();
 	settings.beginWriteArray("Tasks");
