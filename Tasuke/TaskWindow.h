@@ -30,10 +30,10 @@ public:
 
 	// Handles task list display
 	void jumpToCurrentlySelectedTask();
-	void updateCurrentlySelectedTo(int row);
-	void highlightTask(int row);
+	void updateCurrentlySelectedTo(int taskID);
+	void highlightTask(int taskID);
 	void highlightCurrentlySelectedTask(int prevsize);
-	void showTasks(QList<Task> tasks, QString title = "");
+	void showTasks(const QList<Task>& tasks, const QString& title = "");
 
 	// Handles scrolling
 	void scrollUp();
@@ -42,7 +42,7 @@ public:
 	void pageDown();
 
 	// Stacked widget functions
-	int getScreen(); // Helps decide which key press events to execute
+	int getScreen() const; // Helps decide which key press events to execute
 	void changeTutorialWidgetTabs(); // Handles key press "tab"
 	void showListWidget();
 	void showTutorialWidget();
@@ -68,6 +68,14 @@ private:
 	static const int TASK_ENTRY_WIDTH = 780;
 	static const int TASK_ENTRY_HEIGHT = 65;
 
+	enum SubheadingType {
+		OVERDUE,
+		DUE_TODAY,
+		TIMED,
+		FLOATING,
+		SUBHEADING_TYPE_LAST_ITEM
+	};
+
 	Ui::TaskWindowClass ui;	
 	TutorialWidget tutorial;
 	HotKeyThread *hotKeyThread;
@@ -77,28 +85,32 @@ private:
 	qreal wOpacity;
 
 	// For selection of tasks
-	int currentlySelected; // Represents of the # of the selected entry in the UI. (Range: 1 < # < taskListSize)
-	int previouslySelected;
+	int currentlySelectedTask; // Represents of the # of the selected entry in the UI. (Range: 1 < # < taskListSize)
+	int previouslySelectedTask;
 	int previousSize;
+	int subheadingRowIndexes[SubheadingType::SUBHEADING_TYPE_LAST_ITEM];
 
 	//========================================
 	// FUNCTIONS
 	//=========================================
+	void resetSubheadingIndexes();
 	void initTutorial();
 	void initAnimation();
 	void decideContent();
-	void showBackButtonIfSearching(QString title);
+	void showBackButtonIfSearching(const QString& title);
 	void setOpacity(qreal value);
 	qreal getOpacity() const;
 
 	
 	// Handles task entry creation and addition to list
-	bool isInRange(int index);
-	void changeTitle(QString title);
-	TaskEntry* createEntry(Task t);
-	void addListItemToRow(TaskEntry* entry, int row, QString type);
+	bool isInRange(int taskID) const;
+	void changeTitle(const QString& title);
+	TaskEntry* createEntry(const Task& t);
+	void addListItemToRow(TaskEntry* entry, int row, const QString& type);
 	void addListItem(TaskEntry* entry);
-	void displayTask(Task t, int showDone);
+	void displaySubheading(const QString& content);
+	void displayTask(const Task& t, int showDone);
+	int getTaskEntryRow(int taskID) const;
 };
 
 #endif // TASKWINDOW_H

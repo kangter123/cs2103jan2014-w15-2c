@@ -13,9 +13,9 @@ class SubheadingEntry : public QWidget {
 	Q_OBJECT
 
 public:
-	SubheadingEntry(QWidget *parent = 0);
+	SubheadingEntry(const QString& content, QWidget *parent = 0);
 	~SubheadingEntry();
-	void changeText(QString text);
+	void changeText(const QString& text);
 
 public slots:
 

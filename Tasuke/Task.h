@@ -31,7 +31,7 @@ public:
 
 	void addTag(QString tag);
 	void removeTag(QString tag);
-	QList<QString> getTags();
+	QList<QString> getTags() const;
 
 	void setBegin(QDateTime _begin);
 	void setBeginDate(QDate _beginDate);
@@ -51,7 +51,7 @@ public:
 	bool isDone() const;
 
 	void setId(int identifier);
-	int getId();
+	int getId() const;
 
 	bool isFloating() const;
 	bool isOverdue() const;

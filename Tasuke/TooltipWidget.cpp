@@ -51,38 +51,38 @@ void TooltipWidget::initIcons() {
 	IconSet iconSet = (IconSet)settings.value("Icon", IconSet::NYANSUKE).toInt();
 
 	switch (iconSet) {
-	case NYANSUKE:
-		normalIcon = QPixmap(":Images/images/icons/nyansukenormal.png");
-		successIcon = QPixmap(":Images/images/icons/nyansukesuccess.png");
-		failureIcon = QPixmap(":Images/images/icons/nyansukefailure.png");
-		break;
-	case SYMBOLS:
-		normalIcon = QPixmap(":Images/images/icons/symbolnormal.png");
-		successIcon = QPixmap(":Images/images/icons/symbolsuccess.png");
-		failureIcon = QPixmap(":Images/images/icons/symbolfailure.png");
-		break;
-	case SYMBOLS2:
-		normalIcon = QPixmap(":Images/images/icons/symbolnormal.png");
-		successIcon = QPixmap(":Images/images/icons/symbolwhitesuccess.png");
-		failureIcon = QPixmap(":Images/images/icons/symbolwhitefailure.png");
-		break;
-	case NICCAGE:
-		normalIcon = QPixmap(":Images/images/icons/niccagenormal.png");
-		successIcon = QPixmap(":Images/images/icons/niccagesuccess.png");
-		failureIcon = QPixmap(":Images/images/icons/niccagefailure.png");
-		break;
-	case MEME:
-		normalIcon = QPixmap(":Images/images/icons/memenormal.png");
-		successIcon = QPixmap(":Images/images/icons/memesuccess.png");
-		failureIcon = QPixmap(":Images/images/icons/memefailure.png");
-		break;
-	case SHIBE:
-		normalIcon = QPixmap(":Images/images/icons/dogenormal.png");
-		successIcon = QPixmap(":Images/images/icons/dogesuccess.png");
-		failureIcon = QPixmap(":Images/images/icons/dogefailure.png");
-		break;
-	default:
-		break;
+		case NYANSUKE:
+			normalIcon = QPixmap(":Images/images/icons/nyansukenormal.png");
+			successIcon = QPixmap(":Images/images/icons/nyansukesuccess.png");
+			failureIcon = QPixmap(":Images/images/icons/nyansukefailure.png");
+			break;
+		case SYMBOLS:
+			normalIcon = QPixmap(":Images/images/icons/symbolnormal.png");
+			successIcon = QPixmap(":Images/images/icons/symbolsuccess.png");
+			failureIcon = QPixmap(":Images/images/icons/symbolfailure.png");
+			break;
+		case SYMBOLS2:
+			normalIcon = QPixmap(":Images/images/icons/symbolnormal.png");
+			successIcon = QPixmap(":Images/images/icons/symbolwhitesuccess.png");
+			failureIcon = QPixmap(":Images/images/icons/symbolwhitefailure.png");
+			break;
+		case NICCAGE:
+			normalIcon = QPixmap(":Images/images/icons/niccagenormal.png");
+			successIcon = QPixmap(":Images/images/icons/niccagesuccess.png");
+			failureIcon = QPixmap(":Images/images/icons/niccagefailure.png");
+			break;
+		case MEME:
+			normalIcon = QPixmap(":Images/images/icons/memenormal.png");
+			successIcon = QPixmap(":Images/images/icons/memesuccess.png");
+			failureIcon = QPixmap(":Images/images/icons/memefailure.png");
+			break;
+		case SHIBE:
+			normalIcon = QPixmap(":Images/images/icons/dogenormal.png");
+			successIcon = QPixmap(":Images/images/icons/dogesuccess.png");
+			failureIcon = QPixmap(":Images/images/icons/dogefailure.png");
+			break;
+		default:
+			break;
 	}
 }
 
@@ -99,16 +99,16 @@ void TooltipWidget::initAnimation() {
 
 void TooltipWidget::setIconOnLabel(InputStatus status) {
 	switch (status) {
-	case SUCCESS:
-		ui.icon->setPixmap(successIcon);
-		break;
-	case FAILURE:
-		ui.icon->setPixmap(failureIcon);
-		break;
-	case NORMAL:
-		ui.icon->setPixmap(normalIcon);
-		break;
-	default:
-		break;
+		case SUCCESS:
+			ui.icon->setPixmap(successIcon);
+			break;
+		case FAILURE:
+			ui.icon->setPixmap(failureIcon);
+			break;
+		case NORMAL:
+			ui.icon->setPixmap(normalIcon);
+			break;
+		default:
+			break;
 	}
 }

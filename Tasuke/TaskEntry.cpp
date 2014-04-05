@@ -3,11 +3,9 @@
 #include "Constants.h"
 
 
-TaskEntry::TaskEntry(Task t, QWidget* parent) : QWidget(parent), font("Print Clearly", 20), fm(font)  {
+TaskEntry::TaskEntry(const Task& t, QWidget* parent) : QWidget(parent), font("Print Clearly", 20), fm(font), task(t)  {
 
 	// Initialize field elements
-	this->task = t;
-
 	ui.setupUi(this);
 	makeWidget();
 
@@ -81,7 +79,7 @@ void TaskEntry::highlightOverdue() {
 	ui.ID->setStyleSheet("background:transparent; color: rgb(166, 0, 0); ");
 }
 
-void TaskEntry::setTooltip(QString des, QDateTime start, QDateTime end, QList<QString> tags) {
+void TaskEntry::setTooltip(const QString& des, const QDateTime& start, const QDateTime& end, const QList<QString>& tags) {
 
 	// description
 	QString tooltipText(des);
@@ -123,7 +121,7 @@ void TaskEntry::setTooltip(QString des, QDateTime start, QDateTime end, QList<QS
 	this->setToolTip(tooltipText);
 }
 
-void TaskEntry::setDescription(QString des) {
+void TaskEntry::setDescription(const QString& des) {
 
 	// First, we have to make sure the text fits.
 	// If not, we will append with ellipses ("...")
@@ -135,7 +133,7 @@ void TaskEntry::setDescription(QString des) {
 	}
 }
 
-void TaskEntry::setDateTimes(QDateTime start, QDateTime end) {
+void TaskEntry::setDateTimes(const QDateTime& start, const QDateTime& end) {
 
 	if (!start.isNull()) {
 		QString strStartDate = start.toString("dd MMM (ddd)");
@@ -152,7 +150,7 @@ void TaskEntry::setDateTimes(QDateTime start, QDateTime end) {
 	}
 }
 
-QString TaskEntry::createTagString(QList<QString> tags) {
+QString TaskEntry::createTagString(const QList<QString>& tags) {
 	QString strTags = tags[0];
 	strTags.prepend("#");
 
@@ -166,7 +164,7 @@ QString TaskEntry::createTagString(QList<QString> tags) {
 	return strTags;
 }
 
-void TaskEntry::setTags(QList<QString> tags) {
+void TaskEntry::setTags(const QList<QString>& tags) {
 	QString strTags = createTagString(tags);
 
 	if (fm.width(strTags) < TaskEntry::MAX_WIDTH_FOR_TAGS) { // The tag string fits into the column nicely.

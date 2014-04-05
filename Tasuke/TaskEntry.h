@@ -11,7 +11,7 @@ class TaskEntry : public QWidget {
 	Q_OBJECT
 
 public:
-	TaskEntry(Task t, QWidget *parent = 0);
+	TaskEntry(const Task& t, QWidget *parent = 0);
 	~TaskEntry();
 	void strikeOut();
 	void highlightOngoing();
@@ -30,18 +30,18 @@ private:
 	static const int MAX_WIDTH_FOR_TAGS = 160;
 
 	// fields
-	Task task;
+	const Task& task;
 
 	// font metrics
 	QFont font;
 	QFontMetrics fm;
 
 	// functions
-	void setTooltip(QString des, QDateTime start, QDateTime end, QList<QString> tags);
-	void setDescription(QString description);
-	void setDateTimes(QDateTime start, QDateTime end);
-	QString createTagString(QList<QString> tags);
-	void setTags(QList<QString> tags);
+	void setTooltip(const QString& des, const QDateTime& start, const QDateTime& end, const QList<QString>& tags);
+	void setDescription(const QString& description);
+	void setDateTimes(const QDateTime& start, const QDateTime& end);
+	QString createTagString(const QList<QString>& tags);
+	void setTags(const QList<QString>& tags);
 	void makeWidget();
 };
 

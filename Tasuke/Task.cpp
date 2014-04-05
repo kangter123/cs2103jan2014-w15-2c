@@ -37,7 +37,7 @@ void Task::removeTag(QString tag) {
 	tags.removeOne(tag);
 }
 
-QList<QString> Task::getTags() {
+QList<QString> Task::getTags() const {
 	return tags;
 }
 
@@ -101,7 +101,7 @@ void Task::setId(int identifier) {
 	id = identifier;
 }
 
-int Task::getId() {
+int Task::getId() const {
 	return id;
 }
 
