@@ -171,7 +171,9 @@ void TaskWindow::showAndMoveToSide() {
 	move(center);
 	animation->start();
 	raise();
+	activateWindow();
 	show();
+	setWindowState(Qt::WindowActive);
 }
 
 // Shows message when task list is empty.
