@@ -370,6 +370,7 @@ void Tasuke::runCommand(QString commandString) {
 
 		if (guiMode) {
 			inputWindow->showTooltipMessage(InputStatus::FAILURE);
+			inputWindow->doErrorAnimation();
 		}
 	}
 }
