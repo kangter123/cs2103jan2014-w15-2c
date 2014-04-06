@@ -150,7 +150,8 @@ void CompositeCommand::run() {
 }
 
 void CompositeCommand::undo() {
-	foreach(QSharedPointer<ICommand> command, commands) {
-		command->undo();
+	// must be in reverse order
+	for(int i=commands.size()-1; i>=0; i--) {
+		commands[i]->undo();
 	}
 }
