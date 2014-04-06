@@ -3,7 +3,6 @@
 #include <glog/logging.h>
 #include <QSettings>
 #include <QVariant>
-#include <QJsonArray>
 #include <QStandardPaths>
 #include <QDir>
 #include <iostream>

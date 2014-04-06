@@ -4,7 +4,6 @@
 #include <functional>
 #include <QString>
 #include <QList>
-#include <QJsonObject>
 #include "Task.h"
 
 // Interface class for Storage.

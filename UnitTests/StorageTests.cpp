@@ -158,6 +158,16 @@ namespace StorageTests {
 			task.setEndDate(QDate(2100, 12, 31));
 			Assert::IsFalse(task.isDueOn(QDate::currentDate()));
 		}
+		/*
+		TEST_METHOD(TaskReturnStringDateDifference) {
+			Task task;
+			QDateTime overdueLongAgo(QDate(1900, 1, 1), QTime(0, 0, 0));
+			QDateTime dueInFarFuture(QDate(2100, 1, 1), QTime(23, 59, 59));
+			QDateTime dueTomorrow(QDateTime::currentDateTime().addDays(1));
+			QDateTime overdueYesterday(QDateTime::currentDateTime().addDays(-1));
+
+			task.setEnd(overdueLongAgo);
+		}*/
 
 		/********** Tests for STORAGE class **********/
 		

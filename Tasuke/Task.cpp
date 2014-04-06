@@ -80,11 +80,121 @@ void Task::setEndTime(QTime _endTime) {
 QDateTime Task::getEnd() const {
 	return end;
 }
-/*
-// Possibly the biggest piece of code in this object.
-QString Task::getTimeLeftString() const {
-	
-}*/
+
+// Returns the QString representation of a countdown from now to the end of a task.
+// This method also returns a countup from the end of an overdue task to now.
+// This method does NOT guarantee accuracy of dates. This method assumes that
+// there are 12 identical months in a year, and there are exactly 4 weeks every month,
+// and each month has exactly 30 days.
+QString Task::getTimeDifferenceString() const {
+	long delta = getEnd().toMSecsSinceEpoch() - QDateTime::currentDateTime().toMSecsSinceEpoch();
+	bool isNegative = delta < 0;
+
+	// If date is in the past, set it to positive.
+	if (isNegative) {
+		delta *= -1;
+	}
+
+	delta /= MILLISECONDS_IN_SECOND;			// Get rid of milliseconds.
+
+	int seconds = delta % SECONDS_IN_MINUTE;	// Obtain number of seconds.
+	delta /= SECONDS_IN_MINUTE;					// Get rid of seconds.
+
+	int minutes = delta % MINUTES_IN_HOUR;		// Obtain number of minutes.
+	delta /= MINUTES_IN_HOUR;					// Get rid of minutes.
+
+	int hours = delta % HOURS_IN_DAY;			// Obtain number of hours.
+	delta /= HOURS_IN_DAY;						// Get rid of hours.
+
+	int days = delta % DAYS_IN_WEEK;			// Obtain number of days.
+	delta /= DAYS_IN_WEEK;						// Get rid of days.
+
+	int weeks = delta % WEEKS_IN_MONTH;			// Obtain number of weeks.
+	delta /= WEEKS_IN_MONTH;					// Get rid of weeks.
+
+	int months = delta % MONTHS_IN_YEAR;		// Obtain number of months.
+	delta /= MONTHS_IN_YEAR;					// Get rid of months.
+
+	int years = delta;							// Obtain number of years.
+
+	QString result = "";
+	if (years > 0) {
+		if (years == 1) {
+			result.append("1 year");
+		} else { // Plural
+			result.append("%1 years").arg(years);
+		}
+	}
+
+	if (months > 0) {
+		// Prepend a comma if there is a year in front.
+		if (years > 0) {
+			result.append(", ");
+		}
+		if (months == 1) {
+			result.append("1 month");
+		} else { // Plural
+			result.append("%1 months").arg(months);
+		}
+	}
+
+	if (weeks > 0) {
+		// Prepend a comma if there is a month in front.
+		if (months > 0) {
+			result.append(", ");
+		}
+		if (weeks == 1) {
+			result.append("1 week");
+		} else { // Plural
+			result.append("%1 weeks").arg(weeks);
+		}
+	}
+
+	if (days > 0) {
+		// Prepend a comma if there is a week in front.
+		if (weeks > 0) {
+			result.append(", ");
+		}
+		if (days == 1) {
+			result.append("1 day");
+		} else { //  Plural
+			result.append("%1 days").arg(days);
+		}
+	}
+
+	if (hours > 0) {
+		// Prepend a comma if there is a day in front.
+		if (days > 0) {
+			result.append(", ");
+		}
+		if (hours == 1) {
+			result.append("1 hour");
+		} else { // Plural
+			result.append("%1 hours").arg(hours);
+		}
+	}
+
+	if (minutes > 0) {
+		// Prepend a comma if there is an hour in front.
+		if (hours > 0) {
+			result.append(", ");
+		}
+		if (minutes == 1) {
+			result.append("1 minute");
+		} else { // Plural
+			result.append("%1 minutes").arg(minutes);
+		}
+	}
+
+	// Finally, add closing statement.
+	if (isNegative) {
+		result.append(" ago.");
+	} else {
+		result.append(" from now.");
+	}
+
+	return result;
+}
 
 void Task::setDone(bool _done) {
 	done = _done;
