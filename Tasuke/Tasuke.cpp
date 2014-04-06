@@ -318,6 +318,7 @@ void Tasuke::runCommand(QString commandString) {
 		QSharedPointer<ICommand> command = QSharedPointer<ICommand>(Interpreter::interpret(commandString));
 
 		if (guiMode) {
+			inputWindow->hideTooltip();
 			inputWindow->closeAndClear();
 		}
 
@@ -430,7 +431,9 @@ void Tasuke::handleInputTimeout() {
 }
 
 void Tasuke::handleTryFinish(TRY_RESULT result) {
-	inputWindow->showTooltipMessage(result.status, result.message);
+	if (inputWindow->isVisible()) {
+		inputWindow->showTooltipMessage(result.status, result.message);
+	}
 	mutex.unlock();
 }
 
