@@ -23,182 +23,10 @@ color: rgb(88, 88, 88);
    <property name="geometry">
     <rect>
      <x>5</x>
-     <y>51</y>
+     <y>58</y>
      <width>808</width>
-     <height>391</height>
+     <height>375</height>
     </rect>
-   </property>
-   <property name="palette">
-    <palette>
-     <active>
-      <colorrole role="WindowText">
-       <brush brushstyle="SolidPattern">
-        <color alpha="255">
-         <red>88</red>
-         <green>88</green>
-         <blue>88</blue>
-        </color>
-       </brush>
-      </colorrole>
-      <colorrole role="Button">
-       <brush brushstyle="SolidPattern">
-        <color alpha="0">
-         <red>0</red>
-         <green>0</green>
-         <blue>0</blue>
-        </color>
-       </brush>
-      </colorrole>
-      <colorrole role="Text">
-       <brush brushstyle="SolidPattern">
-        <color alpha="255">
-         <red>88</red>
-         <green>88</green>
-         <blue>88</blue>
-        </color>
-       </brush>
-      </colorrole>
-      <colorrole role="ButtonText">
-       <brush brushstyle="SolidPattern">
-        <color alpha="255">
-         <red>88</red>
-         <green>88</green>
-         <blue>88</blue>
-        </color>
-       </brush>
-      </colorrole>
-      <colorrole role="Base">
-       <brush brushstyle="SolidPattern">
-        <color alpha="0">
-         <red>0</red>
-         <green>0</green>
-         <blue>0</blue>
-        </color>
-       </brush>
-      </colorrole>
-      <colorrole role="Window">
-       <brush brushstyle="SolidPattern">
-        <color alpha="0">
-         <red>0</red>
-         <green>0</green>
-         <blue>0</blue>
-        </color>
-       </brush>
-      </colorrole>
-     </active>
-     <inactive>
-      <colorrole role="WindowText">
-       <brush brushstyle="SolidPattern">
-        <color alpha="255">
-         <red>88</red>
-         <green>88</green>
-         <blue>88</blue>
-        </color>
-       </brush>
-      </colorrole>
-      <colorrole role="Button">
-       <brush brushstyle="SolidPattern">
-        <color alpha="0">
-         <red>0</red>
-         <green>0</green>
-         <blue>0</blue>
-        </color>
-       </brush>
-      </colorrole>
-      <colorrole role="Text">
-       <brush brushstyle="SolidPattern">
-        <color alpha="255">
-         <red>88</red>
-         <green>88</green>
-         <blue>88</blue>
-        </color>
-       </brush>
-      </colorrole>
-      <colorrole role="ButtonText">
-       <brush brushstyle="SolidPattern">
-        <color alpha="255">
-         <red>88</red>
-         <green>88</green>
-         <blue>88</blue>
-        </color>
-       </brush>
-      </colorrole>
-      <colorrole role="Base">
-       <brush brushstyle="SolidPattern">
-        <color alpha="0">
-         <red>0</red>
-         <green>0</green>
-         <blue>0</blue>
-        </color>
-       </brush>
-      </colorrole>
-      <colorrole role="Window">
-       <brush brushstyle="SolidPattern">
-        <color alpha="0">
-         <red>0</red>
-         <green>0</green>
-         <blue>0</blue>
-        </color>
-       </brush>
-      </colorrole>
-     </inactive>
-     <disabled>
-      <colorrole role="WindowText">
-       <brush brushstyle="SolidPattern">
-        <color alpha="255">
-         <red>88</red>
-         <green>88</green>
-         <blue>88</blue>
-        </color>
-       </brush>
-      </colorrole>
-      <colorrole role="Button">
-       <brush brushstyle="SolidPattern">
-        <color alpha="0">
-         <red>0</red>
-         <green>0</green>
-         <blue>0</blue>
-        </color>
-       </brush>
-      </colorrole>
-      <colorrole role="Text">
-       <brush brushstyle="SolidPattern">
-        <color alpha="255">
-         <red>88</red>
-         <green>88</green>
-         <blue>88</blue>
-        </color>
-       </brush>
-      </colorrole>
-      <colorrole role="ButtonText">
-       <brush brushstyle="SolidPattern">
-        <color alpha="255">
-         <red>88</red>
-         <green>88</green>
-         <blue>88</blue>
-        </color>
-       </brush>
-      </colorrole>
-      <colorrole role="Base">
-       <brush brushstyle="SolidPattern">
-        <color alpha="0">
-         <red>0</red>
-         <green>0</green>
-         <blue>0</blue>
-        </color>
-       </brush>
-      </colorrole>
-      <colorrole role="Window">
-       <brush brushstyle="SolidPattern">
-        <color alpha="0">
-         <red>0</red>
-         <green>0</green>
-         <blue>0</blue>
-        </color>
-       </brush>
-      </colorrole>
-     </disabled>
-    </palette>
    </property>
    <property name="font">
     <font>
@@ -209,6 +37,9 @@ color: rgb(88, 88, 88);
    </property>
    <property name="focusPolicy">
     <enum>Qt::NoFocus</enum>
+   </property>
+   <property name="autoFillBackground">
+    <bool>false</bool>
    </property>
    <property name="styleSheet">
     <string notr="true">QTabBar::tab{
@@ -239,7 +70,9 @@ QTabBar::tab:selected{
  QPushButton:pressed {
      background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
                                        stop: 0 #dadbde, stop: 1 #f6f7fa);
- }</string>
+ }
+
+</string>
    </property>
    <property name="tabPosition">
     <enum>QTabWidget::West</enum>
@@ -254,9 +87,15 @@ QTabBar::tab:selected{
     <bool>true</bool>
    </property>
    <property name="documentMode">
-    <bool>false</bool>
+    <bool>true</bool>
    </property>
    <widget class="QWidget" name="nav">
+    <property name="autoFillBackground">
+     <bool>false</bool>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background:white;</string>
+    </property>
     <attribute name="title">
      <string>Navigation</string>
     </attribute>
@@ -266,32 +105,73 @@ QTabBar::tab:selected{
        <x>0</x>
        <y>0</y>
        <width>771</width>
-       <height>301</height>
+       <height>375</height>
       </rect>
      </property>
      <property name="currentIndex">
       <number>0</number>
      </property>
      <widget class="QWidget" name="navPage1">
-      <widget class="QLabel" name="label">
+      <widget class="QLabel" name="tonavigate">
        <property name="geometry">
         <rect>
-         <x>200</x>
-         <y>100</y>
-         <width>371</width>
-         <height>81</height>
+         <x>50</x>
+         <y>290</y>
+         <width>691</width>
+         <height>31</height>
         </rect>
        </property>
        <property name="font">
         <font>
          <family>Quicksand Book</family>
-         <pointsize>16</pointsize>
+         <pointsize>20</pointsize>
          <weight>50</weight>
          <bold>false</bold>
         </font>
        </property>
        <property name="text">
-        <string>Use &lt;tab&gt; and left/right arrow keys</string>
+        <string>To navigate, use &lt;tab&gt; and left/right arrow keys.</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="welcomeImg">
+       <property name="geometry">
+        <rect>
+         <x>280</x>
+         <y>10</y>
+         <width>231</width>
+         <height>231</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="pixmap">
+        <pixmap>images/Tasuke.png</pixmap>
+       </property>
+       <property name="scaledContents">
+        <bool>true</bool>
+       </property>
+      </widget>
+      <widget class="QLabel" name="welcome">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>240</y>
+         <width>761</width>
+         <height>51</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <family>Quicksand Bold</family>
+         <pointsize>30</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Welcome!</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
        </property>
       </widget>
      </widget>
@@ -299,22 +179,53 @@ QTabBar::tab:selected{
       <widget class="QLabel" name="label_2">
        <property name="geometry">
         <rect>
-         <x>200</x>
-         <y>100</y>
-         <width>371</width>
-         <height>81</height>
+         <x>0</x>
+         <y>-10</y>
+         <width>771</width>
+         <height>369</height>
         </rect>
        </property>
-       <property name="font">
-        <font>
-         <family>Quicksand Book</family>
-         <pointsize>30</pointsize>
-         <weight>50</weight>
-         <bold>false</bold>
-        </font>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="pixmap">
+        <pixmap>images/Tutorial/1.png</pixmap>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QWidget" name="navPage3">
+      <widget class="QLabel" name="label_7">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>-10</y>
+         <width>771</width>
+         <height>369</height>
+        </rect>
        </property>
        <property name="text">
-        <string>Navigation page 2</string>
+        <string/>
+       </property>
+       <property name="pixmap">
+        <pixmap>images/Tutorial/2.png</pixmap>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QWidget" name="navPage4">
+      <widget class="QLabel" name="label_8">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>771</width>
+         <height>369</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="pixmap">
+        <pixmap>images/Tutorial/3.png</pixmap>
        </property>
       </widget>
      </widget>
@@ -327,6 +238,9 @@ QTabBar::tab:selected{
        <width>771</width>
        <height>41</height>
       </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background:white;</string>
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout_3">
       <item>
@@ -404,6 +318,9 @@ QTabBar::tab:selected{
     </widget>
    </widget>
    <widget class="QWidget" name="commands">
+    <property name="styleSheet">
+     <string notr="true">background: white;</string>
+    </property>
     <attribute name="title">
      <string>Commands</string>
     </attribute>
@@ -411,7 +328,7 @@ QTabBar::tab:selected{
      <property name="geometry">
       <rect>
        <x>0</x>
-       <y>350</y>
+       <y>340</y>
        <width>771</width>
        <height>41</height>
       </rect>
@@ -496,59 +413,159 @@ QTabBar::tab:selected{
        <x>0</x>
        <y>0</y>
        <width>771</width>
-       <height>301</height>
+       <height>369</height>
       </rect>
      </property>
      <property name="currentIndex">
       <number>0</number>
      </property>
      <widget class="QWidget" name="comPage1">
-      <widget class="QLabel" name="label_3">
+      <widget class="QLabel" name="label_11">
        <property name="geometry">
         <rect>
-         <x>200</x>
-         <y>100</y>
-         <width>371</width>
-         <height>81</height>
+         <x>0</x>
+         <y>0</y>
+         <width>771</width>
+         <height>369</height>
         </rect>
        </property>
-       <property name="font">
-        <font>
-         <family>Quicksand Book</family>
-         <pointsize>30</pointsize>
-         <weight>50</weight>
-         <bold>false</bold>
-        </font>
-       </property>
        <property name="text">
-        <string>Commands page 1</string>
+        <string/>
+       </property>
+       <property name="pixmap">
+        <pixmap>images/Tutorial/3a.png</pixmap>
        </property>
       </widget>
      </widget>
      <widget class="QWidget" name="comPage2">
-      <widget class="QLabel" name="label_4">
+      <widget class="QLabel" name="label_12">
        <property name="geometry">
         <rect>
-         <x>200</x>
-         <y>100</y>
-         <width>371</width>
-         <height>81</height>
+         <x>0</x>
+         <y>0</y>
+         <width>771</width>
+         <height>369</height>
         </rect>
        </property>
-       <property name="font">
-        <font>
-         <family>Quicksand Book</family>
-         <pointsize>30</pointsize>
-         <weight>50</weight>
-         <bold>false</bold>
-        </font>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="pixmap">
+        <pixmap>images/Tutorial/4.png</pixmap>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QWidget" name="comPage3">
+      <widget class="QLabel" name="label_13">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>771</width>
+         <height>369</height>
+        </rect>
        </property>
        <property name="text">
-        <string>Commands page 2</string>
+        <string/>
+       </property>
+       <property name="pixmap">
+        <pixmap>images/Tutorial/5.png</pixmap>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QWidget" name="comPage4">
+      <widget class="QLabel" name="label_14">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>771</width>
+         <height>369</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="pixmap">
+        <pixmap>images/Tutorial/6.png</pixmap>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QWidget" name="comPage5">
+      <widget class="QLabel" name="label_15">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>771</width>
+         <height>369</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="pixmap">
+        <pixmap>images/Tutorial/7.png</pixmap>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QWidget" name="comPage6">
+      <widget class="QLabel" name="label_16">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>771</width>
+         <height>369</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="pixmap">
+        <pixmap>images/Tutorial/8.png</pixmap>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QWidget" name="comPage7">
+      <widget class="QLabel" name="label_17">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>771</width>
+         <height>357</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="pixmap">
+        <pixmap>images/Tutorial/9.png</pixmap>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QWidget" name="comPage8">
+      <widget class="QLabel" name="label_18">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>771</width>
+         <height>369</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="pixmap">
+        <pixmap>images/Tutorial/10.png</pixmap>
        </property>
       </widget>
      </widget>
     </widget>
+    <zorder>commandsSlideshow</zorder>
+    <zorder>commandsButtons</zorder>
    </widget>
    <widget class="QWidget" name="features">
     <attribute name="title">
@@ -560,8 +577,11 @@ QTabBar::tab:selected{
        <x>0</x>
        <y>0</y>
        <width>771</width>
-       <height>301</height>
+       <height>369</height>
       </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background: white;</string>
      </property>
      <property name="currentIndex">
       <number>0</number>
@@ -570,45 +590,85 @@ QTabBar::tab:selected{
       <widget class="QLabel" name="label_5">
        <property name="geometry">
         <rect>
-         <x>200</x>
-         <y>100</y>
-         <width>371</width>
-         <height>81</height>
+         <x>110</x>
+         <y>40</y>
+         <width>591</width>
+         <height>131</height>
         </rect>
        </property>
        <property name="font">
         <font>
-         <family>Quicksand Book</family>
-         <pointsize>30</pointsize>
+         <family>Quicksand Bold</family>
+         <pointsize>25</pointsize>
          <weight>50</weight>
          <bold>false</bold>
         </font>
        </property>
        <property name="text">
-        <string>Features page 1</string>
+        <string>Ease of usage and Personalisation</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_9">
+       <property name="geometry">
+        <rect>
+         <x>100</x>
+         <y>140</y>
+         <width>591</width>
+         <height>111</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <family>Quicksand Book</family>
+         <pointsize>15</pointsize>
+         <weight>50</weight>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>That's what we want for you when we develop Tasuke.</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_10">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>210</y>
+         <width>751</width>
+         <height>51</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <family>Quicksand Book</family>
+         <pointsize>15</pointsize>
+         <weight>50</weight>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Find out more about Tasuke's features &gt;&gt; </string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
        </property>
       </widget>
      </widget>
      <widget class="QWidget" name="featuresPage2">
-      <widget class="QLabel" name="label_6">
+      <widget class="QLabel" name="label_19">
        <property name="geometry">
         <rect>
-         <x>200</x>
-         <y>100</y>
-         <width>371</width>
-         <height>81</height>
+         <x>0</x>
+         <y>0</y>
+         <width>771</width>
+         <height>369</height>
         </rect>
        </property>
-       <property name="font">
-        <font>
-         <family>Quicksand Book</family>
-         <pointsize>30</pointsize>
-         <weight>50</weight>
-         <bold>false</bold>
-        </font>
-       </property>
        <property name="text">
-        <string>Features page 2</string>
+        <string/>
+       </property>
+       <property name="pixmap">
+        <pixmap>images/Tutorial/11.png</pixmap>
        </property>
       </widget>
      </widget>
@@ -617,10 +677,13 @@ QTabBar::tab:selected{
      <property name="geometry">
       <rect>
        <x>0</x>
-       <y>350</y>
+       <y>340</y>
        <width>771</width>
        <height>41</height>
       </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background: white;</string>
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout_4">
       <item>

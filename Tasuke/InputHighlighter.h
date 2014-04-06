@@ -19,6 +19,7 @@ class InputHighlighter : public QSyntaxHighlighter {
      QRegularExpression commandRegex;
      QRegularExpression keywordRegex;
 	 QRegularExpression connectorRegex;
+	 QRegularExpression tagRegex;
 
 	 QTextCharFormat commandFormat;
      QTextCharFormat keywordFormat;
