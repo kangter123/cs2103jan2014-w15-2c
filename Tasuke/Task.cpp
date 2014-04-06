@@ -5,6 +5,7 @@
 #include "Task.h"
 
 Task::Task() {
+	id = -1;
 	done = false;
 }
 
