@@ -36,7 +36,7 @@ TaskWindow::~TaskWindow() {
 // This function is for Tasuke to get TaskWindow to highlight a particular task.
 void TaskWindow::highlightTask(int taskID) {
 	//assert(isInRange(taskID)); Removed due to undo race conditions
-	if (!isInRange(taskID)) {	
+	if (isInRange(taskID)) {	
 		updateCurrentlySelectedTo(taskID);
 		jumpToCurrentlySelectedTask();
 	} else {
