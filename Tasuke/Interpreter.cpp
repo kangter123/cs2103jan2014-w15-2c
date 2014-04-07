@@ -92,6 +92,7 @@ QString Interpreter::substituteForDate(QString text) {
 	subbedText = subbedText.replace(QRegExp("\\bmon\\b"), "monday");
 	subbedText = subbedText.replace(QRegExp("\\btue\\b"), "tuesday");
 	subbedText = subbedText.replace(QRegExp("\\btues\\b"), "tuesday");
+	subbedText = subbedText.replace(QRegExp("\\bwed\\b"), "wednesday");
 	subbedText = subbedText.replace(QRegExp("\\bthu\\b"), "thursday");
 	subbedText = subbedText.replace(QRegExp("\\bthur\\b"), "thursday");
 	subbedText = subbedText.replace(QRegExp("\\bthurs\\b"), "thursday");
