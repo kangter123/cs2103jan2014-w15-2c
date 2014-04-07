@@ -32,6 +32,8 @@ public:
 	QList<Task> searchByBeginDate(QDateTime fromThisDate);
 	QList<Task> searchByDateTimeInterval(QDateTime fromThisDate, QDateTime byThisDate);
 
+	bool isAllDone();
+
 	void sortByEndDate();
 	void sortByBeginDate();
 	void sortByDescription();

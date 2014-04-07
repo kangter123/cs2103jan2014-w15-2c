@@ -193,6 +193,16 @@ QList<Task> IStorage::searchByDateTimeInterval(QDateTime fromThisDate, QDateTime
 	return results;
 }
 
+bool IStorage::isAllDone() {
+	bool _isAllDone = true;
+	foreach (const QSharedPointer<Task>& task, tasks) {
+		if (!task->isDone()) {
+			_isAllDone = false;
+		}
+	}
+	return _isAllDone;
+}
+
 void IStorage::sortByEndDate() {
 	LOG(INFO) << "Sorting by end date.";
 	qStableSort(tasks.begin(), tasks.end(), [](const QSharedPointer<Task>& t1, const QSharedPointer<Task>& t2) {
