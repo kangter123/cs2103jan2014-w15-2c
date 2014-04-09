@@ -23,6 +23,7 @@ class InputWindow : public QWidget {
 public:
 	InputWindow(QWidget *parent = 0);
 	~InputWindow();
+
 	void showTooltipMessage(InputStatus status, QString message = "");
 	void hideTooltip();
 	void doErrorAnimation();
@@ -41,13 +42,13 @@ signals:
 
 private slots:
 	void handleReturnPressed();
-	void initAnimation();
-	void initErrorAnimation();
-	void changeBorder(int themeNumber);
-	void changeBG(int themeNumber);
 	void handleLineEditChanged();
 
 private:
+	
+	// ====================================================
+	//	Attributes
+	// ====================================================
 	Ui::InputWindow ui;
     InputHighlighter *highlighter;
 	TooltipWidget *tooltipWidget;
@@ -55,8 +56,17 @@ private:
 	QPropertyAnimation errorAnimation;
 	qreal wOpacity;
 
+	
+	// ====================================================
+	//	Functions
+	// ====================================================
 	void setOpacity(qreal value);
 	qreal getOpacity() const;
+	void initUI();
+	void initWidgets();
+	void initConnect();
+	void initAnimation();
+	void initErrorAnimation();
 };
 
 #endif // INPUTWINDOW_H

@@ -5,25 +5,15 @@
 
 //@author A0100189
 
-TaskWindow::TaskWindow(QWidget* parent) : connectedToSettings(false), currentlySelectedTask(-1), onlyShowDone(false),
-	animation(this, "opacity"), progressBar(this), QMainWindow(parent) {
+TaskWindow::TaskWindow(QWidget* parent) : connectedToSettings(false), currentlySelectedTask(-1),
+										  animation(this, "opacity"), progressBar(this), QMainWindow(parent) {
 		LOG(INFO) << "TaskWindow instance created";
-
-		ui.setupUi(this);
-		ui.backButton->hide();
-		this->installEventFilter(this);
-
 		resetSubheadingIndexes();
+		initUI();
 		initTutorial(); 
 		initAnimation();
 		initProgressBar();
-
-		connect(ui.emptyAddTaskButton, SIGNAL(pressed()), this, SLOT(handleAddTaskButton()));
-		connect(ui.doneAllAddButton, SIGNAL(pressed()), this, SLOT(handleAddTaskButton()));
-		connect(ui.backButton, SIGNAL(released()), this, SLOT(handleBackButton()));
-
-		setWindowFlags(windowFlags() | Qt::FramelessWindowHint);
-		setAttribute(Qt::WA_TranslucentBackground);
+		initConnect();
 }
 
 TaskWindow::~TaskWindow() {
@@ -36,7 +26,6 @@ TaskWindow::~TaskWindow() {
 
 // This function is for Tasuke to get TaskWindow to highlight a particular task.
 void TaskWindow::highlightTask(int taskID) {
-	//assert(isInRange(taskID)); Removed due to undo race conditions
 	if (isInRange(taskID)) {	
 		updateCurrentlySelectedTo(taskID);
 		jumpToCurrentlySelectedTask();
@@ -47,14 +36,11 @@ void TaskWindow::highlightTask(int taskID) {
 
 // This function is responsible for showing all the tasks entries and subheadings.
 void TaskWindow::showTasks(const QList<Task>& tasks, const QString& title) {
-
+	LOG(INFO) << "Displaying task list.";
 	previousSize = currentTasks.size(); // Size of previous list
 	currentTasks = tasks; // Update current tasks
-	changeTitle(title); // Change title scope
-
-	onlyShowDone = title.compare("done") == 0;
+	changeTitle(title); // Change title scope	
 	displayTaskList();
-
 	decideContent(title); // Show column label or 'no tasks' message.
 	showBackButtonIfSearching(title);
 }
@@ -302,6 +288,20 @@ bool TaskWindow::eventFilter(QObject* object, QEvent* event) {
 // INITIALIZATION
 //=========================================
 
+void TaskWindow::initUI() {
+	ui.setupUi(this);
+	ui.backButton->hide();
+	this->installEventFilter(this);
+	setWindowFlags(windowFlags() | Qt::FramelessWindowHint);
+	setAttribute(Qt::WA_TranslucentBackground);
+}
+
+void TaskWindow::initConnect() {
+	connect(ui.emptyAddTaskButton, SIGNAL(pressed()), this, SLOT(handleAddTaskButton()));
+	connect(ui.doneAllAddButton, SIGNAL(pressed()), this, SLOT(handleAddTaskButton()));
+	connect(ui.backButton, SIGNAL(released()), this, SLOT(handleBackButton()));
+}
+
 void TaskWindow::initTutorial() {
 	ui.stackedWidget->addWidget(&tutorial);
 	tutorial.goToFirstPage();
@@ -393,15 +393,8 @@ void TaskWindow::addListItem(TaskEntry* entry) {
 
 // Displays a task entry on the list.
 void TaskWindow::displayTask(const Task& t) {
-	if (onlyShowDone) { // Showing done tasks
 		TaskEntry * entry = createEntry(t);
 		addListItem(entry);
-	} else { // Showing undone tasks
-		if (!t.isDone()) {
-			TaskEntry * entry = createEntry(t);
-			addListItem(entry);
-		}
-	}
 }
 
 int TaskWindow::getTaskEntryRow(int taskRow) const {
@@ -460,13 +453,17 @@ void TaskWindow::displaySubheading(const QString& content) {
 // PRIVATE HELPER WINDOW CONTENT DISPLAY FUNCTIONS
 //================================================
 
-// This function decides the content to show on the TaskWindow
-void TaskWindow::decideContent(QString title) {
+// This function hides the task window content.
+void TaskWindow::hideContent() {
 	ui.columnLabels->hide();
 	ui.emptyTaskMessage->hide();
 	ui.emptySearchMessage->hide();
 	ui.allDoneMessage->hide();
+}
 
+// This function decides the content to show on the TaskWindow
+void TaskWindow::decideContent(QString title) {
+	hideContent();
 	bool allDone = Tasuke::instance().getStorage().isAllDone();
 	int totalTasks = Tasuke::instance().getStorage().totalTasks();
 

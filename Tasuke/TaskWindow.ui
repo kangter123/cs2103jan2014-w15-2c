@@ -17,87 +17,81 @@
    <string>Tasuke </string>
   </property>
   <property name="styleSheet">
-   <string notr="true">QWidget {background-color: transparent;}
-QPushButton {background-color: transparent;  border: none; }
-
-QPushButton#backButton {
-color: rgb(151, 151, 151);
+   <string notr="true">QLabel,QPushButton {
+color:#666;
 }
 
-
-    QPushButton#backButton:hover {
-color: rgb(74, 74, 74);
-    }
-     
-    QPushButton#backButton:pressed {
-color: rgb(74, 74, 74);
-    }
-  
-
-  QPushButton#minButton {
-background-image: url(:/Images/images/theme1/minButton.png);
+QWidget {
+background-color:transparent;
 }
 
- QPushButton#minButton:hover {
-	background-image: url(:/Images/images/theme1/minButtonHover.png);
-  }
-     
-  QPushButton#minButton:pressed {
-	background-image: url(:/Images/images/theme1/minButtonHover.png);
-  }
-  
-
-	QPushButton#closeButton{
-background-image: url(:/Images/images/theme1/closeButton.png);
+QPushButton {
+background-color:transparent;
+border:none;
 }
 
-    QPushButton#closeButton:hover {
-	background-image: url(:/Images/images/theme1/closeButtonHover.png);
-    }
-     
-    QPushButton#closeButton:pressed {
-	background-image: url(:/Images/images/theme1/closeButtonHover.png);
-    }
+QLabel#taskScope {
+color:#434343;
+}
 
- QScrollBar:vertical {
-     border: none;
-     background: transparent;
-	width: 7px;
- }
+QLabel#border {
+border-radius:11px;
+background-color:#4a4a4a;
+}
+
+QLabel#bg {
+background:#FFF;
+border-radius:9px;
+}
+
+QPushButton#minButton {
+background-image:url(:/Images/images/theme1/minButton.png);
+}
+
+QPushButton#closeButton {
+background-image:url(:/Images/images/theme1/closeButton.png);
+}
+
+QScrollBar:vertical {
+border:none;
+background:transparent;
+width:7px;
+}
 
 QScrollBar::handle:vertical {
-     background: #ABABAB;
-	border: none;
-	width: 7px;
- }
+background:#ABABAB;
+border:none;
+width:7px;
+}
 
- QScrollBar::up-arrow:vertical, QScrollBar::down-arrow:vertical {
-      border: none;
-      background: none;
-	width: 0px;
-     height: 0px;
-
-  }
-
-    QScrollBar::add-line:vertical {
-     width: 0px;  
-     height: 0px;
-    }
-     
-    QScrollBar::sub-line:vertical {
-        width: 0px;  
-        height: 0px;
-    }
+QScrollBar::up-arrow:vertical,QScrollBar::down-arrow:vertical {
+border:none;
+background:none;
+width:0;
+height:0;
+}
 
 QToolTip {
-     border: none;
-	font: 9pt &quot;Consolas&quot;;
-     border-radius: 2px;
-     padding: 2px;
-	color:white;
-	background-color: rgb(128, 128, 128);
- }
-</string>
+border:none;
+font:9pt Consolas;
+border-radius:2px;
+color:#FFF;
+background-color:gray;
+padding:2px;
+}
+
+QPushButton#minButton:hover,QPushButton#minButton:pressed {
+background-image:url(:/Images/images/theme1/minButtonHover.png);
+}
+
+QPushButton#closeButton:hover,QPushButton#closeButton:pressed {
+background-image:url(:/Images/images/theme1/closeButtonHover.png);
+}
+
+QScrollBar::add-line:vertical,QScrollBar::sub-line:vertical {
+width:0;
+height:0;
+}</string>
   </property>
   <widget class="QWidget" name="taskWin">
    <property name="focusPolicy">
@@ -129,9 +123,6 @@ QToolTip {
     <property name="autoFillBackground">
      <bool>false</bool>
     </property>
-    <property name="styleSheet">
-     <string notr="true"/>
-    </property>
     <property name="text">
      <string/>
     </property>
@@ -157,9 +148,9 @@ QToolTip {
        <colorrole role="WindowText">
         <brush brushstyle="SolidPattern">
          <color alpha="255">
-          <red>128</red>
-          <green>128</green>
-          <blue>128</blue>
+          <red>102</red>
+          <green>102</green>
+          <blue>102</blue>
          </color>
         </brush>
        </colorrole>
@@ -175,18 +166,18 @@ QToolTip {
        <colorrole role="Text">
         <brush brushstyle="SolidPattern">
          <color alpha="255">
-          <red>128</red>
-          <green>128</green>
-          <blue>128</blue>
+          <red>102</red>
+          <green>102</green>
+          <blue>102</blue>
          </color>
         </brush>
        </colorrole>
        <colorrole role="ButtonText">
         <brush brushstyle="SolidPattern">
          <color alpha="255">
-          <red>128</red>
-          <green>128</green>
-          <blue>128</blue>
+          <red>102</red>
+          <green>102</green>
+          <blue>102</blue>
          </color>
         </brush>
        </colorrole>
@@ -213,9 +204,9 @@ QToolTip {
        <colorrole role="WindowText">
         <brush brushstyle="SolidPattern">
          <color alpha="255">
-          <red>128</red>
-          <green>128</green>
-          <blue>128</blue>
+          <red>102</red>
+          <green>102</green>
+          <blue>102</blue>
          </color>
         </brush>
        </colorrole>
@@ -231,18 +222,18 @@ QToolTip {
        <colorrole role="Text">
         <brush brushstyle="SolidPattern">
          <color alpha="255">
-          <red>128</red>
-          <green>128</green>
-          <blue>128</blue>
+          <red>102</red>
+          <green>102</green>
+          <blue>102</blue>
          </color>
         </brush>
        </colorrole>
        <colorrole role="ButtonText">
         <brush brushstyle="SolidPattern">
          <color alpha="255">
-          <red>128</red>
-          <green>128</green>
-          <blue>128</blue>
+          <red>102</red>
+          <green>102</green>
+          <blue>102</blue>
          </color>
         </brush>
        </colorrole>
@@ -269,9 +260,9 @@ QToolTip {
        <colorrole role="WindowText">
         <brush brushstyle="SolidPattern">
          <color alpha="255">
-          <red>128</red>
-          <green>128</green>
-          <blue>128</blue>
+          <red>102</red>
+          <green>102</green>
+          <blue>102</blue>
          </color>
         </brush>
        </colorrole>
@@ -287,18 +278,18 @@ QToolTip {
        <colorrole role="Text">
         <brush brushstyle="SolidPattern">
          <color alpha="255">
-          <red>128</red>
-          <green>128</green>
-          <blue>128</blue>
+          <red>102</red>
+          <green>102</green>
+          <blue>102</blue>
          </color>
         </brush>
        </colorrole>
        <colorrole role="ButtonText">
         <brush brushstyle="SolidPattern">
          <color alpha="255">
-          <red>128</red>
-          <green>128</green>
-          <blue>128</blue>
+          <red>102</red>
+          <green>102</green>
+          <blue>102</blue>
          </color>
         </brush>
        </colorrole>
@@ -334,9 +325,6 @@ QToolTip {
     <property name="focusPolicy">
      <enum>Qt::NoFocus</enum>
     </property>
-    <property name="styleSheet">
-     <string notr="true"/>
-    </property>
     <property name="text">
      <string/>
     </property>
@@ -357,8 +345,7 @@ QToolTip {
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">border-radius: 11px;
-background-color: rgb(74, 74, 74);</string>
+     <string notr="true"/>
     </property>
     <property name="text">
      <string/>
@@ -377,8 +364,7 @@ background-color: rgb(74, 74, 74);</string>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">background: white;
-border-radius: 9px;</string>
+     <string notr="true"/>
     </property>
     <property name="text">
      <string/>
@@ -392,9 +378,6 @@ border-radius: 9px;</string>
       <width>820</width>
       <height>461</height>
      </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-color: transparent;</string>
     </property>
     <property name="currentIndex">
      <number>0</number>
@@ -454,12 +437,6 @@ border-radius: 9px;</string>
         <kerning>true</kerning>
        </font>
       </property>
-      <property name="styleSheet">
-       <string notr="true">text-align: center;
-color:;
-color: rgb(74, 74, 74);
-background: transparent;</string>
-      </property>
       <property name="text">
        <string>Viewing tasks</string>
       </property>
@@ -499,11 +476,6 @@ background: transparent;</string>
          <kerning>true</kerning>
         </font>
        </property>
-       <property name="styleSheet">
-        <string notr="true">text-align: center;
-color: rgb(74, 74, 74);
-background: transparent;</string>
-       </property>
        <property name="text">
         <string>You don't have any tasks at the moment.</string>
        </property>
@@ -533,11 +505,6 @@ background: transparent;</string>
          <stylestrategy>PreferAntialias</stylestrategy>
          <kerning>true</kerning>
         </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">text-align: center;
-color: rgb(74, 74, 74);
-background: transparent;</string>
        </property>
        <property name="text">
         <string>Get busy. Add one!</string>
@@ -595,11 +562,6 @@ background: transparent;</string>
         <set>Qt::AlignCenter</set>
        </property>
       </widget>
-      <zorder>emptyTasksMessage1</zorder>
-      <zorder>emptyTaskMessage2</zorder>
-      <zorder>emptyAddTaskButton</zorder>
-      <zorder>oopsImage</zorder>
-      <zorder>emptySearchMessage</zorder>
      </widget>
      <widget class="QWidget" name="columnLabels" native="true">
       <property name="geometry">
@@ -631,10 +593,6 @@ background: transparent;</string>
        <property name="layoutDirection">
         <enum>Qt::LeftToRight</enum>
        </property>
-       <property name="styleSheet">
-        <string notr="true">background: transparent;
-color: grey;</string>
-       </property>
        <property name="text">
         <string>Start</string>
        </property>
@@ -663,10 +621,6 @@ color: grey;</string>
        <property name="layoutDirection">
         <enum>Qt::LeftToRight</enum>
        </property>
-       <property name="styleSheet">
-        <string notr="true">background: transparent;
-color: grey;</string>
-       </property>
        <property name="text">
         <string>Task</string>
        </property>
@@ -691,10 +645,6 @@ color: grey;</string>
        </property>
        <property name="layoutDirection">
         <enum>Qt::LeftToRight</enum>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">background: transparent;
-color: grey;</string>
        </property>
        <property name="text">
         <string>End</string>
@@ -723,10 +673,6 @@ color: grey;</string>
        </property>
        <property name="layoutDirection">
         <enum>Qt::LeftToRight</enum>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">background: transparent;
-color: grey;</string>
        </property>
        <property name="text">
         <string>Tag</string>
@@ -796,11 +742,6 @@ color: grey;</string>
          <kerning>true</kerning>
         </font>
        </property>
-       <property name="styleSheet">
-        <string notr="true">text-align: center;
-color: rgb(74, 74, 74);
-background: transparent;</string>
-       </property>
        <property name="text">
         <string>Sorry, your search turned no results.</string>
        </property>
@@ -853,11 +794,6 @@ background: transparent;</string>
          <kerning>true</kerning>
         </font>
        </property>
-       <property name="styleSheet">
-        <string notr="true">text-align: center;
-color: rgb(74, 74, 74);
-background: transparent;</string>
-       </property>
        <property name="text">
         <string>Press &lt;Backspace&gt; to go back to the main view.</string>
        </property>
@@ -897,11 +833,6 @@ background: transparent;</string>
          <stylestrategy>PreferAntialias</stylestrategy>
          <kerning>true</kerning>
         </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">text-align: center;
-color: rgb(74, 74, 74);
-background: transparent;</string>
        </property>
        <property name="text">
         <string>Amazing, you've completed all your tasks!</string>
@@ -954,11 +885,6 @@ background: transparent;</string>
          <stylestrategy>PreferAntialias</stylestrategy>
          <kerning>true</kerning>
         </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">text-align: center;
-color: rgb(74, 74, 74);
-background: transparent;</string>
        </property>
        <property name="text">
         <string>Would you like to add another?</string>

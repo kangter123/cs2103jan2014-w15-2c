@@ -14,6 +14,7 @@ SettingsWindow::SettingsWindow(QWidget* parent) : QWidget(parent) {
 	connect(ui.apply, SIGNAL(pressed()), this, SLOT(handleApplyButton()));
 
 	initIconsArray();
+	initThemeArray();
 }
 
 SettingsWindow::~SettingsWindow() {
@@ -79,6 +80,18 @@ void SettingsWindow::handleApplyButton() {
 		}
 	}
 
+	/*/ themes
+	Theme oldTheme = (Theme)settings.value("Theme", (char)Theme::SIMPLE).toInt();
+	for (int i=0; i< (char)Theme::THEME_LAST_ITEM - 1; ++i) {
+		if (themeSelectButtons[i]->isChecked()) {
+			settings.setValue("Theme", i);
+			if (oldTheme != (Theme)i) {
+				emit themeChanged();
+			}
+			break;
+		}
+	}*/
+
 }
 
 void SettingsWindow::handleOKButton() {
@@ -101,6 +114,7 @@ bool SettingsWindow::eventFilter(QObject* object, QEvent* event) {
 	return QObject::eventFilter(object, event);
 }
 
+
 void SettingsWindow::initIconsArray() {
 	iconSelectButtons[(char)IconSet::MEME] = ui.optionMeme;
 	iconSelectButtons[(char)IconSet::NICCAGE] = ui.optionNicCage;
@@ -108,6 +122,14 @@ void SettingsWindow::initIconsArray() {
 	iconSelectButtons[(char)IconSet::SHIBE] = ui.optionShibe;
 	iconSelectButtons[(char)IconSet::SYMBOLS] = ui.optionSymbols;
 	iconSelectButtons[(char)IconSet::SYMBOLS2] = ui.optionSymbols2;
+}
+
+void SettingsWindow::initThemeArray() {
+	themeSelectButtons[(char)Theme::BLUESKY] = ui.selectBlueSky;
+	themeSelectButtons[(char)Theme::DARK] = ui.selectNight;
+	themeSelectButtons[(char)Theme::GALAXY] = ui.selectGalaxy;
+	themeSelectButtons[(char)Theme::PINK] = ui.selectPink;
+	themeSelectButtons[(char)Theme::SIMPLE] = ui.selectSimple;
 }
 
 void SettingsWindow::loadCurrSettings() {

@@ -87,7 +87,6 @@ private:
 	HotKeyThread *hotKeyThread;
 
 	// For selection of tasks
-	bool onlyShowDone;
 	int currentlySelectedTask;
 	int previouslySelectedTask;
 	int previousSize;
@@ -98,6 +97,8 @@ private:
 	//=========================================
 
 	// For initialization
+	void initUI();
+	void initConnect();
 	void initTutorial();
 	void initAnimation();
 	void initProgressBar();
@@ -117,6 +118,7 @@ private:
 	void displaySubheading(const QString& content);
 
 	// Private helper functions for window content display
+	void hideContent();
 	void decideContent(QString title);
 	void showBackButtonIfSearching(const QString& title);
 	void changeTitle(const QString& title);

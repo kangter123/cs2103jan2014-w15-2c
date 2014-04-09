@@ -31,16 +31,12 @@
    <double>0.900000000000000</double>
   </property>
   <property name="styleSheet">
-   <string notr="true">background: transparent;
-QToolTip {
-     border: none;
-	font: 9pt &quot;Consolas&quot;;
-     border-radius: 2px;
-	border: 1px solid white;
-     padding: 2px;
-	color: rgb(255, 255, 255);
-	background-color: rgb(128, 128, 128);
- }</string>
+   <string notr="true">QLabel#bg{
+border-radius: 12px;
+background-color: rgb(203, 202, 202);
+}
+
+background:transparent;</string>
   </property>
   <widget class="QLabel" name="bg">
    <property name="geometry">
@@ -50,10 +46,6 @@ QToolTip {
      <width>780</width>
      <height>60</height>
     </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">border-radius: 12px;
-background-color: rgb(203, 202, 202);</string>
    </property>
    <property name="text">
     <string/>

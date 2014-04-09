@@ -6,18 +6,10 @@
 
 InputWindow::InputWindow(QWidget* parent) : QWidget(parent), animation(this, "opacity"), errorAnimation(this, "pos") {
 	LOG(INFO) << "InputWindow instance created";
-
-	ui.setupUi(this);
-	highlighter = new InputHighlighter(ui.lineEdit->document());
-	tooltipWidget = new TooltipWidget(this);
-	ui.lineEdit->installEventFilter(this);
+	initUI();
+	initWidgets();
 	initAnimation();
-
-	setAttribute(Qt::WA_TranslucentBackground);
-    setStyleSheet("background:transparent;");
-	setWindowFlags(windowFlags() | Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint | Qt::Tool);
-
-	connect(ui.lineEdit, SIGNAL(textChanged()), this, SLOT(handleLineEditChanged()));
+	initConnect();
 }
 
 InputWindow::~InputWindow() {
@@ -40,6 +32,10 @@ void InputWindow::doErrorAnimation() {
 	errorAnimation.start();
 }
 
+// ====================================================
+//	EVENTS
+// ====================================================
+
 bool InputWindow::eventFilter(QObject* object, QEvent* event) {
     if(event->type() == QEvent::KeyPress) {
 		// enter key
@@ -49,7 +45,7 @@ bool InputWindow::eventFilter(QObject* object, QEvent* event) {
 			return true;
 		}
 
-		if (Tasuke::instance().getTaskWindow().getScreen() == 0){
+		if (Tasuke::instance().getTaskWindow().getScreen() == 0) { // On main view
 			// Scroll keys for tasks
 			switch (eventKey->key()) {
 				case Qt::Key::Key_Up:
@@ -104,6 +100,14 @@ bool InputWindow::eventFilter(QObject* object, QEvent* event) {
     return QObject::eventFilter(object, event);
 }
 
+void InputWindow::hideEvent(QHideEvent* event) {
+	Q_UNUSED(event);
+	hideTooltip();
+}
+
+// ====================================================
+//	SHOWING AND HIDING INPUTWINDOW
+// ====================================================
 
 void InputWindow::showAndCenter() {
 	LOG(INFO) << "Displaying input window";
@@ -135,17 +139,69 @@ void InputWindow::closeAndClear() {
 	ui.lineEdit->clear();
 }
 
+
+// ====================================================
+//	PRIVATE SLOTS
+// ====================================================
+
+// Handles the enter button being pressed
 void InputWindow::handleReturnPressed() {
 	QString command = ui.lineEdit->toPlainText();
-
 	if (command.isEmpty()) {
 		return;
 	}
-
 	Tasuke::instance().runCommand(command);
-	//doErrorAnimation();
 }
 
+// Handles the event when line edit changes
+void InputWindow::handleLineEditChanged() {
+	QString currText = ui.lineEdit->toPlainText();
+
+	if (currText.isEmpty()) {
+		hideTooltip();
+	} else {
+		emit inputChanged(currText);
+	}
+}
+
+// ====================================================
+//	GETTER & SETTER
+// ====================================================
+
+void InputWindow::setOpacity(qreal value) {
+	wOpacity = value;
+	setWindowOpacity(value);
+	update();
+}
+
+qreal InputWindow::getOpacity() const {
+	return wOpacity;
+}
+
+// ====================================================
+//	INITIALIZATIONS
+// ====================================================
+
+// Initialise user interface
+void InputWindow::initUI() {
+	ui.setupUi(this);
+	ui.lineEdit->installEventFilter(this);
+	setAttribute(Qt::WA_TranslucentBackground);
+	setWindowFlags(windowFlags() | Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint | Qt::Tool);
+}
+
+// Initialise widgets
+void InputWindow::initWidgets() {
+	highlighter = new InputHighlighter(ui.lineEdit->document());
+	tooltipWidget = new TooltipWidget(this);
+}
+
+// Initialise connection of slots and signals
+void InputWindow::initConnect() {
+	connect(ui.lineEdit, SIGNAL(textChanged()), this, SLOT(handleLineEditChanged()));
+}
+
+// Initialize fade in animation of input window
 void InputWindow::initAnimation() {
 	animation.setEasingCurve(QEasingCurve::OutCubic); 
 	animation.setDuration(700); 
@@ -153,6 +209,7 @@ void InputWindow::initAnimation() {
 	animation.setEndValue(1.0); 
 }
 
+// Initialize error wiggle animation of input window
 void InputWindow::initErrorAnimation() {
 	errorAnimation.setEasingCurve(QEasingCurve::OutElastic); 
 	errorAnimation.setDuration(500);
@@ -167,37 +224,4 @@ void InputWindow::initErrorAnimation() {
 
 	errorAnimation.setStartValue(posBefore); 
 	errorAnimation.setEndValue(posAfter);
-}
-
-// Will be updated when "themes" is implemented.
-void InputWindow::changeBorder(int themeNumber) {
-}
-
-// Will be updated when "themes" is implemented.
-void InputWindow::changeBG(int themeNumber) {
-}
-
-void InputWindow::handleLineEditChanged() {
-	QString currText = ui.lineEdit->toPlainText();
-
-	if (currText.isEmpty()) {
-		hideTooltip();
-	} else {
-		emit inputChanged(currText);
-	}
-}
-
-void InputWindow::setOpacity(qreal value) {
-	wOpacity = value;
-	setWindowOpacity(value);
-	update();
-}
-
-qreal InputWindow::getOpacity() const {
-	return wOpacity;
-}
-
-void InputWindow::hideEvent(QHideEvent* event) {
-	Q_UNUSED(event);
-	hideTooltip();
 }

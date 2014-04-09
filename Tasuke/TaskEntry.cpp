@@ -7,22 +7,21 @@
 
 TaskEntry::TaskEntry(const Task& t, QWidget* parent) : QWidget(parent), task(t)  {
 	// Initialize field elements
-	ui.setupUi(this);
-	makeWidget();
-
+	initUI();
 	initLabelsArray();
 	initFonts();
-
-	setAttribute(Qt::WA_TranslucentBackground);
-	setStyleSheet("background:transparent;");
-	setWindowFlags(windowFlags() | Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint | Qt::Tool);
+	makeWidget();
 }
 
 TaskEntry::~TaskEntry() {
 
 }
 
+// ================================================
+// FUNCTIONS THAT SET LOOK OF TASK ENTRY
+// ================================================
 
+// Highlight ongoing task in green
 void TaskEntry::highlightOngoing() {
 	ui.ongoingLabel->show();	
 	ui.description->setStyleSheet("background:transparent; color: rgb(44, 115, 0); ");
@@ -34,6 +33,7 @@ void TaskEntry::highlightOngoing() {
 	ui.ID->setStyleSheet("background:transparent; color: rgb(44, 115, 0); ");
 }
 
+// Highlight overdue task in red
 void TaskEntry::highlightOverdue() {
 	ui.overdueLabel->show();	
 	ui.description->setStyleSheet("background:transparent; color: rgb(166, 0, 0); ");
@@ -43,6 +43,96 @@ void TaskEntry::highlightOverdue() {
 	ui.endTime->setStyleSheet("background:transparent; color: rgb(166, 0, 0); ");
 	ui.tag->setStyleSheet("background:transparent; color: rgb(166, 0, 0); ");
 	ui.ID->setStyleSheet("background:transparent; color: rgb(166, 0, 0); ");
+}
+
+// ================================================
+// FUNCTIONS TO SET FIELD CONTENT OF TASK ENTRY
+// ================================================
+
+// Generates a string of #tags
+QString TaskEntry::createTagString(const QList<QString>& tags) const {
+	QString strTags = tags[0];
+	strTags.prepend("#");
+	if (tags.size() > 1) {
+		for (int i = 1; i < tags.size(); i++) { // Iterate through the list to create a string of tags
+			strTags.append(", #");
+			strTags.append(tags[i]);
+		}
+	}
+	return strTags;
+}
+
+// Sets task ID
+void TaskEntry::setID(int ID) {
+	assert(ID>=0);
+	ui.ID->setText(QString::number(task.getId() + 1));
+}
+
+// Set tooltip
+void TaskEntry::setTooltip(const QString& description, const QDateTime& start, const QDateTime& end, 
+						   const QList<QString>& tags, const QString& dueInMessage) {
+	// description
+	QString tooltipText(description);
+	tooltipText.prepend("Task description: ");
+	// start datetime
+	if (!start.isNull()) {
+		tooltipText.append("\n\nStart: \n" + start.toString("dd MMMM yyyy (dddd)\nh:mm ap"));
+	}
+	// end datetime
+	if (!end.isNull()) {
+		tooltipText.append("\n\nEnd: \n" + end.toString("dd MMMM yyyy (dddd)\nh:mm ap"));
+		tooltipText.append("\n\n" + dueInMessage);
+	}
+	// tags
+	if (!tags.isEmpty()) {
+		tooltipText.append("\n\nTagged with: ");
+		tooltipText.append(createTagString(tags));
+	}
+	// Set it!
+	this->setToolTip(tooltipText);
+}
+
+// Set description that cannot be empty
+void TaskEntry::setDescription(const QString& description) {
+	assert(!description.isEmpty());
+	ui.description->setText(ui.description->fontMetrics().elidedText(description, Qt::ElideRight, 
+							ui.description->contentsRect().width()));
+}
+
+// Set the date time in the specific format
+void TaskEntry::setDateTimes(const QDateTime& start, const QDateTime& end) {
+	if (!start.isNull()) {
+		QString strStartDate = start.toString("dd MMM (ddd)");
+		QString strStartTime = start.toString("h:mm ap");
+		ui.startDate->setText(strStartDate);
+		ui.startTime->setText(strStartTime);
+	}
+	if (!end.isNull()) {
+		QString strEndDate = end.toString("dd MMM (ddd)");
+		QString strEndTime = end.toString("h:mm ap");
+		ui.endDate->setText(strEndDate);
+		ui.endTime->setText(strEndTime);
+	}
+}
+
+// Set the string of tags
+void TaskEntry::setTags(const QList<QString>& tags) {
+	assert(!task.getTags().isEmpty());
+
+	QString strTags = createTagString(tags);
+	ui.tag->setText(ui.tag->fontMetrics().elidedText(strTags, Qt::ElideRight, ui.tag->width()));
+}
+
+// ================================================
+// INITIALIZATIONS
+// ================================================
+
+void TaskEntry::initUI() {
+	ui.setupUi(this);
+	setAttribute(Qt::WA_TranslucentBackground);
+	setWindowFlags(windowFlags() | Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint | Qt::Tool);
+	ui.overdueLabel->hide();
+	ui.ongoingLabel->hide();
 }
 
 void TaskEntry::initLabelsArray() {
@@ -69,85 +159,11 @@ void TaskEntry::initFonts() {
 		}
 		labels[i]->setFont(font);
 	}
-
-	//fm = QFontMetrics(ui.description->font(), ui.description);
-}
-
-void TaskEntry::setTooltip(const QString& des, const QDateTime& start, const QDateTime& end, 
-						   const QList<QString>& tags, const QString& dueInMessage) {
-
-	// description
-	QString tooltipText(des);
-	tooltipText.prepend("Task description: ");
-
-	// start datetime
-	if (!start.isNull()) {
-		tooltipText.append("\n\nStart: \n" + start.toString("dd MMMM yyyy (dddd)\nh:mm ap"));
-	}
-
-	// end datetime
-	if (!end.isNull()) {
-		tooltipText.append("\n\nEnd: \n" + end.toString("dd MMMM yyyy (dddd)\nh:mm ap"));
-		tooltipText.append("\n\n" + dueInMessage);
-
-		// tags
-		if (!tags.isEmpty()) {
-			tooltipText.append("\n\nTagged with: ");
-			tooltipText.append(createTagString(tags));
-		}
-
-		this->setToolTip(tooltipText);
-	}
-}
-
-void TaskEntry::setDescription(const QString& des) {
-
-	// First, we have to make sure the text fits.
-	// If not, we will append with ellipses ("...")
-
-	ui.description->setText(ui.description->fontMetrics().elidedText(des, Qt::ElideRight, ui.description->contentsRect().width()));
-}
-
-void TaskEntry::setDateTimes(const QDateTime& start, const QDateTime& end) {
-
-	if (!start.isNull()) {
-		QString strStartDate = start.toString("dd MMM (ddd)");
-		QString strStartTime = start.toString("h:mm ap");
-		ui.startDate->setText(strStartDate);
-		ui.startTime->setText(strStartTime);
-	}
-
-	if (!end.isNull()) {
-		QString strEndDate = end.toString("dd MMM (ddd)");
-		QString strEndTime = end.toString("h:mm ap");
-		ui.endDate->setText(strEndDate);
-		ui.endTime->setText(strEndTime);
-	}
-}
-
-QString TaskEntry::createTagString(const QList<QString>& tags) const {
-	QString strTags = tags[0];
-	strTags.prepend("#");
-
-	if (tags.size() > 1) {
-		for (int i = 1; i < tags.size(); i++) { // Iterate through the list to create a string of tags
-			strTags.append(", #");
-			strTags.append(tags[i]);
-		}
-	}
-
-	return strTags;
-}
-
-void TaskEntry::setTags(const QList<QString>& tags) {
-	QString strTags = createTagString(tags);
-
-	ui.tag->setText(ui.tag->fontMetrics().elidedText(strTags, Qt::ElideRight, ui.tag->width()));
 }
 
 // This function sets the respective fields in the TaskEntry widget
 void TaskEntry::makeWidget() {
-	ui.ID->setText(QString::number(task.getId() + 1));
+	setID(task.getId());
 
 	setDescription(task.getDescription());
 
@@ -158,7 +174,4 @@ void TaskEntry::makeWidget() {
 	}
 
 	setTooltip(task.getDescription(), task.getBegin(), task.getEnd(), task.getTags(), task.getTimeDifferenceString());
-
-	ui.overdueLabel->hide();
-	ui.ongoingLabel->hide();
 }

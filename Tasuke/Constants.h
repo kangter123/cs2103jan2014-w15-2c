@@ -30,7 +30,8 @@ enum class Theme : char {
 	BLUESKY,
 	DARK,
 	GALAXY,
-	DOGE
+	DOGE,
+	THEME_LAST_ITEM
 };
 
 enum class IconSet : char {

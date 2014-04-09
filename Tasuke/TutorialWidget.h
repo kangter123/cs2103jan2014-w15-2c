@@ -42,7 +42,9 @@ private:
 	static const int COMMANDS_PAGE = 1;
 	static const int FEATURES_PAGE = 2;
 
-
+	void initUI();
+	void initConnect();
+	
 	int getNextIndex(int currIndex, int max);
 	int getPrevIndex(int currIndex, int max);
 };

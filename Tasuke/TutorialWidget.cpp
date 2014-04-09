@@ -5,19 +5,8 @@
 
 TutorialWidget::TutorialWidget(QWidget* parent) : QWidget(parent) {
 	LOG(INFO) << "Tutorialwidget instance created";
-
-	ui.setupUi(this);
-
-	setAttribute(Qt::WA_TranslucentBackground);
-	setWindowFlags(windowFlags() | Qt::FramelessWindowHint | Qt::Tool);
-
-	connect(ui.pushButton, SIGNAL(pressed()), this, SLOT(backToTasuke()));
-	connect(ui.navPrev, SIGNAL(pressed()), this, SLOT(handleNavPrev()));
-    connect(ui.navNext, SIGNAL(pressed()), this, SLOT(handleNavNext()));
-    connect(ui.featuresPrev, SIGNAL(pressed()), this, SLOT(handleFeaturesPrev()));
-    connect(ui.featuresNext, SIGNAL(pressed()), this, SLOT(handleFeaturesNext()));
-    connect(ui.commandsPrev, SIGNAL(pressed()), this, SLOT(handleCommandsPrev()));
-    connect(ui.commandsNext, SIGNAL(pressed()), this, SLOT(handleCommandsNext()));
+	initUI();
+	initConnect();
 }
 
 TutorialWidget::~TutorialWidget() {
@@ -106,15 +95,38 @@ void TutorialWidget::handleFeaturesPrev() {
 bool TutorialWidget::eventFilter(QObject* object, QEvent* event) {
 	if (event->type() == QEvent::KeyPress) {
 		QKeyEvent* eventKey = static_cast<QKeyEvent*>(event);
-
 		if (eventKey->key() == Qt::Key_Tab) {
 			changeTabs();
 			return true;
 		}
 	}
 	return QObject::eventFilter(object, event);
-
 }
+
+// ================================================
+//	INITIALISATION
+// ================================================
+
+void TutorialWidget::initUI() {
+	ui.setupUi(this);
+	setAttribute(Qt::WA_TranslucentBackground);
+	setWindowFlags(windowFlags() | Qt::FramelessWindowHint | Qt::Tool);
+}
+
+void TutorialWidget::initConnect() {
+	connect(ui.pushButton, SIGNAL(pressed()), this, SLOT(backToTasuke()));
+	connect(ui.navPrev, SIGNAL(pressed()), this, SLOT(handleNavPrev()));
+	connect(ui.navNext, SIGNAL(pressed()), this, SLOT(handleNavNext()));
+	connect(ui.featuresPrev, SIGNAL(pressed()), this, SLOT(handleFeaturesPrev()));
+	connect(ui.featuresNext, SIGNAL(pressed()), this, SLOT(handleFeaturesNext()));
+	connect(ui.commandsPrev, SIGNAL(pressed()), this, SLOT(handleCommandsPrev()));
+	connect(ui.commandsNext, SIGNAL(pressed()), this, SLOT(handleCommandsNext())); 
+}
+
+
+// ================================================
+//	PAGE INDEX GETTERS
+// ================================================
 
 // Returns the next page number of the stacked widget
 int TutorialWidget::getNextIndex(int currIndex, int max) {

@@ -5,18 +5,10 @@
 
 InputHighlighter::InputHighlighter(QTextDocument *parent) : QSyntaxHighlighter(parent){
 	setRegex();
-	setupColorsFormatsRules(QColor(51, 204, 255), Qt::darkCyan, QColor(164, 219, 0));
-	spellCheckFormat.setUnderlineColor(QColor(Qt::red));
-	spellCheckFormat.setUnderlineStyle(QTextCharFormat::WaveUnderline);
+	setupColorsFormatsRules(QColor(51, 204, 255), Qt::darkCyan, QColor(145, 194, 0));
 }
 
-void InputHighlighter::setRegex(){
-	// Regex notes:
-	// ^ means it will only be highlighted if the word is used at the start of the string
-	// ? means 0 or more
-	// + means at least one
-	// \b means start/end boundary
-	
+void InputHighlighter::setRegex(){	
 	commandRegex = QRegularExpression("(^(((much)|(such)|(wow such)|(wow much)|(so)|(many)) )?"
 									  "((\\b(add)|(create)|(a)|(do)|"
 									  "(remove)|(delete)|(clear)|(rm)|"
@@ -27,18 +19,20 @@ void InputHighlighter::setRegex(){
 	keywordRegex = QRegularExpression("(^\\b((much|such|wow such|wow much|so|many) )?"
 									  "((\\b(exit)|(quit)|(q)|(options)|(settings)|(help)|(tutorial)|(guide)|(instructions)|(about))\\b)+)");
 	
-	//connectorRegex = QRegExp("((\\b(to|from|by|at|on)\\b)|( @)|-|#)");
 	connectorRegex = QRegularExpression("^(?:(?:wow\\s+)?(?:[ms]uch|so|many)\\s+)?" // doge prefixes
 										"(?:add|create|a|do|edit|update|modify|change|e)" // commands with connectors
 										"\\s+(?:\\S+\\s+)+" // item being added or edited
-										"(from|by|at|on|@)(?:\\s+(?:\\S+\\s+)+(to|-)\\b)?"); // connectors, with optional "to" connector
-    tagRegex = QRegularExpression("\\s(#)\\S");
+										"(from|by|at|on|@)\\b(?:\\s+(?:\\S+\\s+)+(to|-)\\b)?"); // connectors, with optional "to" connector
+   
+	tagRegex = QRegularExpression("\\s(#)\\S");
 }
 
 void InputHighlighter::setFormats(QColor commandC, QColor keywordC, QColor connectorC){
 	commandFormat.setForeground(commandC);
 	keywordFormat.setForeground(keywordC);
 	connectorFormat.setForeground(connectorC);
+	spellCheckFormat.setUnderlineColor(QColor(Qt::red));
+	spellCheckFormat.setUnderlineStyle(QTextCharFormat::WaveUnderline);
 }
 
 void InputHighlighter::setRules(){
@@ -64,7 +58,7 @@ void InputHighlighter::setRules(){
 }
 
 
-void InputHighlighter::setupColorsFormatsRules(QColor commandC, QColor keywordC, QColor connectorC){
+void InputHighlighter::setupColorsFormatsRules(QColor commandC, QColor keywordC, QColor connectorC) {
 	setFormats(commandC, keywordC, connectorC);
 	setRules();
 }
