@@ -16,7 +16,7 @@ NotificationManager::~NotificationManager() {
 NotificationManager& NotificationManager::instance() {
 	static NotificationManager *instance = 0;
 
-	if(instance == 0) {
+	if (instance == 0) {
 		// Allocates memory *before* constructor, so Tasuke::instance() will work within a constructor-called method
 		instance = (NotificationManager *) ::operator new (sizeof(NotificationManager));
 		// Actually runs the constructor now
