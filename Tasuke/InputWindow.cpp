@@ -5,6 +5,9 @@
 
 //@author A0100189
 
+// The input window is also the command box. 
+// The input window handles text input, keyword highlighting and displaying of command tooltip.
+
 InputWindow::InputWindow(QWidget* parent) : QWidget(parent), animation(this, "opacity"), 
 	errorAnimation(this, "pos"), connectedToSettings(false) {
 		LOG(INFO) << "InputWindow instance created";
@@ -149,7 +152,7 @@ void InputWindow::closeAndClear() {
 
 // Reloads theme according to settings.
 void InputWindow::reloadTheme() {
-	LOG(INFO) << "Reloading theme in INPUTWINDOW";
+	LOG(INFO) << "Reloading theme in InputWindow";
 	QSettings settings(QSettings::IniFormat, QSettings::UserScope, "Tasuke", "Tasuke");
 	Theme currTheme = (Theme)settings.value("Theme", (char)Theme::DEFAULT).toInt();
 
@@ -182,7 +185,7 @@ void InputWindow::reloadTheme() {
 
 // Enables or disables features such as highlighter, spellcheck & tooltip according to settings
 void InputWindow::reloadFeatures() {
-	LOG(INFO) << "Reloading highlighter in INPUTWINDOW";
+	LOG(INFO) << "Reloading highlighter in InputWindow";
 	QSettings settings(QSettings::IniFormat, QSettings::UserScope, "Tasuke", "Tasuke");
 	
 	bool highlightCommandsEnabled = settings.value("HighlightCommandsEnabled", true).toBool();

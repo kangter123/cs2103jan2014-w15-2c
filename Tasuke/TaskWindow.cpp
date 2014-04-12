@@ -6,6 +6,9 @@
 
 //@author A0100189
 
+// The task window is the main window.
+// It handles the task list, tutorial, scrolling and focusing on tasks.
+
 TaskWindow::TaskWindow(QWidget* parent) : connectedToSettings(false), currentlySelectedTask(-1),
 										  animation(this, "opacity"), progressBar(this), QMainWindow(parent) {
 		LOG(INFO) << "TaskWindow instance created";
@@ -142,6 +145,7 @@ void TaskWindow::showListWidget() {
 }
 
 void TaskWindow::showTutorialWidget() {
+	LOG(INFO) << "Showing tutorial";
 	ui.stackedWidget->slideInIdx(TUTORIAL_PAGE);
 	tutorial.reset();
 }
@@ -198,7 +202,7 @@ void TaskWindow::displayTaskList() {
 
 // Reloads the theme
 void TaskWindow::reloadTheme() {
-	LOG(INFO) << "Reloading theme in TASKWINDOW";
+	LOG(INFO) << "Reloading theme in TaskWindow";
 	QSettings settings(QSettings::IniFormat, QSettings::UserScope, "Tasuke", "Tasuke");
 	Theme currTheme = (Theme)settings.value("Theme", (char)Theme::DEFAULT).toInt();
 

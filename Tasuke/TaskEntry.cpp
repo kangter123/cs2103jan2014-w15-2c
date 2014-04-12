@@ -5,6 +5,9 @@
 
 //@author A0100189
 
+// Each TaskEntry object represents a Task with different ID, description, dates and tags.
+// They are entered into the listWidget in TaskWindow.
+
 TaskEntry::TaskEntry(const Task& t, QWidget* parent) : QWidget(parent), task(t)  {
 	initUI();
 	initLabelsArray();

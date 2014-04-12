@@ -4,6 +4,8 @@
 
 //@author A0100189
 
+// Subheading entry is entered inside the listWidget inside Task Window.
+// It is used to sort and organize the tasks visually for the user.
 SubheadingEntry::SubheadingEntry(const QString& content, QWidget *parent): QWidget(parent), connectedToSettings(false) {
 	initUI();
 	initSettingsConnect();
