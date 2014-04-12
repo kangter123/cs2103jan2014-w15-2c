@@ -138,9 +138,6 @@ namespace UnitTest {
 			// punctuation
 			Assert::IsFalse(Tasuke::instance().spellCheck("youre")); // A phrase that needs punctuation
 			Assert::IsTrue(Tasuke::instance().spellCheck("you're")); // A phrase that needs punctuation
-
-			// popular words
-			Assert::IsTrue(Tasuke::instance().spellCheck("fuck")); // A popular swear word
 		}
 
 		// The incorrect spelling partition
@@ -169,6 +166,34 @@ namespace UnitTest {
 			//words
 			Assert::IsTrue(Tasuke::instance().spellCheck("settings"));
 			Assert::IsTrue(Tasuke::instance().spellCheck("add"));
+		}
+
+		// To ensure date month words are considered correct.
+		TEST_METHOD(SpellTasukeMonths) {
+
+			// MMM months
+			Assert::IsTrue(Tasuke::instance().spellCheck("jan"));
+			Assert::IsTrue(Tasuke::instance().spellCheck("jul"));
+			Assert::IsTrue(Tasuke::instance().spellCheck("dec"));
+
+			// MMMM months
+			Assert::IsTrue(Tasuke::instance().spellCheck("january"));
+			Assert::IsTrue(Tasuke::instance().spellCheck("july"));
+			Assert::IsTrue(Tasuke::instance().spellCheck("december"));
+		}
+
+		// To ensure date days words are considered correct
+		TEST_METHOD(SpellTasukeDays) {
+
+			// DDD days
+			Assert::IsTrue(Tasuke::instance().spellCheck("mon"));
+			Assert::IsTrue(Tasuke::instance().spellCheck("tue"));
+			Assert::IsTrue(Tasuke::instance().spellCheck("fri"));
+
+			// DDDD days
+			Assert::IsTrue(Tasuke::instance().spellCheck("wednesday"));
+			Assert::IsTrue(Tasuke::instance().spellCheck("thursday"));
+			Assert::IsTrue(Tasuke::instance().spellCheck("sunday"));
 		}
 
 	};
