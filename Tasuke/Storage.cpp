@@ -212,19 +212,11 @@ QDateTime IStorage::nextFreeTime() {
 	QDateTime nextAvailableTime = QDateTime::currentDateTime();
 
 	foreach (const QSharedPointer<Task>& task, tasks) {
-
-		// Skip if we have reached the part of the list where tasks begin on the next day.
-		QDateTime breakCondition = QDateTime(QDate::currentDate().addDays(1), QTime(0, 0, 0));
-		if (task->getBegin() >= breakCondition) {
-			break;
-		}
-
 		if (task->getBegin() <= nextAvailableTime) {
 			nextAvailableTime = task->getEnd();
 		} else {
 			break;
 		}
-		
 	}
 	return nextAvailableTime;
 }

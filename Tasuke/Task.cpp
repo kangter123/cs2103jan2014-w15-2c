@@ -1,4 +1,5 @@
 #include <QDataStream>
+#include <cassert>
 #include "Constants.h"
 #include "Exceptions.h"
 #include "Task.h"
@@ -32,10 +33,12 @@ QString Task::getDescription() const {
 // if the incoming tag causes the number of tags to exceed
 // MAXIMUM_TAGS.
 void Task::addTag(QString _tag) {
+	assert(!_tag.isEmpty());
+
 	if (tags.size() >= MAXIMUM_TAGS) {
 		throw ExceptionTooManyTags();
 	}
-
+	
 	if (!tags.contains(_tag)) {
 		tags.insert(_tag);
 	}
