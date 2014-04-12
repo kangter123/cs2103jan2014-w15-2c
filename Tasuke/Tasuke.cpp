@@ -12,60 +12,6 @@
 
 //@author A0096836M
 
-const char* const MSG_TASUKE_CREATED = "Tasuke object created";
-const char* const MSG_TASUKE_DESTROYED = "Tasuke object destroyed";
-const char* const MSG_LOADING_DICTIONARY = "Loading dictionary";
-const char* const MSG_LOADING_FONTS = "Loading fonts";
-const char* const MSG_STORAGE_CHANGED = "Storage changed";
-const char* const MSG_COMMAND_STACK_PUSH =  "Pushing command to history stack";
-const char* const MSG_UNDO = "Undoing command";
-const char* const MSG_NO_UNDO ="Nothing to undo";
-const char* const MSG_REDO = "Redoing command";
-const char* const MSG_NO_REDO = "Nothing to redo";
-
-#define MSG_ERROR_PARSING(message) \
-	"Error parsing command" << QString(message).toStdString()
-#define MSG_SHOWING_MESSAGE(message) \
-	"Showing message: " << QString(message).toStdString()
-#define MSG_UPDATING_TASKWINDOW(tasks) \
-	"Updating task window with " << QString(tasks).toStdString() << " tasks"
-#define MSG_HIGHLIGHT_TASK(id) \
-	"Highlighting task with id  " << id
-
-const char* const SPELL_GB_DICFILE = "en_GB.dic";
-const char* const SPELL_GB_AFFFILE = "en_GB.aff";
-const char* const SPELL_US_DICFILE = "en_US.dic";
-
-const char* const MAC_RESOURCE_PATH = "/../Resources/";
-
-const char* const METATYPE_TRY_RESULT = "TRY_RESULT";
-
-const QStringList SPELL_NONWORD_COMMANDS = QStringList() << "rm" << "ls"
-	<< "nd";
-const QStringList SPELL_MONTH_NAMES = QStringList() << "january" << "february"
-	<< "march" << "april" << "may" << "june" << "july" << "august"
-	<< "september" << "october" << "november" << "december";
-const QStringList SPELL_MONTH_NAMES_SHORT = QStringList() << "jan" << "feb"
-	<< "mar" << "apr" << "jun" << "jul" << "aug" << "sep" << "sept" << "oct"
-	<< "nov" << "dec";
-const QStringList SPELL_DAY_NAMES = QStringList() << "monday" << "tuesday"
-	<< "wednesday" << "thursday" << "friday" << "saturday" << "sunday";
-const QStringList SPELL_DAY_NAMES_SHORT = QStringList() << "mon" << "tue" << "tues"
-	<< "wed" << "thu" << "thur" << "fri" << "sat" << "sun";
-const QList<QStringList> SPELL_INCLUDE_LISTS = QList<QStringList>()
-	<< SPELL_NONWORD_COMMANDS << SPELL_MONTH_NAMES << SPELL_MONTH_NAMES_SHORT
-	<< SPELL_DAY_NAMES << SPELL_DAY_NAMES_SHORT;
-
-const QStringList FONT_LIST = QStringList() << ":/Fonts/fonts/Quicksand_Book.otf"
-	<< ":/Fonts/fonts/Quicksand_Book_Oblique.otf"
-	<< ":/Fonts/fonts/Quicksand_Light.otf"
-	<< ":/Fonts/fonts/Quicksand_Light_Oblique.otf"
-	<< ":/Fonts/fonts/Quicksand_Bold.otf"
-	<< ":/Fonts/fonts/Quicksand_Bold_Oblique.otf"
-	<< ":/Fonts/fonts/PrintClearly.otf"
-	<< ":/Fonts/fonts/PrintBold.otf"
-	<< ":/Fonts/fonts/Consolas.ttf";
-
 bool Tasuke::guiMode = true;
 
 // Constructor for the Tasuke singleton.
