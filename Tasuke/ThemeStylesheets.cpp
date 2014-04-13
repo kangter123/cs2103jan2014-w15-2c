@@ -1,6 +1,6 @@
 #include "ThemeStylesheets.h"	
 
-//@author A0100189
+//@author A0100189m
 
 QStringList ThemeStylesheets::TASKWINDOW_STYLES = QStringList() 
 	<< "QLabel,QPushButton { color:#666; } \n" // Theme 1: Default
@@ -32,7 +32,6 @@ QStringList ThemeStylesheets::TASKWINDOW_STYLES = QStringList()
 	"QPushButton#minButton:hover,QPushButton#minButton:pressed {background-image:url(:/Images/images/theme2/minButtonHover.png);}\n"
 	"QPushButton#closeButton:hover,QPushButton#closeButton:pressed {background-image:url(:/Images/images/theme2/closeButtonHover.png);}\n"
 	"QScrollBar::add-line:vertical,QScrollBar::sub-line:vertical {width:0;height:0;}\n" 
-
 
 	<< "QLabel,QPushButton { color:white; } \n" // Theme 3: Space
 	"QWidget { background-color:transparent; } \n"

@@ -1,14 +1,11 @@
+#include <QSettings>
 #include "Tasuke.h"
-#include "InputWindow.h"
 #include "Interpreter.h"
 #include "Exceptions.h"
 #include "ThemeStylesheets.h"
-#include <QSettings>
+#include "InputWindow.h"
 
-//@author A0100189
-
-// The input window is also the command box. 
-// The input window handles text input, keyword highlighting and displaying of command tooltip.
+//@author A0100189m
 
 InputWindow::InputWindow(QWidget* parent) : QWidget(parent), animation(this, "opacity"), 
 	errorAnimation(this, "pos") {
@@ -17,7 +14,7 @@ InputWindow::InputWindow(QWidget* parent) : QWidget(parent), animation(this, "op
 		initWidgets();
 		initAnimation();
 		initUIConnect();
-		reloadTheme();
+		handleReloadTheme();
 }
 
 InputWindow::~InputWindow() {
@@ -40,6 +37,80 @@ void InputWindow::hideTooltip() {
 // Starts error wiggle animation
 void InputWindow::doErrorAnimation() {
 	errorAnimation.start();
+}
+
+// Shows and moves the input window to center relative to task window
+void InputWindow::showAndCenter() {
+	LOG(INFO) << "Displaying input window";
+
+	QPoint pos = QApplication::desktop()->screen()->rect().center() - rect().center();
+	if(Tasuke::instance().getTaskWindow().isVisible()){ // If taskWindow is open
+		pos.setY(Tasuke::instance().getTaskWindow().y() + Tasuke::instance().getTaskWindow().height() + 3); //set commandbox below taskWindow
+		pos.setX(Tasuke::instance().getTaskWindow().x());
+	} else {
+		pos.setY(QApplication::desktop()->screen()->rect().height() / 4);
+	}
+
+	move(pos);
+	initErrorAnimation();
+
+	show(); 
+	raise(); 
+	activateWindow();
+	animation.start();
+}
+
+// Shows the input window with an "Add " command 
+void InputWindow::showAndAdd() {
+	LOG(INFO) << "User has clicked \"add one\"";
+	showAndCenter();
+	ui.lineEdit->insertPlainText("add ");
+}
+
+// Closes and clears the text box
+void InputWindow::closeAndClear() {
+	hide();
+	ui.lineEdit->clear();
+}
+
+// ====================================================
+//	PUBLIC SLOTS
+// ====================================================
+
+// Reloads theme according to settings.
+void InputWindow::handleReloadTheme() {
+	LOG(INFO) << "Reloading theme in InputWindow";
+
+	// Get current theme ID
+	QSettings settings(QSettings::IniFormat, QSettings::UserScope, "Tasuke", "Tasuke");
+	Theme currTheme = (Theme)settings.value("Theme", (char)Theme::DEFAULT).toInt();
+
+	try {
+		if (currTheme < (Theme)0 && currTheme >= Theme::THEME_LAST_ITEM) {
+			throw ExceptionThemeOutOfRange();
+		} else {
+			setStyleSheet(ThemeStylesheets::INPUTWINDOW_STYLES[(char)currTheme]); // Apply theme
+		}
+	} catch (ExceptionThemeOutOfRange *exception) {
+		// If the icon enum in the settings is out of range, set back to default
+		settings.setValue("Theme", (char)Theme::DEFAULT); 
+		handleReloadTheme();
+	}
+}
+
+// Enables or disables features such as highlighter, spellcheck & tooltip according to settings
+void InputWindow::handleReloadFeatures() {
+	LOG(INFO) << "Reloading highlighter in InputWindow";
+	QSettings settings(QSettings::IniFormat, QSettings::UserScope, "Tasuke", "Tasuke");
+
+	bool highlightCommandsEnabled = settings.value("HighlightCommandsEnabled", true).toBool();
+	highlighter->setCommandsEnabled(highlightCommandsEnabled);
+
+	bool highlightSpellcheckEnabled = settings.value("SpellcheckEnabled", true).toBool();
+	highlighter->setSpellcheckEnabled(highlightSpellcheckEnabled);
+
+	bool tooltipEnabled = settings.value("TooltipEnabled", true).toBool();
+	showTooltip = tooltipEnabled;
 }
 
 // ====================================================
@@ -117,81 +188,6 @@ void InputWindow::hideEvent(QHideEvent* event) {
 }
 
 // ====================================================
-//	SLOTS
-// ====================================================
-
-// Shows and moves the input window to center relative to task window
-void InputWindow::showAndCenter() {
-	LOG(INFO) << "Displaying input window";
-
-	QPoint pos = QApplication::desktop()->screen()->rect().center() - rect().center();
-	if(Tasuke::instance().getTaskWindow().isVisible()){ // If taskWindow is open
-		pos.setY(Tasuke::instance().getTaskWindow().y() + Tasuke::instance().getTaskWindow().height() + 3); //set commandbox below taskWindow
-		pos.setX(Tasuke::instance().getTaskWindow().x());
-	} else {
-		pos.setY(QApplication::desktop()->screen()->rect().height() / 4);
-	}
-
-	move(pos);
-	initErrorAnimation();
-
-	show(); 
-	raise(); 
-	activateWindow();
-	animation.start();
-}
-
-// Shows the input window with an "Add " command 
-void InputWindow::showAndAdd() {
-	LOG(INFO) << "User has clicked \"add one\"";
-	showAndCenter();
-	ui.lineEdit->insertPlainText("add ");
-}
-
-// Closes and clears the text box
-void InputWindow::closeAndClear() {
-	hide();
-	ui.lineEdit->clear();
-}
-
-// Reloads theme according to settings.
-void InputWindow::reloadTheme() {
-	LOG(INFO) << "Reloading theme in InputWindow";
-
-	// Get current theme ID
-	QSettings settings(QSettings::IniFormat, QSettings::UserScope, "Tasuke", "Tasuke");
-	Theme currTheme = (Theme)settings.value("Theme", (char)Theme::DEFAULT).toInt();
-
-	try {
-		if (currTheme < (Theme)0 && currTheme >= Theme::THEME_LAST_ITEM) {
-			throw ExceptionThemeOutOfRange();
-		} else {
-			setStyleSheet(ThemeStylesheets::INPUTWINDOW_STYLES[(char)currTheme]); // Apply theme
-		}
-	} catch (ExceptionThemeOutOfRange *exception) {
-		// If the icon enum in the settings is out of range, set back to default
-		settings.setValue("Theme", (char)Theme::DEFAULT); 
-		reloadTheme();
-	}
-}
-
-// Enables or disables features such as highlighter, spellcheck & tooltip according to settings
-void InputWindow::reloadFeatures() {
-	LOG(INFO) << "Reloading highlighter in InputWindow";
-	QSettings settings(QSettings::IniFormat, QSettings::UserScope, "Tasuke", "Tasuke");
-
-	bool highlightCommandsEnabled = settings.value("HighlightCommandsEnabled", true).toBool();
-	highlighter->setCommandsEnabled(highlightCommandsEnabled);
-
-	bool highlightSpellcheckEnabled = settings.value("SpellcheckEnabled", true).toBool();
-	highlighter->setSpellcheckEnabled(highlightSpellcheckEnabled);
-
-	bool tooltipEnabled = settings.value("TooltipEnabled", true).toBool();
-	showTooltip = tooltipEnabled;
-}
-
-
-// ====================================================
 //	PRIVATE SLOTS
 // ====================================================
 
@@ -251,7 +247,7 @@ void InputWindow::initWidgets() {
 // Initialise connection of slots and signals
 void InputWindow::initUIConnect() {
 	connect(ui.lineEdit, SIGNAL(textChanged()), this, SLOT(handleLineEditChanged()));
-	connect(this, SIGNAL(reloadIcons()), tooltipWidget, SLOT(initIcons()));
+	connect(this, SIGNAL(reloadIcons()), tooltipWidget, SLOT(handleReloadIcons()));
 }
 
 // Initialize fade in animation of input window

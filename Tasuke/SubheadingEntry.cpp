@@ -1,23 +1,20 @@
+#include <QSettings>
 #include "Tasuke.h"
-#include "SubheadingEntry.h"
 #include "Exceptions.h"
 #include "ThemeStylesheets.h"
-#include <QSettings>
+#include "SubheadingEntry.h"
 
-//@author A0100189
-
-// Subheading entry is entered inside the listWidget inside Task Window.
-// It is used to sort and organize the tasks visually for the user.
+//@author A0100189m
 
 SubheadingEntry::SubheadingEntry(const QString& content, QWidget *parent): QWidget(parent), connectedToSettings(false) {
 	initUI();
 	initSettingsConnect();
-	reloadTheme();
+	handleReloadTheme();
 	changeText(content);
 }
 
 SubheadingEntry::~SubheadingEntry() {
-	disconnect(this, SLOT(reloadTheme()));
+	disconnect(this, SLOT(handleReloadTheme()));
 }
 
 void SubheadingEntry::changeText(const QString& text) {
@@ -25,7 +22,7 @@ void SubheadingEntry::changeText(const QString& text) {
 }
 
 // Essentially reloads the theme's font color
-void SubheadingEntry::reloadTheme() {
+void SubheadingEntry::handleReloadTheme() {
 	LOG(INFO) << "Reloading theme in SubheadingEntry";
 
 	// Get current theme ID
@@ -40,7 +37,7 @@ void SubheadingEntry::reloadTheme() {
 	} catch (ExceptionThemeOutOfRange *exception) {
 		// If the icon enum in the settings is out of range, set back to default
 		settings.setValue("Theme", (char)Theme::DEFAULT); 
-		reloadTheme();
+		handleReloadTheme();
 	}
 }
 
@@ -54,6 +51,6 @@ void SubheadingEntry::initSettingsConnect() {
 	if (!connectedToSettings) {
 		connectedToSettings = true;
 		LOG(INFO) << "Connected SubheadingEntry to SettingsWindow";
-		connect(parentWidget(), SIGNAL(themeChanged()), this, SLOT(reloadTheme()));
+		connect(parentWidget(), SIGNAL(themeChanged()), this, SLOT(handleReloadTheme()));
 	}
 }

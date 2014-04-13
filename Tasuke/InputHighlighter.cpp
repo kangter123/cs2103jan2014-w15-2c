@@ -1,11 +1,9 @@
+#include <QSettings>
 #include "Tasuke.h"
 #include "InputHighlighter.h"
-#include <QSettings>
 
-//@author A0100189
+//@author A0100189m
 
-// This class is a subclass of QSyntaxHighlighter.
-// It handles color highlighting of input window's text's commands keywords and spellcheck.
 InputHighlighter::InputHighlighter(QTextDocument *parent) : QSyntaxHighlighter(parent), commandsEnabled(true), spellcheckEnabled(true) {
 	setRegex();
 	setupColorsFormatsRules();

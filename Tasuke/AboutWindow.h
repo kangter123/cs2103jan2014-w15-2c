@@ -6,7 +6,11 @@
 #include <QDesktopWidget>
 #include "ui_AboutWindow.h"
 
-//@author A0100189
+//@author A0100189m
+
+// This is a simple window that displays brief info about Tasuke
+// And credits any resources used.
+// It can be accessed in the tray icon context menu.
 
 class AboutWindow : public QDialog {
 	Q_OBJECT

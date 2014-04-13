@@ -1,9 +1,8 @@
 #include "Tasuke.h"
 #include "TutorialWidget.h"
 
-//@author A0100189
+//@author A0100189m
 
-// Tutorial widget handles the tutorial slideshow. Hence, it has many Next and Prev buttons.
 TutorialWidget::TutorialWidget(QWidget* parent) : QWidget(parent) {
 	LOG(INFO) << "Tutorialwidget instance created";
 
@@ -15,7 +14,7 @@ TutorialWidget::~TutorialWidget() {
 	LOG(INFO) << "TutorialWidget instance destroyed";
 }
 
-// Everything is back to first page
+// Makes all slideshows go back to first page
 void TutorialWidget::reset() {
 	ui.tabWidget->setCurrentIndex(0);
 	ui.navSlideshow->setCurrentIndex(0);
@@ -50,12 +49,8 @@ void TutorialWidget::goPrevPage() {
 void TutorialWidget::goToFirstPage() {
 	ui.tabWidget->setCurrentIndex(0);
 }
-// Goes back to the task list
-void TutorialWidget::backToTasuke() {
-	Tasuke::instance().getTaskWindow().showListWidget();
-}
 
-// Switches tabs to the next tab
+// Switches tabs to the next tab (slideshow).
 void TutorialWidget::changeTabs() {
 
 	int nextTab;
@@ -68,6 +63,11 @@ void TutorialWidget::changeTabs() {
 	}
 
 	ui.tabWidget->setCurrentIndex(nextTab);
+}
+
+// Goes back to the task list
+void TutorialWidget::handleBackButton() {
+	Tasuke::instance().getTaskWindow().showListWidget();
 }
 
 void TutorialWidget::handleNavNext() {
@@ -94,6 +94,10 @@ void TutorialWidget::handleFeaturesPrev() {
 	ui.featuresSlideshow->slideInIdx(getPrevIndex(ui.featuresSlideshow->currentIndex(), ui.featuresSlideshow->count()));
 }
 
+// ================================================
+//	EVENTS
+// ================================================
+
 bool TutorialWidget::eventFilter(QObject* object, QEvent* event) {
 	if (event->type() == QEvent::KeyPress) {
 		QKeyEvent* eventKey = static_cast<QKeyEvent*>(event);
@@ -115,8 +119,9 @@ void TutorialWidget::initUI() {
 	setWindowFlags(windowFlags() | Qt::FramelessWindowHint | Qt::Tool);
 }
 
+// Connects all the buttons in tutorial widget.
 void TutorialWidget::initConnect() {
-	connect(ui.pushButton, SIGNAL(pressed()), this, SLOT(backToTasuke()));
+	connect(ui.pushButton, SIGNAL(pressed()), this, SLOT(handleBackButton()));
 	connect(ui.navPrev, SIGNAL(pressed()), this, SLOT(handleNavPrev()));
 	connect(ui.navNext, SIGNAL(pressed()), this, SLOT(handleNavNext()));
 	connect(ui.featuresPrev, SIGNAL(pressed()), this, SLOT(handleFeaturesPrev()));

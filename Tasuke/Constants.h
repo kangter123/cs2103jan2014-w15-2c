@@ -29,7 +29,7 @@ static const int MINUTES_IN_HOUR = 60;
 static const int SECONDS_IN_MINUTE = 60;
 static const int MSECS_IN_SECOND = 1000;
 
-//@author A0100189
+//@author A0100189m
 
 // Stacked widget page indexes
 static const int TASKS_PAGE = 0;

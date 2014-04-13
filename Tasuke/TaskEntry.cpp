@@ -1,12 +1,9 @@
 #include <QSettings>
 #include "Tasuke.h"
-#include "TaskEntry.h"
 #include "Constants.h"
+#include "TaskEntry.h"
 
-//@author A0100189
-
-// Each TaskEntry object represents a Task with different ID, description, dates and tags.
-// They are entered into the listWidget in TaskWindow.
+//@author A0100189m
 
 TaskEntry::TaskEntry(const Task& t, QWidget* parent) : QWidget(parent), task(t)  {
 	initUI();

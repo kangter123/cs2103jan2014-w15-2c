@@ -8,7 +8,10 @@
 #include "ui_TaskEntry.h"
 #include "Task.h"
 
-//@author A0100189
+//@author A0100189m
+
+// Each TaskEntry object represents a Task with different ID, description, dates and tags.
+// They are entered into the listWidget in TaskWindow.
 
 class TaskEntry : public QWidget {
 	Q_OBJECT
@@ -16,14 +19,15 @@ class TaskEntry : public QWidget {
 public:
 	TaskEntry(const Task& t, QWidget *parent = 0);
 	~TaskEntry();
+
 	Ui::TaskEntry ui;
 	void highlightOngoing();
 	void highlightOverdue();
 
 private:
+	// Attributes
 	static const int FONT_SIZE_DIFF = 4;
-	enum class TaskEntryLabel : char
-	{
+	enum class TaskEntryLabel : char {
 		ID,
 		DESCRIPTION,
 		START_DATE,
@@ -34,15 +38,18 @@ private:
 		TASKENTRYLABEL_LAST_ITEM
 	};
 
-	// Attributes
 	const Task& task;
 	QLabel* labels[(char)TaskEntryLabel::TASKENTRYLABEL_LAST_ITEM];
 
 	// Functions
 	QString createTagString(const QList<QString>& tags) const;
 	void setID(int ID);
-	void setTooltip(const QString& description, const QDateTime& start, const QDateTime& end, 
-					const QList<QString>& tags, const QString& dueInMessage);
+	void setTooltip(
+		const QString& description,
+		const QDateTime& start, 
+		const QDateTime& end, 
+		const QList<QString>& tags, 
+		const QString& dueInMessage);
 	void setDescription(const QString& description);
 	void setDateTimes(const QDateTime& start, const QDateTime& end);
 	void setTags(const QList<QString>& tags);

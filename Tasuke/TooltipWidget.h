@@ -5,13 +5,18 @@
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QPropertyAnimation>
-#include <glog/logging.h>
-#include "ui_TooltipWidget.h"
-#include "Constants.h"
 #include <QFontMetrics>
 #include <QFont>
+#include <glog/logging.h>
+#include "Constants.h"
+#include "ui_TooltipWidget.h"
 
-//@author A0100189
+//@author A0100189m
+
+// The tooltip guide displays when user is inputting a command. It aims to guide the user on formats.
+// It can be called by logic when it wants to send feedback.
+// The signals of the user inputting command is handled by the input window.
+// Hence, tooltip widget's parent is the input window.
 
 class TooltipWidget : public QWidget {
 	Q_OBJECT
@@ -19,11 +24,12 @@ class TooltipWidget : public QWidget {
 public:
 	TooltipWidget(QWidget *parent = 0);
 	~TooltipWidget();
+
 	void setText(InputStatus status, QString content = "");
+	void showAndAlign();
 
 public slots:
-	void showAndAlign();
-	void initIcons();
+	void handleReloadIcons();
 
 private:
 	static const int WIDTH_DIFFERENCE = 70;

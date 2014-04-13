@@ -1,15 +1,12 @@
+#include <QSettings>
 #include "Tasuke.h"
-#include "TaskWindow.h"
 #include "Constants.h"
 #include "Exceptions.h"
 #include "ThemeStylesheets.h"
 #include "SubheadingEntry.h"
-#include <QSettings>
+#include "TaskWindow.h"
 
-//@author A0100189
-
-// The task window is the main window.
-// It handles the task list, tutorial, scrolling and focusing on tasks.
+//@author A0100189m
 
 TaskWindow::TaskWindow(QWidget* parent) : currentlySelectedTask(-1), animation(this, "opacity"),
 										  progressBar(this), QMainWindow(parent) {
@@ -21,7 +18,7 @@ TaskWindow::TaskWindow(QWidget* parent) : currentlySelectedTask(-1), animation(t
 		initAnimation();
 		initProgressBar();
 		initUIConnect();
-		reloadTheme();
+		handleReloadTheme();
 }
 
 TaskWindow::~TaskWindow() {
@@ -187,10 +184,7 @@ void TaskWindow::showTutorialOrTaskList() {
 	}
 }
 
-//========================================
-// SLOTS
-//=========================================
-
+// Shows and moves the task window and decides if the screen should be the task list or the tutorial.
 void TaskWindow::showAndMoveToSide() {
 	if (isVisible()) {
 		return;
@@ -198,6 +192,10 @@ void TaskWindow::showAndMoveToSide() {
 	showTutorialOrTaskList(); // Shows the task list, or tutorial if it's first run.
 	positionAndShow(); // Positions the window then shows it
 }
+
+//========================================
+// SLOTS
+//=========================================
 
 // Shows message when task list is empty.
 void TaskWindow::handleAddTaskButton() {
@@ -210,26 +208,8 @@ void TaskWindow::handleBackButton() {
 	changeTitle("");
 }
 
-// Displays current tasks
-void TaskWindow::displayTaskList() {
-	LOG(INFO) << "Displaying task list";
-
-	ui.taskList->clear(); // Clear previous list
-	resetSubheadingIndexes(); // Reset subheadings
-	if (currentTasks.size() != 0) {
-		for (int i = 0; i < currentTasks.size(); i++) {
-			displayAndUpdateSubheadings(i);
-			displayTask(currentTasks[i]);
-			progressBar.setValue((int)((i+1) * 100 / currentTasks.size()));	
-		}
-	} else {
-		progressBar.hide();
-	}
-	hideProgressBarWhenDone();
-}
-
 // Reloads the theme
-void TaskWindow::reloadTheme() {
+void TaskWindow::handleReloadTheme() {
 	LOG(INFO) << "Reloading theme in TaskWindow";
 
 	// get current theme ID
@@ -255,9 +235,27 @@ void TaskWindow::reloadTheme() {
 	} catch (ExceptionThemeOutOfRange *exception) {
 		// If the icon enum in the settings is out of range, set back to default
 		settings.setValue("Theme", (char)Theme::DEFAULT); 
-		reloadTheme();
+		handleReloadTheme();
 	}
 
+}
+
+// Displays current tasks
+void TaskWindow::displayTaskList() {
+	LOG(INFO) << "Displaying task list";
+
+	ui.taskList->clear(); // Clear previous list
+	resetSubheadingIndexes(); // Reset subheadings
+	if (currentTasks.size() != 0) {
+		for (int i = 0; i < currentTasks.size(); i++) {
+			displayAndUpdateSubheadings(i);
+			displayTask(currentTasks[i]);
+			progressBar.setValue((int)((i+1) * 100 / currentTasks.size()));	
+		}
+	} else {
+		progressBar.hide();
+	}
+	hideProgressBarWhenDone();
 }
 
 

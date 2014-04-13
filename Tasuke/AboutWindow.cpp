@@ -1,11 +1,7 @@
 #include "Tasuke.h"
 #include "AboutWindow.h"
 
-//@author A0100189
-
-// This is a simple window that displays brief info about Tasuke
-// And credits any resources used.
-// It can be accessed in the tray icon context menu.
+//@author A0100189m
 
 AboutWindow::AboutWindow(QDialog* parent) : QDialog(parent) {
 	ui.setupUi(this);

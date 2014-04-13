@@ -9,12 +9,15 @@
 #include <QFocusEvent>
 #include <QPropertyAnimation>
 #include "HotKeyThread.h"
-#include "ui_InputWindow.h"
 #include "InputHighlighter.h"
 #include "TooltipWidget.h"
 #include "Constants.h"
+#include "ui_InputWindow.h"
 
-//@author A0100189
+//@author A0100189m
+
+// The input window is also the command box. 
+// The input window handles text input, keyword highlighting and displaying of command tooltip guide.
 
 class InputWindow : public QWidget {
 	Q_OBJECT
@@ -27,17 +30,17 @@ public:
 	void showTooltipMessage(InputStatus status, QString message = "");
 	void hideTooltip();
 	void doErrorAnimation();
-
-public slots:
 	void showAndCenter();	
 	void showAndAdd();
 	void closeAndClear();
-	void reloadTheme();
-	void reloadFeatures();
+
+public slots:
+	void handleReloadTheme();
+	void handleReloadFeatures();
 
 protected:
-	bool eventFilter(QObject *object, QEvent *event);
-	void hideEvent(QHideEvent *event);
+	bool eventFilter(QObject *object, QEvent *event) override;
+	void hideEvent(QHideEvent *event) override;
 
 signals:
 	void inputChanged(QString text);

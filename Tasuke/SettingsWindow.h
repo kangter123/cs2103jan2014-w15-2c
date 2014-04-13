@@ -5,10 +5,13 @@
 #include <QWidget>
 #include <QApplication>
 #include <QDesktopWidget>
-#include "ui_SettingsWindow.h"
 #include "Constants.h"
+#include "ui_SettingsWindow.h"
 
-//@author A0100189
+//@author A0100189m
+
+// The settings window handles changing of settings inside the settings window.
+// Users can enable/disable features, change icon set, change font and change the theme.
 
 class SettingsWindow : public QWidget {
 	Q_OBJECT
@@ -16,7 +19,9 @@ class SettingsWindow : public QWidget {
 public:
 	SettingsWindow(QWidget *parent = 0);
 	~SettingsWindow();
+
 	void showAndCenter();
+	void changeTabs();
 
 signals:
 	void featuresChanged();
@@ -25,12 +30,11 @@ signals:
 	void fontChanged();
 
 public slots:
-	void changeTabs();
 	void handleApplyButton();
 	void handleOKButton();
 
 protected:
-	bool eventFilter(QObject* object, QEvent* event);
+	bool eventFilter(QObject* object, QEvent* event) override;
 	virtual void showEvent(QShowEvent *event) override;
 
 private:
@@ -43,15 +47,15 @@ private:
 	void initUIConnect();
 	void initIconsArray();
 	void initThemeArray();
-	void loadCurrSettings();
 
 	// Helper functions to load current checked boxes
+	void loadCurrSettings();
 	void loadCurrFeatures();
 	void loadCurrFont();
 	void loadCurrIcons();
 	void loadCurrTheme();
 
-	// Handle changed settings
+	// Handle changing of settings
 	void editRunOnStartup();
 	void editFeatures();
 	void editFont();

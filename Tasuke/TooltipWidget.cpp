@@ -1,21 +1,16 @@
-#include "Tasuke.h"
-#include "TooltipWidget.h"
-#include "Constants.h"
 #include <QSettings>
+#include "Tasuke.h"
+#include "Constants.h"
+#include "TooltipWidget.h"
 
-//@author A0100189
-
-// The tooltip guide displays when user is inputting a command. It aims to guide the user on formats.
-// It can be called by logic when it wants to send feedback.
-// The signals of the user inputting command is handled by the input window.
-// Hence, tooltip widget's parent is the input window.
+//@author A0100189m
 
 TooltipWidget::TooltipWidget(QWidget *parent) : QWidget(parent), font("Consolas", 11), fm(font), 
 												animation(this, "pos") {
 	LOG(INFO) << "TooltipWidget instance created";
 
 	initUI();
-	initIcons();
+	handleReloadIcons();
 	initAnimation();
 }
 
@@ -44,7 +39,7 @@ void TooltipWidget::showAndAlign() {
 }
 
 // Initialize icon set from settings
-void TooltipWidget::initIcons() {
+void TooltipWidget::handleReloadIcons() {
 	LOG(INFO) << "Initialising tooltip widget icons";
 
 	QSettings settings(QSettings::IniFormat, QSettings::UserScope, "Tasuke", "Tasuke");

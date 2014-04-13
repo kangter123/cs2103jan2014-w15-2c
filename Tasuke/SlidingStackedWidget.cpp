@@ -1,4 +1,4 @@
-//@author A0100189-reused
+//@author A0100189m-reused
 
 // Code credits to: http://developer.nokia.com/community/wiki/ Code_Example_for_SlidingStackedWidget_class_in_Qt
 
@@ -11,14 +11,6 @@ SlidingStackedWidget::SlidingStackedWidget(QWidget *parent) : QStackedWidget(par
 		m_mainwindow=this;
 		qDebug()<<"ATTENTION: untested mainwindow case !";
 	}
-	/*
-	// Parent should not be 0; not tested for any other case yet !!
-	#ifdef Q_OS_SYMBIAN
-	#ifndef __S60_50__
-	qDebug()<< "WARNING: ONLY TESTED AND 5TH EDITION";
-	#endif //__S60_50__
-	#endif //Q_OS_SYMBIAN
-	*/
 	// Now, initialize some private variables with default values
 	m_vertical=false;
 	//setVerticalMode(true);

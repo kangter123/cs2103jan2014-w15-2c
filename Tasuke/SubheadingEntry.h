@@ -8,7 +8,10 @@
 #include <glog/logging.h>
 #include "ui_SubheadingEntry.h"
 
-//@author A0100189
+//@author A0100189m
+
+// Subheading entry is entered inside the listWidget inside Task Window.
+// It is used to sort and organize the tasks visually for the user.
 
 class SubheadingEntry : public QWidget {
 	Q_OBJECT
@@ -19,13 +22,11 @@ public:
 	void changeText(const QString& text);
 
 public slots:
-	void reloadTheme();
+	void handleReloadTheme();
 
 private:
 	Ui::SubheadingEntry ui;
 	bool connectedToSettings;
-
-	// initialization
 	void initUI();
 	void initSettingsConnect();
 };

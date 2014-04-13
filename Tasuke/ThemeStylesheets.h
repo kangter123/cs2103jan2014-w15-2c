@@ -1,5 +1,9 @@
 #include <QStringList>
 
+// Stores all the stylesheets for themeing. 
+// To add a new stylesheet, simply insert the stylesheet into each QStringList.
+// Each theme stylesheet has the same index across all QStringLists.
+
 class ThemeStylesheets {
 public:
 	static QStringList TASKWINDOW_STYLES;

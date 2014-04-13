@@ -1,11 +1,9 @@
+#include <QSettings>
 #include "Tasuke.h"
 #include "Exceptions.h"
 #include "SettingsWindow.h"
-#include <QSettings>
 
-//@author A0100189
-
-// The settings window handles changing of settings inside the settings window.
+//@author A0100189m
 
 SettingsWindow::SettingsWindow(QWidget* parent) : QWidget(parent) {
 	LOG(INFO) << "SettingsWindow instance created";
@@ -20,10 +18,7 @@ SettingsWindow::~SettingsWindow() {
 	LOG(INFO) << "SettingsWindow instance destroyed";
 }
 
-// ============================================================
-// slots
-// ============================================================
-
+// Shows and centers the Settings Window, then resets the tab to the first one.
 void SettingsWindow::showAndCenter() {
 	LOG(INFO) << "Displaying settings window";
 
@@ -52,6 +47,11 @@ void SettingsWindow::changeTabs() {
 }
 
 
+// ============================================================
+// slots
+// ============================================================
+
+// Handles the user pressing Apply - all the options they changed will be set.
 void SettingsWindow::handleApplyButton() {
 	editFeatures();
 	editFont();
@@ -60,6 +60,7 @@ void SettingsWindow::handleApplyButton() {
 	editTheme();
 }
 
+// Like apply, but also closes the Settings Window.
 void SettingsWindow::handleOKButton() {
 	handleApplyButton();
 	close();
@@ -205,7 +206,7 @@ void SettingsWindow::editRunOnStartup() {
 	bool newRunOnStartup = ui.runOnStartup->isChecked();
 }
 
-// Change features
+// Change features in settings
 void SettingsWindow::editFeatures() {
 	QSettings settings(QSettings::IniFormat, QSettings::UserScope, "Tasuke", "Tasuke");
 	settings.setValue("HighlightCommandsEnabled", ui.commandColors->isChecked());	
@@ -214,7 +215,7 @@ void SettingsWindow::editFeatures() {
 	emit featuresChanged();
 }
 
-// Change font
+// Change font in settings
 void SettingsWindow::editFont() {
 	QSettings settings(QSettings::IniFormat, QSettings::UserScope, "Tasuke", "Tasuke");
 	QString oldFont = settings.value("Font", "Print Clearly").toString();
@@ -226,7 +227,7 @@ void SettingsWindow::editFont() {
 	}
 }
 
-// Change Icon Set
+// Change Icon Set in settings
 void SettingsWindow::editIcons() {
 	QSettings settings(QSettings::IniFormat, QSettings::UserScope, "Tasuke", "Tasuke");
 	IconSet oldIcons = (IconSet)settings.value("Icon", (char)IconSet::NYANSUKE).toInt();
@@ -242,7 +243,7 @@ void SettingsWindow::editIcons() {
 	}
 }
 
-// Change theme
+// Change theme in settings. It will emit the signal to TaskWindow, InputWindow and SubheadingEntry to change theme.
 void SettingsWindow::editTheme() {
 	QSettings settings(QSettings::IniFormat, QSettings::UserScope, "Tasuke", "Tasuke");
 	Theme oldTheme = (Theme)settings.value("Theme", (char)Theme::DEFAULT).toInt();

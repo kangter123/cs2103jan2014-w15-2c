@@ -2,26 +2,29 @@
 #define TASKWINDOW_H
 
 #include <glog/logging.h>
+#include <assert.h>
 #include <QApplication>
 #include <QDesktopWidget>
-#include <QSystemTrayIcon>
 #include <QMenu>
 #include <QCloseEvent>
+#include <QMouseEvent>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QProgressBar>
-#include <QMouseEvent>
 #include <QListView>
 #include <QKeySequence>
 #include <QPoint>
 #include <QPropertyAnimation>
-#include <assert.h>
 #include "Task.h"
-#include "ui_TaskWindow.h"
 #include "HotKeyThread.h"
 #include "TaskEntry.h"
 #include "TutorialWidget.h"
+#include "ui_TaskWindow.h"
 
-//@author A0100189
+//@author A0100189m
+
+// The task window is the main window.
+// It contains a stacked widget of two pages: The task list, and the tutorial widget.
+// It handles the scrolling and focusing of tasks as well.
 
 class TaskWindow : public QMainWindow {
 	Q_OBJECT
@@ -52,22 +55,23 @@ public:
 	// Window display functions
 	void positionAndShow();
 	void showTutorialOrTaskList();
+	void showAndMoveToSide();
+
 
 public slots:
-	void showAndMoveToSide();
 	void handleAddTaskButton();
 	void handleBackButton();
+	void handleReloadTheme();
 	void displayTaskList();
-	void reloadTheme();
 
 signals:
 	void themeChanged();
 
 protected:
-	void closeEvent(QCloseEvent *event);
-	void mousePressEvent(QMouseEvent *event);
-	void mouseMoveEvent(QMouseEvent *event);
-	bool eventFilter(QObject* object, QEvent* event);
+	void closeEvent(QCloseEvent *event) override;
+	void mousePressEvent(QMouseEvent *event) override;
+	void mouseMoveEvent(QMouseEvent *event) override;
+	bool eventFilter(QObject* object, QEvent* event) override;
 
 
 private:
