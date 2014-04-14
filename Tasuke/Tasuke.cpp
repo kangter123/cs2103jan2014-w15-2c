@@ -451,6 +451,9 @@ QString Tasuke::formatTooltipMessage(QString commandString,
 	} else if (commandType == COMMAND_HELP) {
 		formatPart = FORMAT_HELP;
 		descriptionPart = DESCRIPTION_HELP;
+	}  else if (commandType == COMMAND_NEXT) {
+		formatPart = FORMAT_NEXT;
+		descriptionPart = DESCRIPTION_NEXT;
 	} else if (commandType == COMMAND_SETTINGS) {
 		formatPart = FORMAT_SETTINGS;
 		descriptionPart = DESCRIPTION_SETTINGS;

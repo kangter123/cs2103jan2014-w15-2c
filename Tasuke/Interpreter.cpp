@@ -273,6 +273,8 @@ ICommand* Interpreter::interpret(QString commandString, bool dry) {
 		doHelp();
 	} else if (commandType == COMMAND_SETTINGS) {
 		doSettings();
+	} else if (commandType == COMMAND_NEXT) {
+		doNextFreeTime();
 	} else if (commandType == COMMAND_ABOUT) {
 		doAbout();
 	} else if (commandType == COMMAND_EXIT) {
@@ -559,6 +561,12 @@ void Interpreter::doRedo(QString commandString, bool dry) {
 	for (int i=0; i<times; i++) {
 		Tasuke::instance().redoCommand();
 	}
+}
+
+void Interpreter::doNextFreeTime() {
+	QDateTime time = Tasuke::instance().getStorage().nextFreeTime();
+	QString timeString = time.toString();
+	Tasuke::instance().showMessage(timeString);
 }
 
 // does the settings command.
