@@ -154,6 +154,10 @@ const char* const MSG_STORAGE_LOAD_FILE_END = "File loaded.";
 const char* const MSG_STORAGE_SAVE_FILE_START = "Saving file...";
 const char* const MSG_STORAGE_SAVE_FILE_END = "File saved.";
 
+const char* const MSG_STORAGESTUB_INSTANCE_CREATED = "StorageStub created destroyed";
+const char* const MSG_STORAGESTUB_INSTANCE_DESTROYED = "StorageStub instance destroyed";
+const char* const MSG_STORAGESTUB_SAVING_FILE = "Stub saving file";
+const char* const MSG_STORAGESTUB_LOADING_FILE = "Stub loading file";
 
 // Filenames of dictionary files
 const char* const _SPELL_GB_DICFILE = "en_GB.dic";
