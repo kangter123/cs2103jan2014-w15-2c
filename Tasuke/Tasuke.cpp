@@ -14,9 +14,14 @@
 #include "Commands.h"
 #include "Tasuke.h"
 
+// This private static boolean is used a flag for gui mode
+// It is only accessible from within Tasuke and can only be
+// modified publicly using the setGuiMode() setter.
 bool Tasuke::guiMode = true;
 
-// Constructor for the Tasuke singleton.
+// Constructor for the Tasuke singleton. This should only run once. If this
+// is run multiple times, bad things will happen. Thus, the constructor is
+// private so that only Tasuke can initialize itself.
 Tasuke::Tasuke() : QObject(nullptr) {
 	LOG(INFO) << MSG_TASUKE_CREATED;
 	
@@ -32,22 +37,28 @@ Tasuke::Tasuke() : QObject(nullptr) {
 	systemTrayWidget = nullptr;
 	hotKeyManager = nullptr;
 
+	// generate interpreter formats on another thread so the user
+	// can use Tasuke as early as possible without waiting for
+	// generation to finish
 	std::thread dateFormatGeneratorThread([]() {
 		Interpreter::initFormats();
 	});
 	dateFormatGeneratorThread.detach();
 
+	// set up the on the fly input evaluation system
 	qRegisterMetaType<TRY_RESULT>(METATYPE_TRY_RESULT);
 	connect(this, SIGNAL(tryFinish(TRY_RESULT)), 
 		this, SLOT(handleTryFinish(TRY_RESULT)));
 	connect(&inputTimer, SIGNAL(timeout()), this, SLOT(handleInputTimeout()));
 	
+	// only run the initGui method after Tasuke has been constructor
 	if (guiMode) {
 		QTimer::singleShot(0, this, SLOT(initGui()));
 	}
 }
 
-// Destructor for the Tasuke singleton.
+// Destructor for the Tasuke singleton. This should only run when the 
+// program exits.
 Tasuke::~Tasuke() {
 	LOG(INFO) << MSG_TASUKE_DESTROYED;
 
@@ -84,20 +95,22 @@ Tasuke::~Tasuke() {
 	}
 }
 
-// loads the dictionary used by hunspell
-// if the dictionaries cannot be found at the path, then spell checking 
-// is disabled for the program
+// Loads the dictionary used by hunspell
+// If the dictionaries cannot be found at the path, then spell checking 
+// is disabled for the program. Should only be called by Tasuke constructor.
 void Tasuke::loadDictionary() {
 	LOG(INFO) << MSG_TASUKE_LOADING_DICTIONARY;
 
 	spellCheckEnabled = true;
 
+	// check if the files exist before attempting to load them
 	if (!QFile(SPELL_GB_AFFFILE).exists() 
 		|| !QFile(SPELL_GB_DICFILE).exists()) {
 		spellCheckEnabled = false;
 		return;
 	}
 
+	// create a hunspell object
 	spellObj = new Hunspell(SPELL_GB_AFFFILE, SPELL_GB_DICFILE);
 	spellObj->add_dic(SPELL_US_DICFILE);
 
@@ -109,7 +122,8 @@ void Tasuke::loadDictionary() {
 	}
 }
 
-// loads all fonts in resources
+// Loads all fonts embedded in resources. Should only be called by Tasuke 
+// constructor.
 void Tasuke::loadFonts(){
 	LOG(INFO) << MSG_TASUKE_LOADING_FONTS;
 
@@ -119,7 +133,9 @@ void Tasuke::loadFonts(){
 	}
 }
 
-// initialize the GUI if required
+// Initialize the GUI if required. Should only be called after Tasuke is
+// fully constructed. If Tasuke is not fully constructed, an assertion
+// will trigger stopping a mutual dependency error.
 void Tasuke::initGui(){
 	loadFonts();
 	
@@ -149,12 +165,14 @@ void Tasuke::initGui(){
 		taskWindow, SIGNAL(themeChanged()));
 }
 
-// enables/disables gui mode
+// Enables/disables gui mode. This method should only be set before
+// Tasuke is initialized. If gui mode is disabled no UI will be init
 void Tasuke::setGuiMode(bool mode) {
 	guiMode = mode;
 }
 
-// Static method that returns the sole instance of Tasuke.
+// Static method that returns the sole instance of Tasuke. This is the
+// only method that can create a new Tasuke instance
 Tasuke& Tasuke::instance() {
 	static Tasuke *instance = 0;
 	static bool alreadyCreated = false;
@@ -170,7 +188,9 @@ Tasuke& Tasuke::instance() {
 	}
 }
 
-// changes the storage instance used by tasuke
+// Changes the storage instance used by tasuke with something else.
+// This is intended for storage stubbing but can also be used for other
+// use such as changing save file name
 void Tasuke::setStorage(IStorage* _storage) {
 	assert(_storage != nullptr);;
 	LOG(INFO) << MSG_TASUKE_STORAGE_CHANGED;
@@ -178,49 +198,50 @@ void Tasuke::setStorage(IStorage* _storage) {
 	storage = _storage;
 }
 
-// getter for inputwindow
+// Getter for inputwindow. Should only be used when gui mode is enabled.
 InputWindow& Tasuke::getInputWindow(){
 	assert(inputWindow != nullptr);
 
 	return *inputWindow;
 }
 
-// getter for aboutWindow
+// Getter for aboutWindow. Should only be used when gui mode is enabled.
 AboutWindow& Tasuke::getAboutWindow(){
 	assert(aboutWindow != nullptr);
 	
 	return *aboutWindow;
 }
 
-// getter for settingsWindow
+// Getter for settingsWindow. Should only be used when gui mode is enabled.
 SettingsWindow& Tasuke::getSettingsWindow(){
 	assert(settingsWindow != nullptr);
 
 	return *settingsWindow;
 }
 
-// getter for taskWindow
+// Getter for taskWindow. Should only be used when gui mode is enabled.
 TaskWindow& Tasuke::getTaskWindow(){
 	assert(taskWindow != nullptr);
 
 	return *taskWindow;
 }
 
-// getter for hotKeyManager
+// Getter for hotKeyManager. Should only be used when gui mode is enabled.
 HotKeyManager& Tasuke::getHotKeyManager() {
 	assert(hotKeyManager != nullptr);
 
     return *hotKeyManager;
 }
 
-// This function exposes the Storage instance for editing.
+// This function exposes the Storage instance for editing storage
 IStorage& Tasuke::getStorage() {
 	assert(storage != nullptr);
 
 	return *storage;
 }
 
-// shows the input window. if gui is disabled does nothing.
+// Shows the input window. If gui is disabled does nothing.
+// This method acts as a facade interface for other classes to use.
 void Tasuke::showInputWindow() {
 	if (!guiMode) {
 		return;
@@ -228,7 +249,8 @@ void Tasuke::showInputWindow() {
 	inputWindow->showAndCenter();
 }
 
-// shows the task window. if gui is disabled does nothing.
+// Shows the task window. If gui is disabled does nothing.
+// This method acts as a facade interface for other classes to use.
 void Tasuke::showTaskWindow() {
 	if (!guiMode) {
 		return;
@@ -236,7 +258,8 @@ void Tasuke::showTaskWindow() {
 	taskWindow->showAndMoveToSide();
 }
  
-// shows the about window. if gui is disabled does nothing.
+// Shows the about window. If gui is disabled does nothing.
+// This method acts as a facade interface for other classes to use.
 void Tasuke::showAboutWindow(){
 	if (!guiMode) {
 		return;
@@ -244,7 +267,8 @@ void Tasuke::showAboutWindow(){
 	aboutWindow->showAndCenter();
 }
 
-// hide the input window. if gui is disabled does nothing.
+// Hides the input window. If gui is disabled does nothing.
+// This method acts as a facade interface for other classes to use.
 void Tasuke::hideInputWindow() {
 	if (!guiMode) {
 		return;
@@ -252,7 +276,8 @@ void Tasuke::hideInputWindow() {
 	inputWindow->hide();
 }
 
-// hide the task window. if gui is disabled does nothing.
+// Hide the task window. If gui is disabled does nothing.
+// This method acts as a facade interface for other classes to use.
 void Tasuke::hideTaskWindow() {
 	if (!guiMode) {
 		return;
@@ -260,7 +285,8 @@ void Tasuke::hideTaskWindow() {
 	taskWindow->hide();
 }
 
-// taggoles the input window. if gui is disabled does nothing.
+// Toggles the input window. If gui is disabled does nothing.
+// This method acts as a facade interface for other classes to use.
 void Tasuke::toggleInputWindow() {
 	if (!guiMode) {
 		return;
@@ -273,7 +299,8 @@ void Tasuke::toggleInputWindow() {
 	}
 }
 
-// taggoles the task window. if gui is disabled does nothing.
+// Toggles the task window. If gui is disabled does nothing.
+// This method acts as a facade interface for other classes to use.
 void Tasuke::toggleTaskWindow() {
 	if (!guiMode) {
 		return;
@@ -286,7 +313,8 @@ void Tasuke::toggleTaskWindow() {
 	}
 }
 
-// taggoles the input and task window. if gui is disabled does nothing.
+// Toggles the input and task window. if gui is disabled does nothing.
+// This method acts as a facade interface for other classes to use.
 void Tasuke::toggleBothWindows() {
 	if (!guiMode) {
 		return;
@@ -302,7 +330,8 @@ void Tasuke::toggleBothWindows() {
 	}
 }
 
-// shows the tutorial. if gui is disabled does nothing.
+// Shows the tutorial. If gui is disabled does nothing.
+// This method acts as a facade interface for other classes to use.
 void Tasuke::showTutorial() {
 	if (!guiMode) {
 		return;
@@ -315,7 +344,8 @@ void Tasuke::showTutorial() {
 	taskWindow->showTutorialWidget();
 }
 
-// shows the settings window. if gui is disabled does nothing.
+// Shows the settings window. If gui is disabled does nothing.
+// This method acts as a facade interface for other classes to use.
 void Tasuke::showSettingsWindow() {
 	if (!guiMode) {
 		return;
@@ -324,7 +354,8 @@ void Tasuke::showSettingsWindow() {
 	settingsWindow->showAndCenter();
 }
 
-// shows the messaage in the system tray
+// Shows the messaage in the system tray through the system tray widget.
+// This method acts as a facade interface for other classes to use.
 void Tasuke::showMessage(QString message) {
 	LOG(INFO) << MSG_TASUKE_SHOWING_MESSAGE(message);
 
@@ -347,7 +378,9 @@ void Tasuke::updateTaskWindow(QList<Task> tasks, QString title) {
 	taskWindow->showTasks(tasks, title);
 }
 
-// Highlight the task with the given id in the task window
+// Highlight the task with the given id in the task window.
+// The id must be a valid id in the storage
+// This method acts as a facade interface for other classes to use.
 void Tasuke::highlightTask(int id) {
 	if (!guiMode) {
 		return;
@@ -358,7 +391,11 @@ void Tasuke::highlightTask(int id) {
 	taskWindow->highlightTask(id);
 }
 
-// check if word is correctly spelt
+// Check if word is correctly spelt or ignored by spell checked.
+// Returns true if accepted, or false is incorrectly spelt.
+// If spell checking is disabled because of missing dictionaries, this
+// method will always return true.
+// This method acts as a facade interface for other classes to use.
 bool Tasuke::spellCheck(QString word) {
 	if (!spellCheckEnabled) {
 		return true;
@@ -379,6 +416,10 @@ bool Tasuke::spellCheck(QString word) {
 	return false;
 }
 
+// Sets Tasuke to run on startup by copying a link to Tasuke to
+// the user's startup directory. Returns true on success and 
+// false on failure. This method is only supported on Windows
+// so will always fail when run on other OSes
 bool Tasuke::setRunOnStartup(bool yes) {
 #ifdef Q_OS_WIN
 	QDir dir = QDir(QStandardPaths::writableLocation(
@@ -396,7 +437,9 @@ bool Tasuke::setRunOnStartup(bool yes) {
 #endif
 }
 
-// formats the message displayed in tooltip feedback in rich text
+// Formats the message displayed in tooltip feedback in rich text
+// This is only used by Tasuke to format the message shown in the
+// tooltip widget
 QString Tasuke::formatTooltipMessage(QString commandString, 
 									 QString errorString, 
 									 QString errorWhere) {
@@ -489,7 +532,9 @@ QString Tasuke::formatTooltipMessage(QString commandString,
 	return message;
 }
 
-// This function runs a command in a string
+// This function runs a command in a string. The method should be run
+// with the user input from InputWindow. Feedback and errors are
+// taken care of by this method.
 void Tasuke::runCommand(QString commandString) {
 	// if the validator is scheduled to run, stop it
 	if (inputTimer.isActive()) {
@@ -539,7 +584,9 @@ void Tasuke::runCommand(QString commandString) {
 	}
 }
 
-// activates when user is typing in the command
+// Slot that activates when user is typing in the command. It activates a
+// timer that delays the evaluation thread so that GUI doesn't lag while
+// typing
 void Tasuke::handleInputChanged(QString commandString) {
 	input = commandString;
 	
@@ -564,7 +611,8 @@ void Tasuke::handleInputChanged(QString commandString) {
 	inputTimer.start();
 }
 
-// activates when an evaluation is scheduled and triggered
+// Slot that activates when an evaluation is scheduled and triggered. If the
+// an evaluation is already underway, another evaluation is rescheduled
 void Tasuke::handleInputTimeout() {
 	if (!mutex.tryLock()) {
 		// try thread is still running! reschedule the timer
@@ -614,7 +662,8 @@ void Tasuke::handleInputTimeout() {
 	tryThread.detach();
 }
 
-// activates when an evaluation has finished
+// Slot that activates when an evaluation has finished. The result is 
+// passed from the signal emitted in the evaluation thread
 void Tasuke::handleTryFinish(TRY_RESULT result) {
 	if (inputWindow->isVisible() && !input.isEmpty()) {
 		inputWindow->showTooltipMessage(result.status, result.message);
@@ -623,8 +672,9 @@ void Tasuke::handleTryFinish(TRY_RESULT result) {
 	mutex.unlock();
 }
 
-// undos the last command
-// if there was no last command, nothing happens
+// Undos the last command
+// If there was no last command, nothing happens
+// This should be primarily called from interpreter
 void Tasuke::undoCommand() {
 	if (commandUndoHistory.size() == 0) {
 		showMessage(MSG_TASUKE_NO_UNDO);
@@ -643,6 +693,7 @@ void Tasuke::undoCommand() {
 
 // redos the last command
 // if there was no command to redo, nothing happens
+// This should be primarily called from interpreter
 void Tasuke::redoCommand() {
 	if (commandRedoHistory.size() == 0) {
 		showMessage(MSG_TASUKE_NO_REDO);
@@ -659,17 +710,20 @@ void Tasuke::redoCommand() {
 	limitUndoRedo();
 }
 
-// returns the size of the undo history
+// Returns the size of the undo history for other classes to determine
+// if there are commands that can be undone. Primarily used by "undo max"
 int Tasuke::undoSize() const {
 	return commandUndoHistory.size();
 }
 
-// returns the size of the redo history
+// Returns the size of the redo history for other classes to determine
+// if there are commands that can be redone. Primarily used by "redo max"
 int Tasuke::redoSize() const {
 	return commandRedoHistory.size();
 }
 
-// limits the undo/redo stack to prevent overflowing
+// Limits the undo/redo stack to prevent overflowing. Should be Run after 
+// undos, redos and commands.
 void Tasuke::limitUndoRedo() {
 	while (commandUndoHistory.size() > UNDO_LIMIT) {
 		commandUndoHistory.pop_front();	
