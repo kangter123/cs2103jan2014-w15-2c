@@ -245,6 +245,7 @@ const char* const COMMAND_REDO = "redo";
 const char* const COMMAND_CLEAR = "clear";
 const char* const COMMAND_HELP = "help";
 const char* const COMMAND_ABOUT = "about";
+const char* const COMMAND_NEXT = "next";
 const char* const COMMAND_SETTINGS = "settings";
 const char* const COMMAND_EXIT = "exit";
 
@@ -252,7 +253,8 @@ const char* const COMMAND_EXIT = "exit";
 const QStringList COMMANDS = QStringList() << COMMAND_ADD << COMMAND_EDIT
 	<< COMMAND_REMOVE << COMMAND_SHOW << COMMAND_HIDE << COMMAND_DONE
 	<< COMMAND_UNDONE << COMMAND_UNDO << COMMAND_REDO << COMMAND_CLEAR
-	<< COMMAND_HELP << COMMAND_ABOUT << COMMAND_SETTINGS << COMMAND_EXIT;
+	<< COMMAND_HELP << COMMAND_ABOUT << COMMAND_NEXT << COMMAND_SETTINGS
+	<< COMMAND_EXIT;
 
 // Command formats
 const char* const FORMAT_ALL = "add | edit | done | undone | remove "
@@ -284,6 +286,7 @@ const char* const FORMAT_UNDO = "undo {times}[times]{/times} | max";
 const char* const FORMAT_REDO = "redo {times}[times]{/times} | max";
 const char* const FORMAT_CLEAR = "clear";
 const char* const FORMAT_HELP = "help";
+const char* const FORMAT_NEXT = "next";
 const char* const FORMAT_SETTINGS = "settings";
 const char* const FORMAT_ABOUT = "about";
 const char* const FORMAT_EXIT = "exit";
@@ -303,6 +306,7 @@ const char* const DESCRIPTION_UNDO = "Undos your last command(s).";
 const char* const DESCRIPTION_REDO = "Redos your last command(s).";
 const char* const DESCRIPTION_CLEAR = "Clears all tasks in your list.";
 const char* const DESCRIPTION_HELP = "Shows the tutorial.";
+const char* const DESCRIPTION_NEXT = "Shows the next free time.";
 const char* const DESCRIPTION_SETTINGS = "Open the settings window.";
 const char* const DESCRIPTION_ABOUT = "Shows about Tasuke.";
 const char* const DESCRIPTION_EXIT = "Exits the program.";
@@ -546,6 +550,7 @@ const QList<QRegExp> EQUIV_HELP_REGEX = QList<QRegExp>()
 	<< QRegExp("^tutorial\\b") << QRegExp("^guide\\b")
 	<< QRegExp("^instructions\\b");
 const QList<QRegExp> EQUIV_ABOUT_REGEX = QList<QRegExp>();
+const QList<QRegExp> EQUIV_NEXT_REGEX = QList<QRegExp>();
 const QList<QRegExp> EQUIV_SETTINGS_REGEX = QList<QRegExp>()
 	<< QRegExp("^options\\b");
 const QList<QRegExp> EQUIV_EXIT_REGEX = QList<QRegExp>()
@@ -557,7 +562,8 @@ const QList< QList<QRegExp> > EQUIV_COMMAND_REGEX =
 	<< EQUIV_REMOVE_REGEX << EQUIV_SHOW_REGEX << EQUIV_HIDE_REGEX
 	<< EQUIV_DONE_REGEX << EQUIV_UNDONE_REGEX << EQUIV_UNDO_REGEX
 	<< EQUIV_REDO_REGEX << EQUIV_CLEAR_REGEX << EQUIV_HELP_REGEX
-	<< EQUIV_ABOUT_REGEX << EQUIV_SETTINGS_REGEX << EQUIV_EXIT_REGEX;
+	<< EQUIV_ABOUT_REGEX << EQUIV_NEXT_REGEX << EQUIV_SETTINGS_REGEX
+	<< EQUIV_EXIT_REGEX;
 
 // Special tag for format display
 #define PSEUDO_TAG_BEGIN(tag) \

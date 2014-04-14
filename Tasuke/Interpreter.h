@@ -63,6 +63,7 @@ private:
 	static void doUndo(QString commandString, bool dry = false);
 	static void doRedo(QString commandString, bool dry = false);
 	static void doHelp();
+	static void doNextFreeTime();
 	static void doSettings();
 	static void doExit();
 
