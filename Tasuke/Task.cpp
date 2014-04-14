@@ -10,6 +10,7 @@ Task::Task() {
 	done = false;
 }
 
+// Constructor of a task that takes in a description.
 Task::Task(QString _description) {
 	id = -1;
 	done = false;
@@ -20,11 +21,15 @@ Task::~Task() {
 
 }
 
+// Sets the description of a task.
 void Task::setDescription(QString _description) {
 	description = _description;
 }
 
+// Retrieves the description of a task.
+// All tasks must have a description.
 QString Task::getDescription() const {
+	assert(description != nullptr);
 	return description;
 }
 
@@ -44,23 +49,27 @@ void Task::addTag(QString _tag) {
 	}
 }
 
+// Searches through the set of tags for a task and removes the tag _tag.
 bool Task::removeTag(QString _tag) {
 	return tags.remove(_tag);
 }
 
+// Gets all tags of a task in the form of a QList.
 QList<QString> Task::getTags() const {
 	return tags.toList();
 }
 
+// Gets all tags of a task in the form of a QSet.
 QSet<QString> Task::getTagsSet() const {
 	return tags;
 }
 
 // Sets the begin date and time for this task.
 // It is the responsibility of the caller of this method
-// to pass in a QDateTime object that is complete and valid,
+// to pass in a QDateTime object that is complete,
 // as this method makes no assumptions about the date and time.
 void Task::setBegin(QDateTime _begin) {
+	assert(_begin.isValid());
 	begin = _begin;
 }
 
@@ -69,6 +78,7 @@ void Task::setBegin(QDateTime _begin) {
 // missing time field, this method will attempt to validate
 // by appending the time as 0000 hours.
 void Task::setBeginDate(QDate _beginDate) {
+	assert(_beginDate.isValid());
 	begin.setDate(_beginDate);
 
 	if (!begin.isValid() || !begin.time().isValid()) {
@@ -81,6 +91,7 @@ void Task::setBeginDate(QDate _beginDate) {
 // missing date field, this method will attempt to validate
 // by prepending the date as the current day.
 void Task::setBeginTime(QTime _beginTime) {
+	assert(_beginTime.isValid());
 	begin.setTime(_beginTime);
 
 	if (!begin.isValid() || !begin.date().isValid()) {
@@ -88,15 +99,17 @@ void Task::setBeginTime(QTime _beginTime) {
 	}
 }
 
+// Retrives the begin date-time of a task.
 QDateTime Task::getBegin() const {
 	return begin;
 }
 
 // Sets the end date and time for this task.
 // It is the responsibility of the caller of this method
-// to pass in a QDateTime object that is complete and valid,
+// to pass in a QDateTime object that is complete,
 // as this method makes no assumptions about the date and time.
 void Task::setEnd(QDateTime _end) {
+	assert(_end.isValid());
 	end = _end;
 }
 
@@ -124,6 +137,7 @@ void Task::setEndTime(QTime _endTime) {
 	}
 }
 
+// Retrives the end date-time of a task.
 QDateTime Task::getEnd() const {
 	return end;
 }
@@ -250,22 +264,29 @@ void Task::setDone(bool _done) {
 	done = _done;
 }
 
+// Marks the status of a task as 'done' by setting the 'done'
+// field to TRUE.
 void Task::markDone() {
 	done = true;
 }
 
+// Marks the status of a tsask as 'undone' by setting the 'done'
+// field to FALSE.
 void Task::markUndone() {
 	done = false;
 }
 
+// Queries the 'done' status of a task.
 bool Task::isDone() const {
 	return done;
 }
 
+// Sets the ID of a task.
 void Task::setId(int _id) {
 	id = _id;
 }
 
+// Retrieves the ID of a task.
 int Task::getId() const {
 	return id;
 }

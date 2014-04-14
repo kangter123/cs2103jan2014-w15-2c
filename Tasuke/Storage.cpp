@@ -18,6 +18,7 @@ IStorage::~IStorage() {
 
 }
 
+// Adds a task to the list of tasks in memory.
 Task IStorage::addTask(Task& task) {
 	QMutexLocker lock(&mutex);
 
@@ -31,6 +32,9 @@ Task IStorage::addTask(Task& task) {
 	return *taskPtr;
 }
 
+// Edits a task in memory.
+// In general, this is done by replacing the task with ID id with
+// a new task object.
 Task IStorage::editTask(int id, Task& task) {
 	QMutexLocker lock(&mutex);
 
@@ -44,11 +48,13 @@ Task IStorage::editTask(int id, Task& task) {
 	return *taskPtr;
 }
 
+// Retrieves a task with ID id from the list of tasks in memory.
 Task IStorage::getTask(int id) {
 	QMutexLocker lock(&mutex);
 	return *tasks[id];
 }
 
+// Removes a task with ID id from the list of tasks in memory.
 void IStorage::removeTask(int id) {
 	QMutexLocker lock(&mutex);
 	LOG(INFO) << MSG_STORAGE_REMOVING_TASK << id;
@@ -57,6 +63,7 @@ void IStorage::removeTask(int id) {
 	renumber();
 }
 
+// Removes a task from the back of the list of tasks in memory.
 void IStorage::popTask() {
 	QMutexLocker lock(&mutex);
 	LOG(INFO) << MSG_STORAGE_POP_TASK;
@@ -65,6 +72,10 @@ void IStorage::popTask() {
 	renumber();
 }
 
+// Returns the task that is at the front of the list of tasks in
+// memorry. This task is guaranteed not to be 'overdue'.
+// This method throws ExceptionNoMoreTasks if there are no more tasks 
+// in memory that are not overdue.
 Task IStorage::getNextUpcomingTask() {
 	LOG(INFO) << MSG_STORAGE_RETRIEVE_NEXT_TASK;
 
@@ -76,7 +87,7 @@ Task IStorage::getNextUpcomingTask() {
 	throw ExceptionNoMoreTasks();
 }
 
-// Read-only
+// Read-only. Retrieves the entire list of tasks in memory.
 QList<Task> IStorage::getTasks(bool hideDone) const {
 	QList<Task> results;
 
@@ -93,11 +104,16 @@ QList<Task> IStorage::getTasks(bool hideDone) const {
 	return results;
 }
 
+// Returns the total number of tasks in memory.
 int IStorage::totalTasks() {
 	QMutexLocker lock(&mutex);
 	return tasks.size();
 }
 
+// Searches for tasks. Takes in a function as an argument and searches for
+// tasks with a criteria that is determined by the function. It is the caller's
+// responsibility for the function to be valid and correct, as this method 
+// makes no assumptions about the criteria.
 QList<Task> IStorage::search(std::function<bool(Task)> predicate) const {
 	LOG(INFO) << MSG_STORAGE_SEARCH;
 	QList<Task> results;
@@ -131,7 +147,7 @@ QList<Task> IStorage::searchByDescription(QString keyword, Qt::CaseSensitivity c
 // Searches all tags in all tasks in memory for specified tag.
 // Returns a list of all tasks that contain that tag.
 // Will also return partial results (if tag contains the searched keyword)
-// Case sensitivity optional, but insensitive is the default.
+// Case insensitive is the default.
 QList<Task> IStorage::searchByTag(QString keyword, Qt::CaseSensitivity caseSensitivity) {
 	QMutexLocker lock(&mutex);
 	LOG(INFO) << MSG_STORAGE_SEARCH_BY_TAG << keyword.toStdString();
@@ -183,6 +199,8 @@ bool IStorage::isAllDone() {
 	return _isAllDone;
 }
 
+// Sorts the list of tasks in memory by its end date-time.
+// Tasks that end earlier are sorted to the front of the list.
 void IStorage::sortByEndDate() {
 	LOG(INFO) << MSG_STORAGE_SORT_BY_END_DATE;
 	qStableSort(tasks.begin(), tasks.end(), [](const QSharedPointer<Task>& t1, const QSharedPointer<Task>& t2) {
@@ -190,6 +208,7 @@ void IStorage::sortByEndDate() {
 	});
 }
 
+// Sorts the list of tasks in memory by its description alphabetically.
 void IStorage::sortByDescription() {
 	LOG(INFO) << MSG_STORAGE_SORT_BY_DESCRIPTION;
 	qStableSort(tasks.begin(), tasks.end(), [](const QSharedPointer<Task>& t1, const QSharedPointer<Task>& t2) {
@@ -197,6 +216,8 @@ void IStorage::sortByDescription() {
 	});
 }
 
+// Sorts the list of tasks in memory by whether or not it is ongoing.
+// Ongoing tasks are sorted to the front of the list.
 void IStorage::sortByOngoing() {
 	LOG(INFO) << MSG_STORAGE_SORT_BY_ONGOING_STATUS;
 	qStableSort(tasks.begin(), tasks.end(), [](const QSharedPointer<Task>& t1, const QSharedPointer<Task>& t2) {
@@ -204,6 +225,8 @@ void IStorage::sortByOngoing() {
 	});
 }
 
+// Sorts the list of tasks in memory by whether or not it is due on
+// the current day. Tasks that are due on the current day are sorted the front.
 void IStorage::sortByIsDueToday() {
 	LOG(INFO) << MSG_STORAGE_SORT_BY_DUE_TODAY;
 	qStableSort(tasks.begin(), tasks.end(), [](const QSharedPointer<Task>& t1, const QSharedPointer<Task>& t2) {
@@ -211,6 +234,8 @@ void IStorage::sortByIsDueToday() {
 	});
 }
 
+// Sorts the list of tasks in memory by whether or not it is overdue.
+// Tasks that are overdue are sorted to the front of the list.
 void IStorage::sortByOverdue() {
 	LOG(INFO) << MSG_STORAGE_SORT_BY_OVERDUE;
 	qStableSort(tasks.begin(), tasks.end(), [](const QSharedPointer<Task>& t1, const QSharedPointer<Task>& t2) {
@@ -218,6 +243,8 @@ void IStorage::sortByOverdue() {
 	});
 }
 
+// Sorts the list of tasks in memory by whether or not it is done.
+// Tasks that are done are sorted to the back of the list.
 void IStorage::sortByDone() {
 	LOG(INFO) << MSG_STORAGE_SORT_BY_DONE_STATUS;
 	qStableSort(tasks.begin(), tasks.end(), [](const QSharedPointer<Task>& t1, const QSharedPointer<Task>& t2) {
@@ -225,6 +252,9 @@ void IStorage::sortByDone() {
 	});
 }
 
+// Sorts the list of tasks in memory by whether or not is has a valid
+// end date-time. Tasks with no valid end date-time are sorted to the back
+// of the list.
 void IStorage::sortByHasEndDate() {
 	LOG(INFO) << MSG_STORAGE_SORT_BY_HAS_END_DATE;
 	qStableSort(tasks.begin(), tasks.end(), [](const QSharedPointer<Task>& t1, const QSharedPointer<Task>& t2) {
@@ -307,7 +337,8 @@ Storage::Storage(QString _path) {
 }
 
 // This function loads the contents of the text file and serializes it into
-// the memory. If there is no such file, this function does nothing.
+// the memory. It does so via QSettings.
+// If there is no such file, this function does nothing.
 void Storage::loadFile() {
 	LOG(INFO) << MSG_STORAGE_LOAD_FILE_START;
 
@@ -349,7 +380,8 @@ void Storage::loadFile() {
 }
 
 // This function deserializes the data from memory and writes it to the text
-// file. If the file cannot be written, an ExceptionNotOpen is thrown.
+// file. It does so via QSettings.
+// If the file cannot be written, an ExceptionNotOpen is thrown.
 void Storage::saveFile() {
 	LOG(INFO) << MSG_STORAGE_SAVE_FILE_START;
 
