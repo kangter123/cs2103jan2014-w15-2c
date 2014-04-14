@@ -10,15 +10,15 @@
 
 TaskWindow::TaskWindow(QWidget* parent) : currentlySelectedTask(-1), animation(this, "opacity"),
 										  progressBar(this), QMainWindow(parent) {
-		LOG(INFO) << "TaskWindow instance created";
+	LOG(INFO) << "TaskWindow instance created";
 
-		resetSubheadingIndexes();
-		initUI();
-		initTutorial(); 
-		initAnimation();
-		initProgressBar();
-		initUIConnect();
-		handleReloadTheme();
+	resetSubheadingIndexes();
+	initUI();
+	initTutorial(); 
+	initAnimation();
+	initProgressBar();
+	initUIConnect();
+	handleReloadTheme();
 }
 
 TaskWindow::~TaskWindow() {
@@ -45,10 +45,12 @@ void TaskWindow::showTasks(const QList<Task>& tasks, const QString& title) {
 
 	previousSize = currentTasks.size(); // Size of previous list
 	currentTasks = tasks; // Update current tasks
+
 	changeTitle(title); // Change title scope	
-	displayTaskList();
 	decideContent(title); // Show column label or 'no tasks' message.
 	showBackButtonIfSearching(title);
+
+	displayTaskList();
 }
 
 
@@ -56,6 +58,7 @@ void TaskWindow::showTasks(const QList<Task>& tasks, const QString& title) {
 // SCROLLING
 //=========================================
 
+// Scroll up one taskentry
 void TaskWindow::scrollUp() {
 	if (currentlySelectedTask > 0) {
 		updateCurrentlySelectedTo(currentlySelectedTask - 1);
@@ -63,6 +66,7 @@ void TaskWindow::scrollUp() {
 	}
 }
 
+// Scroll down one taskentry
 void TaskWindow::scrollDown() {
 	if(currentlySelectedTask < currentTasks.size() - 1) {
 		updateCurrentlySelectedTo(currentlySelectedTask + 1);
@@ -70,6 +74,7 @@ void TaskWindow::scrollDown() {
 	}
 }
 
+// Scrolls up TASKS_PER_PAGE number of tasks. Right now, it's about 5.
 void TaskWindow::pageUp() {
 	if (currentlySelectedTask < 1){
 		return;
@@ -84,6 +89,7 @@ void TaskWindow::pageUp() {
 	jumpToCurrentlySelectedTask();
 }
 
+// Scrolls down TASKS_PER_PAGE number of tasks. Right now, it's about 5.
 void TaskWindow::pageDown() {
 	if (currentlySelectedTask == currentTasks.size() - 1) {
 		return;
@@ -98,6 +104,7 @@ void TaskWindow::pageDown() {
 	jumpToCurrentlySelectedTask();
 }
 
+// Jump to next subsection of tasks
 void TaskWindow::gotoPreviousSection() {
 	char thisSection = -1, prevSection = -1;
 	for (char i = (char)SubheadingType::SUBHEADING_TYPE_LAST_ITEM - 1; i >= 0; --i) {
@@ -114,6 +121,7 @@ void TaskWindow::gotoPreviousSection() {
 	ui.taskList->scrollToItem(ui.taskList->item(getTaskEntryRow(currentlySelectedTask) - 1));
 }
 
+// Jump to prev subsection of tasks
 void TaskWindow::gotoNextSection() {
 	char nextSection = -1;
 	for (char i = 0; i < (char)SubheadingType::SUBHEADING_TYPE_LAST_ITEM; ++i) {
@@ -290,29 +298,31 @@ bool TaskWindow::eventFilter(QObject* object, QEvent* event) {
 		// Scroll task list
 		if (ui.stackedWidget->currentIndex() == 0) { // Is on task list
 			switch (eventKey->key()) {
-			case Qt::Key::Key_Up:
-				if (eventKey->modifiers() & Qt::Modifier::CTRL) {
-					pageUp();
-				} else if (eventKey->modifiers() & Qt::Modifier::SHIFT) {
-					gotoPreviousSection();
-				} else {
-					scrollUp();
+				case Qt::Key::Key_Up:
+					if (eventKey->modifiers() & Qt::Modifier::CTRL) {
+						pageUp();
+					} else if (eventKey->modifiers() & Qt::Modifier::SHIFT) {
+						gotoPreviousSection();
+					} else {
+						scrollUp();
+					}
+					return true;
+
+				case Qt::Key::Key_Down:
+					if (eventKey->modifiers() & Qt::Modifier::CTRL) {
+						pageDown();
+					} else if (eventKey->modifiers() & Qt::Modifier::SHIFT) {
+						gotoNextSection();
+					} else {
+						scrollDown();
+					}
+					return true;
+					// Search backspace to go back
+
+				case Qt::Key::Key_Backspace:
+					handleBackButton();
+					return true;
 				}
-				return true;
-			case Qt::Key::Key_Down:
-				if (eventKey->modifiers() & Qt::Modifier::CTRL) {
-					pageDown();
-				} else if (eventKey->modifiers() & Qt::Modifier::SHIFT) {
-					gotoNextSection();
-				} else {
-					scrollDown();
-				}
-				return true;
-				// Search backspace to go back
-			case Qt::Key::Key_Backspace:
-				handleBackButton();
-				return true;
-			}
 
 			// Undo and redo shortcuts
 			if (eventKey->matches(QKeySequence::Undo)) {
@@ -324,6 +334,7 @@ bool TaskWindow::eventFilter(QObject* object, QEvent* event) {
 				Tasuke::instance().runCommand(QString("redo"));
 				return true;
 			}
+
 		} else {
 			// Tutorial shortcuts start here
 
@@ -472,12 +483,14 @@ int TaskWindow::getTaskEntryRow(int taskRow) const {
 // PRIVATE HELPER SUBHEADING DISPLAY FUNCTIONS
 //============================================
 
+// When a new list of tasks is displayed, subheading indexes are reset.
 void TaskWindow::resetSubheadingIndexes() {
 	for (int i = 0; i < (char)SubheadingType::SUBHEADING_TYPE_LAST_ITEM; ++i) {
 		subheadingRowIndexes[i] = -1;
 	}
 }
 
+// For every new list of tasks, subheadings are slotted above differnt sections of tasks.
 void TaskWindow::displayAndUpdateSubheadings(int index) {
 	if (currentTasks[index].isOverdue()) {
 		if (subheadingRowIndexes[(char)SubheadingType::OVERDUE] == -1) {
@@ -502,6 +515,7 @@ void TaskWindow::displayAndUpdateSubheadings(int index) {
 	}
 }
 
+// Enters a subheading entry with QString content as the title.
 void TaskWindow::displaySubheading(const QString& content) {
 	SubheadingEntry * subheading = new SubheadingEntry(content, this);
 	QListWidgetItem *listItem = new QListWidgetItem();
@@ -625,6 +639,7 @@ void TaskWindow::highlightCurrentlySelectedTask(int prevSize) {
 // PRIVATE THEMING FUNCTION
 //================================================
 
+// Applies the stylesheets when the theme is changed.
 void TaskWindow::applyTheme(const QString mainStyle, const QString normalTaskEntryStyle, const QString selectedTaskEntryStyle) {
 	setStyleSheet(mainStyle);
 	taskEntryNormalStylesheet = normalTaskEntryStyle;
