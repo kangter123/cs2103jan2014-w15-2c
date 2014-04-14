@@ -168,8 +168,6 @@ QString Task::getTimeDifferenceString() const {
 	}
 
 	delta /= MSECS_IN_SECOND;					// Get rid of milliseconds.
-
-	int seconds = delta % SECONDS_IN_MINUTE;	// Obtain number of seconds.
 	delta /= SECONDS_IN_MINUTE;					// Get rid of seconds.
 
 	int minutes = delta % MINUTES_IN_HOUR;		// Obtain number of minutes.
