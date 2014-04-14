@@ -1,7 +1,5 @@
 //@author A0096836M
 
-#include <string>
-#include <iostream>
 #include <thread>
 #include <glog/logging.h>
 #include <QMessageBox>

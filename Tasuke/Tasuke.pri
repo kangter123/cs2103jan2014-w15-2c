@@ -17,7 +17,9 @@ HEADERS += ./Interpreter.h \
     ./Tasuke.h \
     ./Storage.h \
     ./TooltipWidget.h \
-    ./SubheadingEntry.h
+    ./SubheadingEntry.h \
+    ./ThemeStylesheets.h \
+    ./NotificationManager.h
 SOURCES += ./AboutWindow.cpp \
     ./HotKeyManager.cpp \
     ./InputHighlighter.cpp \
@@ -37,7 +39,9 @@ SOURCES += ./AboutWindow.cpp \
     ./Storage.cpp \
     ./TutorialWidget.cpp \
     ./TooltipWidget.cpp \
-    ./SubheadingEntry.cpp
+    ./SubheadingEntry.cpp \
+    ./ThemeStylesheets.cpp \
+    ./NotificationManager.cpp
 FORMS += ./TaskWindow.ui \
     ./InputWindow.ui \
     ./AboutWindow.ui \
