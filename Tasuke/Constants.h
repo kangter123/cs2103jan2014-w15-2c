@@ -205,7 +205,7 @@ const char* const METATYPE_KEYCOMIBNATION = "KeyCombination";
 
 // Lists of words to add into dictionary
 const QStringList SPELL_NONWORD_COMMANDS = QStringList() << "rm" << "ls"
-	<< "nd";
+	<< "nd" << "tmr";
 const QStringList SPELL_MONTH_NAMES = QStringList() << "january" << "february"
 	<< "march" << "april" << "may" << "june" << "july" << "august"
 	<< "september" << "october" << "november" << "december";
